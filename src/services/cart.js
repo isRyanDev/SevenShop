@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const cartProductsAPI = axios.create({
-    baseURL: "http://3.139.70.254:8000/carrinho",
+    baseURL: "https://api.ryandev.com.br/carrinho",
 });
 
 async function getCartProducts() {
