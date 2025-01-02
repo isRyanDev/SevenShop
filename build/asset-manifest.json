@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.js": "/static/js/main.bcd529b2.js",
+    "static/js/488.1168fcaf.chunk.js": "/static/js/488.1168fcaf.chunk.js",
+    "static/media/zeusx.png": "/static/media/zeusx.e7a80a061d6f663adcb1.png",
+    "static/media/lg165hz.png": "/static/media/lg165hz.bf70c95cec42d83e931f.png",
+    "static/media/Banner.png": "/static/media/Banner.350c8673041479b4a5e9.png",
+    "static/media/a520m.png": "/static/media/a520m.48c9a2c21fc3ea1ec8f8.png",
+    "static/media/motoe13.png": "/static/media/motoe13.ff1ca5a56a81538b22f5.png",
+    "static/media/r55500.png": "/static/media/r55500.5c4552d59133d7871119.png",
+    "static/media/rtx4060.png": "/static/media/rtx4060.cba44881c03066bcfea5.png",
+    "static/media/g935.png": "/static/media/g935.3558f2ea658d1c84d278.png",
+    "static/media/ps5.png": "/static/media/ps5.2f2b99ab2050cd7b6f9a.png",
+    "static/media/cadeiraalpha.png": "/static/media/cadeiraalpha.06d6082f9cd632bdeea2.png",
+    "static/media/fonte850w.png": "/static/media/fonte850w.bea4984a95cfda40d220.png",
+    "static/media/trash.png": "/static/media/trash.db662a3b97127f354f91.png",
+    "static/media/shopping-cart.png": "/static/media/shopping-cart.ae99f4d8bd541996b663.png",
+    "static/media/add-to-cart.png": "/static/media/add-to-cart.9ec7e19567befb0c5386.png",
+    "index.html": "/index.html",
+    "main.bcd529b2.js.map": "/static/js/main.bcd529b2.js.map",
+    "488.1168fcaf.chunk.js.map": "/static/js/488.1168fcaf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bcd529b2.js"
+  ]
+}
