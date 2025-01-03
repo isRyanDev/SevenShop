@@ -5,7 +5,6 @@ import StyledLink from "../link/index.js"
 import cartImg from "../images/shopping-cart.png"
 import addCartImg from "../images/add-to-cart.png"
 
-
 const ProductsList = styled.ol`
     display: flex;
     justify-content: center;

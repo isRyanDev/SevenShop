@@ -3,21 +3,28 @@ import bagImg from "../images/shopping-bag.png"
 import Search from "../search/index.js"
 import styled from "styled-components"
 import StyledLink from "../link/index.js"
+import { Link } from "react-router-dom"
 
 const HeaderContainer = styled.header`
     display: flex;
     width: 100%;
-    height: 4rem;
+    height: 5rem;
+    gap: 1rem;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     background-color: rgba(88, 3, 150, 0.5);
+
+    @media screen and (min-width: 450px){
+        justify-content: space-around;
+        gap: 0;
+        padding: 0;
+    }
 `
 
 const HeaderLogoContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80%;
 
     @media screen and (min-width: 450px){
         width: 50%;
@@ -38,12 +45,21 @@ const HeaderMenuContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @media screen and (min-width: 450px){
+        width: 50%;
+        font-size: 1.2rem;
+    }
+
+    @media screen and (min-width: 1000px){
+        width: 20%;
+    }
 `
 
 const HeaderMenu = styled.ol`
     display: flex;
     flex-direction: row;
-    width: 20%;
+    width: 100%;
     align-items: center;
     justify-content: center;
     font-size: 1rem;
@@ -53,13 +69,8 @@ const HeaderMenu = styled.ol`
     transition: all .5s ease-in-out;
 
     @media screen and (min-width: 450px){
-        width: 50%;
         font-size: 1.2rem;
-    )
-
-    @media screen and (min-width: 1000px){
-        width: 20%;
-    )
+    }
 `
 
 const HeaderMenuLi = styled.li`
@@ -71,6 +82,12 @@ const HeaderMenuLi = styled.li`
     @media screen and (min-width: 450px){
         display: flex;
     }
+`
+
+const LinkStyled = styled(Link)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 
 const ShoppingBag = styled.img`
@@ -101,9 +118,9 @@ function Header(){
                         </StyledLink>
                     </HeaderMenuLi>
 
-                    <StyledLink to="/carrinho">
+                    <LinkStyled to="/carrinho">
                         <ShoppingBag src={bagImg} alt="bag" />
-                    </StyledLink>
+                    </LinkStyled>
 
                 </HeaderMenu>
 
