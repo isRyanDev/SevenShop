@@ -13,7 +13,6 @@ const HomeContainer = styled.div`
 
 const Banner = styled.img`
     width: 100%;
-    height: 35rem;
 `
 
 const ProductsContainer = styled.div`
