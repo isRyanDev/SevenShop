@@ -20,7 +20,7 @@ const Product = styled.li`
     padding: .8rem;
     margin: .5rem;
     height: 30rem;
-    width: 15rem;
+    width: 100%;
     border-radius: .5rem;
     transition: all .7s;
 
