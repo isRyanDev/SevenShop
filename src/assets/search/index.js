@@ -4,11 +4,16 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 const SearchContent = styled.div`
-    display: flex;
+    display: none;
     align-items: center;
     background-color: white;
     height: 2.8rem;
     border-radius: 1.5rem;
+    transition: all .5s ease-in-out;
+
+    @media (min-width: 1000px) {
+        display: flex;
+    }
 `
 
 const SearchForm = styled.form` 

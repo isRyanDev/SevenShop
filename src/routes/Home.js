@@ -19,9 +19,21 @@ const Banner = styled.img`
 const ProductsContainer = styled.div`
     display: grid;
     justify-content: center;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     padding: 2rem;
     overflow: hidden;
+
+    @media (min-width: 900px) {
+      grid-template-columns: 1fr 1fr;
+    }
+        
+    @media (min-width: 1320px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media (min-width: 1750px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
 `
 
 function Home() {

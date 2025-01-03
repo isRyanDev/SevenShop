@@ -20,12 +20,19 @@ const Product = styled.li`
     padding: .8rem;
     margin: .5rem;
     height: 30rem;
-    width: 24rem;
+    width: 15rem;
     border-radius: .5rem;
     transition: all .7s;
 
     &:hover {
         box-shadow: 1px 0px 5px 5px rgba(89, 0, 161, 0.2);
+    }
+
+    @media screen and (min-width: 450px){
+        padding: .8rem;
+        margin: .5rem;
+        height: 30rem;
+        width: 24rem;
     }
 `
 
