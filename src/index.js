@@ -18,12 +18,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0; 
-    font-family: Poppins, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(180deg, rgb(46 0 78) 0%, rgb(84 0 133) 100%);
-  }
-
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
 
   li {

@@ -1,9 +1,8 @@
+import { Link } from "react-router-dom"
 import Logo from "../logo/index.js"
 import bagImg from "../images/shopping-bag.png"
 import Search from "../search/index.js"
 import styled from "styled-components"
-import StyledLink from "../link/index.js"
-import { Link } from "react-router-dom"
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -18,6 +17,10 @@ const HeaderContainer = styled.header`
         justify-content: space-around;
         gap: 0;
         padding: 0;
+    }
+
+    @media screen and (min-height: 950px){
+        height: 8vh;
     }
 `
 
@@ -45,6 +48,7 @@ const HeaderMenuContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 40%;
 
     @media screen and (min-width: 450px){
         width: 50%;
@@ -59,6 +63,7 @@ const HeaderMenuContainer = styled.div`
 const HeaderMenu = styled.ol`
     display: flex;
     flex-direction: row;
+    height: 100%;
     width: 100%;
     align-items: center;
     justify-content: center;
@@ -77,6 +82,7 @@ const HeaderMenuLi = styled.li`
     display: none;
     justify-content: center;
     align-items: center;
+    height: 100%;
     flex-direction: column;
 
     @media screen and (min-width: 450px){
@@ -87,11 +93,14 @@ const HeaderMenuLi = styled.li`
 const LinkStyled = styled(Link)`
     display: flex;
     align-items: center;
+    height: 100%;
+    text-decoration: none;  
+    color: white;
     justify-content: center;
 `
 
 const ShoppingBag = styled.img`
-    width: 2rem;
+    height: 100%;
 `
 
 function Header(){
@@ -108,14 +117,14 @@ function Header(){
             <HeaderMenuContainer>
                 <HeaderMenu>
                     <HeaderMenuLi>
-                        <StyledLink to="mailto:suporte@sevenshop.com.br">
+                        <LinkStyled to="mailto:suporte@sevenshop.com.br">
                             SUPORTE
-                        </StyledLink>
+                        </LinkStyled>
                     </HeaderMenuLi>
                     <HeaderMenuLi>
-                        <StyledLink to="#contacts">
+                        <LinkStyled to="#contacts">
                             CONTATO
-                        </StyledLink>
+                        </LinkStyled>
                     </HeaderMenuLi>
 
                     <LinkStyled to="/carrinho">

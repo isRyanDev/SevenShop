@@ -3,6 +3,7 @@ import { getProducts } from "../services/products.js";
 import styled from "styled-components";
 import banner from "../assets/images/Banner.png"
 import ProductsStyled from "../assets/products/index.js";
+import Footer from "../assets/footer/index.js";
 
 const HomeContainer = styled.div`
     display: flex;
@@ -64,6 +65,7 @@ function Home() {
             })}
         </ProductsContainer>
 
+        <Footer/>
       </HomeContainer>
 
     );  

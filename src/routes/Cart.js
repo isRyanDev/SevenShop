@@ -1,22 +1,36 @@
+import { Link } from "react-router-dom";
 import { getCartProducts, patchCartProducts } from "../services/cart";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CartProductsStyled from "../assets/cart-products/index.js";
+import Footer from "../assets/footer/index.js";
 import StyledLink from "../assets/link/index.js";
 
 const CartContainer = styled.div`
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+`
+
+const CartContent = styled.div`
+    display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 2rem;
-    margin: 2rem;
-    min-height: 92vh;
+    margin: 2vh;
+    min-height: 83vh;
+    gap: 2rem;  
     overflow: hidden;
+
+    @media screen and (min-width: 1080px){
+        margin: 4vh;
+        min-height: 79vh;
+    }
 `
 
 const CartEmptyContainer = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     margin-top: 2vh;
     gap: 1.5rem;
@@ -37,6 +51,14 @@ const CartEmptyContainer = styled.div`
             cursor: pointer;
         }
     }
+`
+
+const CardEmptyContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 `
 
 const CartEmptyText = styled.div`
@@ -60,14 +82,18 @@ const ProductCard = styled.div`
     flex-direction: column;
     gap: 2rem;
     color: white;
-    width: 65%;
     text-align: center;
 `
 
 const Checkout = styled.div`
-    display: flex;
+    display: none;
     flex-direction: column;
+    width: 20%;
     gap: 2rem;
+
+    @media screen and (min-width: 1720px){
+        display: flex;
+    }
 `
 
 const CheckoutTitle = styled.h1`
@@ -81,9 +107,7 @@ const SummaryContainer = styled.div`
     justify-content: space-between;
     background-color: rgba(46,0,78,0.5);
     padding: 2rem;
-    width: 25rem;
     border-radius: .5rem;
-    gap: .5rem;
     gap: 4rem;
 
     &:hover {
@@ -173,6 +197,87 @@ const Discont = styled.p`
     font-size: .8rem;
 `
 
+const CheckoutButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(46,0,78,0.5);
+    padding: 2rem;
+    border-radius: .5rem;
+    justify-content: center;
+    gap: 1rem;
+`
+
+const CheckoutButton = styled.button`
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background-color: rgba(109, 0, 156, 0.5);
+    border: none;
+    font-weight: bold;
+    width: 100%;
+    border-radius: .5rem;
+    padding: 1.5rem;
+    transition: all .7s;
+    cursor: pointer;
+
+    &:hover {
+        background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
+    }
+`
+
+const ReturnButton = styled.button`
+    font-family: 'Poppins', sans-serif;
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(109, 0, 156, 0.5);
+    font-weight: bold;
+    width: 100%;
+    border-radius: .5rem;
+    padding: 1.5rem;
+    transition: all .7s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(109, 0, 156, 0.5);
+    }
+`
+
+const ButtonLink = styled(Link)`
+    text-decoration: none;
+    color: white;
+`
+
+const BuyButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(109, 0, 156);
+    height: 5rem;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+
+    & .buy-button-link{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+    }
+
+    @media screen and (min-width: 1720px){
+        display: none;
+    }
+`
+
+const BuyButton = styled.button`
+    font-family: 'Poppins', sans-serif;
+    border-radius: .5rem;
+    width: 100%;
+    color: white;
+    background-color: rgb(46,0,78);
+    border: none;
+    padding: 1rem;
+`
+
 function CartProducts() {
     const [cartProducts, setCartProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
@@ -229,79 +334,99 @@ function CartProducts() {
     if (cartProducts.length < 1) {
         return (
             <CartEmptyContainer>
-                <CartEmptyText>
-                    <h1>Seu carrinho está vazio.</h1>
-                    <p>Adicione algum produto para finalizar a compra</p>
-                </CartEmptyText>
-                <StyledLink to={"/"}>
-                    <button>VOLTE A COMPRAR</button>
-                </StyledLink>
+                <CardEmptyContent>
+                    <CartEmptyText>
+                        <h1>Seu carrinho está vazio.</h1>
+                        <p>Adicione algum produto para finalizar a compra</p>
+                    </CartEmptyText>
+                    <StyledLink to={"/"}>
+                        <button>VOLTE A COMPRAR</button>
+                    </StyledLink>
+                </CardEmptyContent>
+                <Footer />
             </CartEmptyContainer>
         );
     } else {
         return (
             <CartContainer>
+                <CartContent>
+                    <ProductCard>
+                        <h1>PRODUTOS</h1>
+                        {cartProducts.map((product) => {
+                            const imagePath = `./${product.src}.png`;
+                            const image = images(imagePath);
+
+                            return (
+                                <CartProductsStyled
+                                    key={product.id}
+                                    name={product.name}
+                                    image={image}
+                                    price={product.price}
+                                    newprice={product.newprice}
+                                    id={product.id}
+                                    src={product.src}
+                                    quantity={quantities[product.id] || 1}
+                                    onQuantityChange={handleQuantityChange}
+                                    onDelete={handleDeleteProduct}
+                                />
+                            );
+                        })}
+                    </ProductCard>
+
+                    <Checkout>
+                        <CheckoutTitle>RESUMO</CheckoutTitle>
+                        <SummaryContainer>
+                            <ProductsTotal>
+                                <div>
+                                    <SubtitleText>Total do produtos:</SubtitleText>
+                                    <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                </div>
+                                <div>
+                                    <SubtitleText>Frete:</SubtitleText>
+                                    <Value>R$ {frete.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                </div>
+                            </ProductsTotal>
+                            <TotalPrices>
+                                <TotalInTime>
+                                    <ValueInTime>
+                                        <SubtitleText>Total à prazo:</SubtitleText>
+                                        <Value>R$ {(totalPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    </ValueInTime>
+                                    <Terms>
+                                        <p>(Até 10x sem juros)</p>
+                                    </Terms>
+                                </TotalInTime>
+                                <Total1x>
+                                    <Value1x>
+                                        <SubtitleText>Total à vista:</SubtitleText>
+                                        <Value>R$ {(totalNewPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    </Value1x>
+                                    <Discont>
+                                        <SubtitleText>(Desconto: </SubtitleText>
+                                        <p>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</p>
+                                    </Discont>
+                                </Total1x>
+                            </TotalPrices>
+                        </SummaryContainer>
+
+                        <CheckoutButtonContainer>
+                            <ButtonLink>
+                                <CheckoutButton>FINALIZAR COMPRA</CheckoutButton>
+                            </ButtonLink>
+                            <ButtonLink to={"/"}>
+                                <ReturnButton>VOLTE A COMPRAR</ReturnButton>
+                            </ButtonLink>
+                        </CheckoutButtonContainer>
+                    </Checkout>
+                </CartContent>
                 
-                <ProductCard>
-                    <h1>PRODUTOS</h1>
-                    {cartProducts.map((product) => {
-                        const imagePath = `./${product.src}.png`;
-                        const image = images(imagePath);
-
-                        return (
-                            <CartProductsStyled
-                                key={product.id}
-                                name={product.name}
-                                image={image}
-                                price={product.price}
-                                newprice={product.newprice}
-                                id={product.id}
-                                src={product.src}
-                                quantity={quantities[product.id] || 1}
-                                onQuantityChange={handleQuantityChange}
-                                onDelete={handleDeleteProduct}
-                            />
-                        );
-                    })}
-                </ProductCard>
-
-                <Checkout>
-                    <CheckoutTitle>RESUMO</CheckoutTitle>
-                    <SummaryContainer>
-                        <ProductsTotal>
-                            <div>
-                                <SubtitleText>Total do produtos:</SubtitleText>
-                                <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                            </div>
-                            <div>
-                                <SubtitleText>Frete:</SubtitleText>
-                                <Value>R$ {frete.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                            </div>
-                        </ProductsTotal>
-                        <TotalPrices>
-                            <TotalInTime>
-                                <ValueInTime>
-                                    <SubtitleText>Total à prazo:</SubtitleText>
-                                    <Value>R$ {(totalPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                                </ValueInTime>
-                                <Terms>
-                                    <p>(Até 10x sem juros)</p>
-                                </Terms>
-                            </TotalInTime>
-                            <Total1x>
-                                <Value1x>
-                                    <SubtitleText>Total à vista:</SubtitleText>
-                                    <Value>R$ {(totalNewPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                                </Value1x>
-                                <Discont>
-                                    <SubtitleText>(Desconto: </SubtitleText>
-                                    <p>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</p>
-                                </Discont>
-                            </Total1x>
-                        </TotalPrices>
-                    </SummaryContainer>
-                </Checkout>
-            </CartContainer>
+                <BuyButtonContainer>
+                    <ButtonLink className="buy-button-link">
+                        <BuyButton>FINALIZAR COMPRA</BuyButton>             
+                    </ButtonLink>
+                </BuyButtonContainer>
+                <Footer display="none" />
+             </CartContainer>
         );
     }
 }

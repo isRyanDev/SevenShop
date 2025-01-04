@@ -9,22 +9,26 @@ const ProductsList = styled.ol`
     flex-direction: column;
     justify-content: center;
     list-style: none;
-    border-radius: .5rem;
 `
 
 const Product = styled.li`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
     background-color: rgba(46,0,78,0.5);
-    padding: 2rem;
+    padding: 1rem;
     border-radius: .5rem;
     transition: all .7s;
 
     &:hover {
         box-shadow: 1px 0px 5px 5px rgba(89, 0, 161, 0.2);
+    }
+
+    @media screen and (min-width: 1080px){
+        flex-direction: row;
+
     }
 `
 
@@ -48,10 +52,14 @@ const Description = styled.div`
 
 const InfosContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     gap: 1.5rem;
+
+    @media screen and (min-width: 1080px){
+        flex-direction: row;
+    }
 `
 
 const ProductImg = styled.img`
@@ -95,11 +103,16 @@ const ProductNewPrice = styled.h3`
 
 const QuantityContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
+    width: 100%;
     align-items: center;
-    height: 6rem;
     gap: 1rem;
+
+    @media screen and (min-width: 1080px){
+        align-items: flex-start;
+        width: unset;
+    }
 `
 
 const QuantityMain = styled.div`
@@ -185,7 +198,6 @@ const DiscontPriceContainer = styled.div`
     flex-direction: column;
     max-width: 15rem;
     font-size: .8rem;
-    height: 6rem;
     gap: .5rem;
 
     & h2 {
@@ -255,6 +267,8 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
                 </DescriptionContainer>
 
                 <QuantityContainer>
+
+
                     <QuantityMain>
                         <label>Qtd</label>
                         <QuantityContent>
@@ -266,21 +280,20 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
                                 <img src={arrowRight} alt="arrow-right"/>
                             </button>
                         </QuantityContent>
+
+                        <CartRemContainer>
+                            <ButtonCartContainer onClick={() => {
+                                delCartProduct(id)
+                            }}>
+                                <ButtonCart src={remCartImg} alt="Cart Icon"/>
+                            </ButtonCartContainer>
+                        </CartRemContainer>
                     </QuantityMain>
-
-                    <CartRemContainer>
-                        <ButtonCartContainer onClick={() => {
-                            delCartProduct(id)
-                        }}>
-                            <ButtonCart src={remCartImg} alt="Cart Icon"/>
-                        </ButtonCartContainer>
-                    </CartRemContainer>
+                        <DiscontPriceContainer>
+                            <h4>Preço à vista no pix</h4>
+                            <h2>R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                        </DiscontPriceContainer>
                 </QuantityContainer>
-
-                <DiscontPriceContainer>
-                    <h4>Preço à vista no pix</h4>
-                    <h2>R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                </DiscontPriceContainer>
 
             </Product>
         </ProductsList>
