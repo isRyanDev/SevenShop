@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import Logo from "../logo/index.js"
-import bagImg from "../images/shopping-bag.png"
+import cartImg from "../images/cart-icon.png"
 import Search from "../search/index.js"
 import styled from "styled-components"
 
@@ -69,7 +69,7 @@ const HeaderMenu = styled.ol`
     justify-content: center;
     font-size: 1rem;
     list-style: none;
-    gap: 1rem;
+    gap: 2rem;
     font-weight: bold;
     transition: all .5s ease-in-out;
 
@@ -99,8 +99,18 @@ const LinkStyled = styled(Link)`
     justify-content: center;
 `
 
-const ShoppingBag = styled.img`
+const ShoppingBagContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
+`
+
+const ShoppingBag = styled.img`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
 `
 
 function Header(){
@@ -121,15 +131,12 @@ function Header(){
                             SUPORTE
                         </LinkStyled>
                     </HeaderMenuLi>
-                    <HeaderMenuLi>
-                        <LinkStyled to="#contacts">
-                            CONTATO
-                        </LinkStyled>
-                    </HeaderMenuLi>
 
-                    <LinkStyled to="/carrinho">
-                        <ShoppingBag src={bagImg} alt="bag" />
-                    </LinkStyled>
+                    <ShoppingBagContainer>
+                        <LinkStyled to="/carrinho">
+                            <ShoppingBag src={cartImg} alt="bag" />
+                        </LinkStyled>
+                    </ShoppingBagContainer>
 
                 </HeaderMenu>
 

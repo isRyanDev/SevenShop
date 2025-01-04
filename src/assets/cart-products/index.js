@@ -275,7 +275,7 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
                             <button onClick={() => {arrowL()}}>
                                 <img src={arrowLeft} alt="arrow-left"/>
                             </button>
-                            <QuantityInput type="number" defaultValue="1" value={quantity} onChange={handleQuantityChange} min="1" max="25"/>
+                            <QuantityInput type="number" value={quantity} onChange={handleQuantityChange} min="1" max="25"/>
                             <button onClick={() => {arrowR()}}>
                                 <img src={arrowRight} alt="arrow-right"/>
                             </button>

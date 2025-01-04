@@ -69,10 +69,12 @@ const CartEmptyText = styled.div`
 
     & h1 {
         color: white;
+        text-align: center;
     }
 
     & p {
         font-size: .8rem;
+        text-align: center;
         color: white;
     }
 `
@@ -189,7 +191,7 @@ const Value1x = styled.div`
     justify-content: space-between;
 `
 
-const Discont = styled.p`
+const Discont = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -301,6 +303,11 @@ function CartProducts() {
         setCartProducts((prevProducts) =>
             prevProducts.filter((product) => product.id !== productId)
         );
+
+        if(cartProducts.length === 1){
+            window.location.replace("/");
+        }
+
         setQuantities((prevQuantities) => {
             const updatedQuantities = { ...prevQuantities };
             delete updatedQuantities[productId];
@@ -410,10 +417,10 @@ function CartProducts() {
                         </SummaryContainer>
 
                         <CheckoutButtonContainer>
-                            <ButtonLink>
+                            <ButtonLink to="/compra">
                                 <CheckoutButton>FINALIZAR COMPRA</CheckoutButton>
                             </ButtonLink>
-                            <ButtonLink to={"/"}>
+                            <ButtonLink to="/">
                                 <ReturnButton>VOLTE A COMPRAR</ReturnButton>
                             </ButtonLink>
                         </CheckoutButtonContainer>
@@ -421,7 +428,7 @@ function CartProducts() {
                 </CartContent>
                 
                 <BuyButtonContainer>
-                    <ButtonLink className="buy-button-link">
+                    <ButtonLink className="buy-button-link" to="/compra">
                         <BuyButton>FINALIZAR COMPRA</BuyButton>             
                     </ButtonLink>
                 </BuyButtonContainer>

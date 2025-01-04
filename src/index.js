@@ -4,6 +4,7 @@ import Home from './routes/Home';
 import Header from './assets/header/index.js';
 import Products from './routes/Products';
 import CartProducts from './routes/Cart';
+import Buy from './routes/Buy';
 import reportWebVitals from './reportWebVitals.js';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -59,6 +60,7 @@ root.render(
         <Route path="/" element={<Home/>} />
         <Route path="/produtos" element={<Products/>} />
         <Route path="/carrinho" element={<CartProducts/>} />
+        <Route path="/compra" element={<Buy/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

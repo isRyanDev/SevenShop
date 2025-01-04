@@ -1,8 +1,7 @@
 import { getCartProducts, postCartProducts } from "../../services/cart.js";
 import { useEffect,useState } from "react";
 import styled from "styled-components"
-import StyledLink from "../link/index.js"
-import cartImg from "../images/shopping-cart.png"
+import cartImg from "../images/cart-icon.png"
 import addCartImg from "../images/add-to-cart.png"
 
 const ProductsList = styled.ol`
@@ -87,6 +86,7 @@ const ProductBuyButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
     background-color: rgba(109, 0, 156, 0.5);
     font-family: Poppins, sans-serif;
     font-size: 1rem;
@@ -151,6 +151,17 @@ function ProductsStyled({name, image, price, newprice, src, id}) {
         fetchCartProducts();
     }
 
+    async function insertAndBuy(productId){
+
+        if (cartProducts.find((product) => product.id === productId)) {
+            alert("Produto já está no carrinho!");
+            return;
+        }
+        await postCartProducts(productId);
+        fetchCartProducts();
+        window.location.replace("/carrinho");
+    }
+
     const [hoverCart, setHoverCart] = useState(false);
 
     const priceConvert = parseFloat(price)
@@ -177,10 +188,8 @@ function ProductsStyled({name, image, price, newprice, src, id}) {
                     </PayMethod>
 
                     <ProductBuyContainer>
-                        <ProductBuyButton>
-                            <StyledLink>
-                                COMPRAR
-                            </StyledLink>
+                        <ProductBuyButton onClick={() => insertAndBuy(id)}>
+                            COMPRAR 
                         </ProductBuyButton>
 
                         <ButtonCartContainer
