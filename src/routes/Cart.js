@@ -250,23 +250,57 @@ const ButtonLink = styled(Link)`
 
 const BuyButtonContainer = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: rgb(109, 0, 156);
-    height: 5rem;
-    width: 100%;
-    position: fixed;
+    padding: 1rem;
+    gap: .5rem;
+    position: sticky;
     bottom: 0;
 
     & .buy-button-link{
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 80%;
+        width: 100%;
     }
 
     @media screen and (min-width: 1720px){
         display: none;
+    }
+
+    @media screen and (min-width: 600px){
+        & .buy-button-link{
+            width: 90%;
+        }
+    }
+`
+
+const BuyResumeContainer = styled.div`
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+    flex-direction: row;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    & h3{
+        font-size: 1rem;
+        font-weight: bold; 
+    }
+
+    & p{
+        font-size: .7rem;
+    }
+
+    @media screen and (min-width: 600px){
+        width: 90%;
+
+        & p{
+            font-size: .8rem;
+        }
     }
 `
 
@@ -425,9 +459,14 @@ function CartProducts() {
                             </ButtonLink>
                         </CheckoutButtonContainer>
                     </Checkout>
-                </CartContent>
-                
+
+                </CartContent>                      
+
                 <BuyButtonContainer>
+                    <BuyResumeContainer>
+                        <h3>RESUMO</h3>
+                        <p>VALOR À VISTA: <strong>R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></p>
+                    </BuyResumeContainer>
                     <ButtonLink className="buy-button-link" to="/compra">
                         <BuyButton>FINALIZAR COMPRA</BuyButton>             
                     </ButtonLink>
