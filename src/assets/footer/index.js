@@ -15,16 +15,16 @@ const FooterContainer = styled.footer`
 `
 
 const FooterText = styled.h1`
-    font-family: 'Dancing Script', sans-serif;
+    font-family: 'Bebas Neue', sans-serif;
     color: white;
-    font-weight: bold;
+    letter-spacing: 2px;
     font-size: 1.2rem;
 `
 
 function Footer({display}){
     return(
         <FooterContainer display={display}>
-            <FooterText>Copyright © 2024 SevenShop</FooterText>
+            <FooterText>© SevenShop 2025</FooterText>
         </FooterContainer>
     )
 }

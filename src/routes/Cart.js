@@ -174,6 +174,12 @@ const PortageCep = styled.input`
     border: none;
     padding: .5rem;
     border-radius: .5rem;
+    color: rgb(46,0,78);
+    transition: all .5s ease-in-out;
+
+    &::placeholder {
+        color: rgb(46,0,78);
+    }
 
     &:focus-visible {
         outline: none;
@@ -552,6 +558,16 @@ function CartProducts() {
         }
     };
 
+    const [cepPlaceholder, setCepPlaceholder] = useState('Digite seu CEP*');
+
+    const handleFocus = () => {
+        setCepPlaceholder('12345-678');
+    };
+
+    const handleBlur = () => {
+        setCepPlaceholder('Digite seu CEP*');
+    };
+
     function getPortageValue(distance){
         distance = distance / 1000;
 
@@ -620,7 +636,7 @@ function CartProducts() {
                         <SummaryContainer>
                             <ProductsTotal>
                                 <TotalValue>
-                                    <SubtitleText>Total do produtos:</SubtitleText>
+                                    <SubtitleText>Total dos produtos:</SubtitleText>
                                     <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                 </TotalValue>
                                 <Portage className="portage-value">
@@ -629,7 +645,7 @@ function CartProducts() {
                                 </Portage>
 
                                 <PortageContainer onSubmit={getDistance}>
-                                    <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder="00000-000" onChange={(e) => {setCep(e.target.value)}} required/>
+                                    <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
                                     <PortageSubmit type="submit" value="Calcular Frete"/>
                                 </PortageContainer>
                             </ProductsTotal>
@@ -698,7 +714,7 @@ function CartProducts() {
                         </BuyResumeDescription>
 
                         <PortageContainer onSubmit={getDistance}>
-                            <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder="00000-000" onChange={(e) => {setCep(e.target.value)}} required/>
+                            <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
                             <PortageSubmit type="submit" value="Calcular Frete"/>
                         </PortageContainer>
 
