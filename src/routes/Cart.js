@@ -479,6 +479,23 @@ function CartProducts() {
     const totalDiscont = totalPrice - totalNewPrice;
     const frete = 32.9;
 
+    const[cep, setCep] = useState("");
+    const[destination, setDestination] = useState("");
+    const apiKey = process.env.API_KEY;
+
+    async function getPortage(){
+        const response = await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=04138-001&destinations=83413-530&key=${apiKey}`);
+
+        const data = await response.json();
+
+        setDestination(data.destination);
+
+        console.log(data);
+        console.log(destination);
+    }
+
+    getPortage();
+
     const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/);
 
     let isOpen = false;
@@ -558,8 +575,8 @@ function CartProducts() {
                                     <Value>R$ {frete.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                 </div>
 
-                                <PortageContainer>
-                                    <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder="00000-000" required/>
+                                <PortageContainer onSubmit={getPortage}>
+                                    <PortageCep  type="text" pattern="\d{5}-\d{3}" placeholder="00000-000" onChange={(e) => {setCep(e.target.value)}} required/>
                                     <PortageSubmit type="submit" value="Calcular Frete"/>
                                 </PortageContainer>
                             </ProductsTotal>
