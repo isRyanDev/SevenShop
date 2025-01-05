@@ -110,7 +110,7 @@ const SummaryContainer = styled.div`
     background-color: rgba(46,0,78,0.5);
     padding: 2rem;
     border-radius: .5rem;
-    gap: 4rem;
+    gap: 2rem;
 
     &:hover {
         box-shadow: 1px 0px 5px 5px rgba(89, 0, 161, 0.2);
@@ -120,7 +120,6 @@ const SummaryContainer = styled.div`
 const ProductsTotal = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     justify-content: space-between;
 `
 
@@ -643,12 +642,13 @@ function CartProducts() {
                                     <SubtitleText>Frete:</SubtitleText>
                                     <Value>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                 </Portage>
-
-                                <PortageContainer onSubmit={getDistance}>
-                                    <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
-                                    <PortageSubmit type="submit" value="Calcular Frete"/>
-                                </PortageContainer>
                             </ProductsTotal>
+
+                            <PortageContainer onSubmit={getDistance}>
+                                <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
+                                <PortageSubmit type="submit" value="Calcular Frete"/>
+                            </PortageContainer>
+
                             <TotalPrices>
                                 <TotalInTime>
                                     <ValueInTime>
