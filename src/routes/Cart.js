@@ -627,7 +627,7 @@ function CartProducts() {
         ) : cartProducts.length < 1 ? (
             <CartEmptyContainer> 
                 <CardEmptyContent>
-                    <Header />
+                    <Header displaySearch="none" />
                     <CartEmptyText>
                         <h1>Seu carrinho está vazio.</h1>
                         <p>Adicione algum produto para finalizar a compra</p>
@@ -640,7 +640,7 @@ function CartProducts() {
             </CartEmptyContainer>
         ) : (
                 <CartContainer>
-                    <Header/>
+                    <Header displaySearch="none"/>
                     <CartContent>
                         <ProductCard>
                             <h1>PRODUTOS</h1>

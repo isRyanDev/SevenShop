@@ -22,14 +22,14 @@ const CheckoutContent = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
+`
 
-    & div{
-      display: flex;
-      flex-direction: column;
-      text-align: center;
-      justify-content: center;
-      align-items: center;
-    }
+const CheckouPage = styled.div`
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
 `
 
 function Checkout() {
@@ -39,22 +39,20 @@ function Checkout() {
   return (
       <CheckoutContainer>
         <CheckoutContent>
-          <Header/>
+          <Header displaySearch="none" />
 
           <h1>PAGINA EM DESENVOLVIMENTO</h1>
-          <div>
+          <CheckouPage>
             <h1>Resumo da Compra</h1>
             <p>Endereço: {street}</p>
             <p>Total dos produtos: R$ {totalPrice}</p>
             <p>Total à vista: R$ {totalNewPrice}</p>
             <p>Frete: R$ {portageValue}</p>
-          </div>
+          </CheckouPage>
         </CheckoutContent>
 
           <Footer />
       </CheckoutContainer>
-
-
   );
 }
 

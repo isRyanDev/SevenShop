@@ -12,7 +12,7 @@ const SearchContent = styled.div`
     transition: all .5s ease-in-out;
 
     @media (min-width: 1000px) {
-        display: flex;
+        display: ${props => props.display || "flex"};
     }
 `
 
@@ -51,7 +51,7 @@ const SearchImg = styled.img`
     cursor: pointer;
 `
 
-function Search(){
+function Search({display}){
     const [searchInput, setSearchInput] = useState("");
     const navigate = useNavigate();
   
@@ -67,7 +67,7 @@ function Search(){
     };
 
     return(
-        <SearchContent>
+        <SearchContent display={display}>
             <SearchForm method="get" onSubmit={handleSubmit}>
                 <SearchInput type="text" placeholder="Busque aqui..." value={searchInput} onChange={(e) => {setSearchInput(e.target.value)}}/>
                 <SearchButton type="submit">

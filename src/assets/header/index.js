@@ -113,7 +113,7 @@ const ShoppingBag = styled.img`
     height: 90%;
 `
 
-function Header(){
+function Header({displaySearch}){
     return(
         <HeaderContainer>
             <HeaderLogoContainer>
@@ -121,7 +121,7 @@ function Header(){
             </HeaderLogoContainer>
                     
             <HeaderSearchContainer>
-                <Search/>
+                <Search display={displaySearch}/>
             </HeaderSearchContainer>
         
             <HeaderMenuContainer>
