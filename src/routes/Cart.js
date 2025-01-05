@@ -558,7 +558,7 @@ function CartProducts() {
                                     <Value>R$ {frete.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                 </div>
 
-                                <PortageContainer onSubmit={getPortage}>
+                                <PortageContainer>
                                     <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder="00000-000" required/>
                                     <PortageSubmit type="submit" value="Calcular Frete"/>
                                 </PortageContainer>
