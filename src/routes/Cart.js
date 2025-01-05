@@ -659,7 +659,7 @@ function CartProducts() {
                                         src={product.src}
                                         quantity={quantities[product.id] || 1}
                                         onQuantityChange={handleQuantityChange}
-                                        onDelete={handleDeleteProduct}
+                                        handleDeleteProduct={handleDeleteProduct}
                                     />
                                 );
                             })}

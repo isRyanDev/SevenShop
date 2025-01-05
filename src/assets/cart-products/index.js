@@ -1,4 +1,3 @@
-import { deleteCartProduct } from "../../services/cart.js";
 import styled from "styled-components"
 import remCartImg from "../images/trash.png"
 import arrowLeft from "../images/arrow-left.png"
@@ -206,16 +205,11 @@ const DiscontPriceContainer = styled.div`
     }
 `
 
-function CartProductsStyled({name, image, price, newprice, src, id, quantity, onQuantityChange, onDelete}) {
+function CartProductsStyled({name, image, price, newprice, src, id, quantity, onQuantityChange, handleDeleteProduct }) {
 
     function handleQuantityChange(e) {
         const newQuantity = Math.max(1, Math.min(25, Number(e.target.value)));
         onQuantityChange(id, newQuantity);
-    }
-
-    async function delCartProduct(productId) {
-        await deleteCartProduct(productId);
-        onDelete(productId);
     }
 
     function arrowL(){
@@ -223,7 +217,7 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
             onQuantityChange(id, Number(quantity) - 1);
         }
         else{
-            delCartProduct(id);
+            handleDeleteProduct(id);
         }
     }
 
@@ -283,7 +277,7 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
 
                         <CartRemContainer>
                             <ButtonCartContainer onClick={() => {
-                                delCartProduct(id)
+                                handleDeleteProduct(id);
                             }}>
                                 <ButtonCart src={remCartImg} alt="Cart Icon"/>
                             </ButtonCartContainer>
