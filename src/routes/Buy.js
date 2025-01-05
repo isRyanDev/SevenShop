@@ -13,6 +13,7 @@ function Buy() {
     return (
 
       <BuyContainer>
+          <h1>PAGINA AINDA EM DESENVOLVIMENTO</h1>
         <Footer/>
       </BuyContainer>
 
