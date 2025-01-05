@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 const Loader = styled.span`
-    width: 80px;
+    width: 150px;
     height: 50px;
     position: relative;
 `

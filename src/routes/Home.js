@@ -12,7 +12,7 @@ const LoadingContainer = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background: linear-gradient(180deg, rgb(46 0 78) 0%, rgb(84 0 133) 100%);
     display: flex;
     justify-content: center;
