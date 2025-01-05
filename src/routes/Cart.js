@@ -152,6 +152,41 @@ const Value = styled.p`
     color: rgb(0, 183, 255);
 `
 
+const PortageContainer = styled.form`
+    display: flex;
+    flex-direction: column;
+
+    gap: .5rem;
+`
+
+const PortageCep = styled.input`
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    padding: .5rem;
+    border-radius: .5rem;
+
+    &:focus-visible {
+        outline: none;
+    }
+`
+
+const PortageSubmit = styled.input`
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(109, 0, 156, 0.5);
+    padding: .5rem;
+    border: none;
+    border-radius: .5rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+
+    &:hover {
+        background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
+    }
+`
+
 const TotalInTime = styled.div`
     display: flex;
     flex-direction: column;
@@ -444,6 +479,23 @@ function CartProducts() {
     const totalDiscont = totalPrice - totalNewPrice;
     const frete = 32.9;
 
+    const[cep, setCep] = useState("");
+    const[destination, setDestination] = useState("");
+    const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
+
+    async function getPortage(){
+        const response = await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=04138-001&destinations=83413-530&key=${apiKey}`);
+
+        const data = await response.json();
+
+        setDestination(data.destination);
+
+        console.log(data);
+        console.log(destination);
+    }
+
+    getPortage();
+
     const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/);
 
     let isOpen = false;
@@ -522,6 +574,11 @@ function CartProducts() {
                                     <SubtitleText>Frete:</SubtitleText>
                                     <Value>R$ {frete.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                 </div>
+
+                                <PortageContainer onSubmit={getPortage}>
+                                    <PortageCep  type="text" pattern="\d{5}-\d{3}" placeholder="00000-000" onChange={(e) => {setCep(e.target.value)}} required/>
+                                    <PortageSubmit type="submit" value="Calcular Frete"/>
+                                </PortageContainer>
                             </ProductsTotal>
                             <TotalPrices>
                                 <TotalInTime>
