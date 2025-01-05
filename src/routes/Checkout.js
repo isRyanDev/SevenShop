@@ -26,6 +26,7 @@ const CheckoutContent = styled.div`
     & div{
       display: flex;
       flex-direction: column;
+      text-align: center;
       justify-content: center;
       align-items: center;
     }
