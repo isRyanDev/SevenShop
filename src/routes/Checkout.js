@@ -33,7 +33,7 @@ const CheckoutContent = styled.div`
 
 function Checkout() {
   const location = useLocation();
-  const { totalPrice, totalNewPrice, portageValue } = location.state || {};
+  const { totalPrice, totalNewPrice, portageValue, street } = location.state || {};
 
   return (
       <CheckoutContainer>
@@ -43,6 +43,7 @@ function Checkout() {
           <h1>PAGINA EM DESENVOLVIMENTO</h1>
           <div>
             <h1>Resumo da Compra</h1>
+            <p>Endereço: {street}</p>
             <p>Total dos produtos: R$ {totalPrice}</p>
             <p>Total à vista: R$ {totalNewPrice}</p>
             <p>Frete: R$ {portageValue}</p>

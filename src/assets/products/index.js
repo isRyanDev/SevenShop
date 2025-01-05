@@ -1,5 +1,4 @@
-import { getCartProducts, postCartProducts } from "../../services/cart.js";
-import { useEffect,useState } from "react";
+import { useState } from "react";
 import styled from "styled-components"
 import cartImg from "../images/cart-icon.png"
 import addCartImg from "../images/add-to-cart.png"
@@ -131,34 +130,30 @@ const ButtonCart = styled.img`
 `
 
 function ProductsStyled({name, image, price, newprice, src, id}) {
-    const [ cartProducts, setCartProducts ] = useState([]);
 
-    async function fetchCartProducts() {
-        const cartProductsAPI = await getCartProducts();
-        setCartProducts(cartProductsAPI);
-    }
-    useEffect(() => {
-        fetchCartProducts();
-    }, []);
-
-    async function insertCartProduct(productId){
-
-        if (cartProducts.find((product) => product.id === productId)) {
-            alert("Produto já está no carrinho!");
+    function insertCartProduct(productId) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        
+        if (cart.some(product => product.id === productId)) {
+            alert("Este produto já está no carrinho!");
             return;
         }
-        await postCartProducts(productId);
-        fetchCartProducts();
+        
+        const newProduct = { id: productId, name, price, newprice, src, quantity: 1 };
+        cart.push(newProduct);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log("Produto adicionado ao carrinho!");
     }
 
-    async function insertAndBuy(productId){
+    function insertAndBuy(productId) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-        if (cartProducts.find((product) => product.id === productId)) {
-            alert("Produto já está no carrinho!");
+        if (cart.some(product => product.id === productId)) {
+            alert("Este produto já está no carrinho!");
             return;
         }
-        await postCartProducts(productId);
-        fetchCartProducts();
+
+        insertCartProduct(productId); 
         window.location.replace("/carrinho");
     }
 

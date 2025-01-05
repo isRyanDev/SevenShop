@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { getCartProducts, patchCartProducts } from "../services/cart";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
@@ -484,43 +483,44 @@ function CartProducts() {
     const [quantities, setQuantities] = useState({});
     const [loading, setLoading] = useState(true);
 
-    async function fetchCartProducts() {
-        setLoading(true);
-        const cartProductsAPI = await getCartProducts();
-        setCartProducts(cartProductsAPI);
-
+    useEffect(() => {
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCartProducts(storedCart);
+    
         const initialQuantities = {};
-        cartProductsAPI.forEach((product) => {
+        storedCart.forEach((product) => {
             initialQuantities[product.id] = product.quantity;
         });
         setQuantities(initialQuantities);
         setLoading(false);
-    }
-
-    useEffect(() => {
-        fetchCartProducts();
     }, []);
 
     function handleDeleteProduct(productId) {
-        setCartProducts((prevProducts) =>
-            prevProducts.filter((product) => product.id !== productId)
-        );
-
+        const updatedCart = cartProducts.filter((product) => product.id !== productId);
+        setCartProducts(updatedCart);
         setQuantities((prevQuantities) => {
             const updatedQuantities = { ...prevQuantities };
             delete updatedQuantities[productId];
             return updatedQuantities;
         });
+    
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
     }
 
     function handleQuantityChange(productId, newQuantity) {
         setQuantities((prevQuantities) => ({
-            ...prevQuantities, [productId]: newQuantity,
+            ...prevQuantities,
+            [productId]: newQuantity,
         }));
-
-        patchCartProducts(productId, { quantity: newQuantity })
+    
+        const updatedCart = cartProducts.map((product) =>
+            product.id === productId ? { ...product, quantity: newQuantity } : product
+        );
+    
+        setCartProducts(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
     }
-
+    
     const totalPrice = cartProducts.reduce((total, product) => {
         const quantity = quantities[product.id] || 1;
         return total + parseFloat(product.price) * quantity;
@@ -558,6 +558,7 @@ function CartProducts() {
     }
 
     const [portageValue, setPortageValue] = useState(0);
+    const [street, setStreet] = useState('');
     const [cep, setCep] = useState('');
 
     const getDistance = async (event) => {
@@ -569,7 +570,14 @@ function CartProducts() {
             const response = await fetch(`https://api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
             const data = await response.json();
             
-            getPortageValue(data.rows[0].elements[0].distance.value);
+            if(data.rows[0].elements[0].status === 'OK'){
+                getPortageValue(data.rows[0].elements[0].distance.value);
+                setStreet(data.destination_addresses[0]);
+            }else{
+                alert('CEP não encontrado!');
+                return;
+            }
+            
         } catch (error) {
             console.error('Erro ao calcular distância:', error);
         }
@@ -603,7 +611,7 @@ function CartProducts() {
         e.preventDefault();
 
         if(portageValue > 0){
-            navigate("/checkout", { state: { totalPrice, totalNewPrice, portageValue } });
+            navigate("/checkout", { state: { totalPrice, totalNewPrice, portageValue, street } });
         }
         else{
             alert('Preencha o campo de calculo do frete antes de prosseguir com a compra!');
