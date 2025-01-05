@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { getCartProducts, patchCartProducts } from "../services/cart";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import arrowUp from "../assets/images/arrow-up.png"
 import CartProductsStyled from "../assets/cart-products/index.js";
 import Footer from "../assets/footer/index.js";
 import StyledLink from "../assets/link/index.js";
@@ -10,6 +11,7 @@ const CartContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 92vh;
 `
 
 const CartContent = styled.div`
@@ -17,13 +19,11 @@ const CartContent = styled.div`
     flex-direction: row;
     justify-content: center;
     margin: 2vh;
-    min-height: 83vh;
     gap: 2rem;  
     overflow: hidden;
 
     @media screen and (min-width: 1080px){
         margin: 4vh;
-        min-height: 79vh;
     }
 `
 
@@ -143,6 +143,8 @@ const TotalPrices = styled.div`
 `
 
 const SubtitleText = styled.p`
+    display: flex;
+    justify-content: center;
     color: white;
 `
 
@@ -189,14 +191,6 @@ const Value1x = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`
-
-const Discont = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
-    gap: .5rem;
-    font-size: .8rem;
 `
 
 const CheckoutButtonContainer = styled.div`
@@ -248,14 +242,14 @@ const ButtonLink = styled(Link)`
     color: white;
 `
 
-const BuyButtonContainer = styled.div`
+const BuyResumeContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: rgb(109, 0, 156);
-    padding: 1rem;
-    gap: .5rem;
+    padding: 1.5rem;
+    gap: 1rem;
     position: sticky;
     bottom: 0;
 
@@ -277,31 +271,111 @@ const BuyButtonContainer = styled.div`
     }
 `
 
-const BuyResumeContainer = styled.div`
+const BuyResumeButton = styled.button`
     display: flex;
-    font-family: 'Roboto', sans-serif;
-    flex-direction: row;
-    color: white;
-    justify-content: space-between;
+    justify-content: center;
+    background-color: rgb(109, 0, 156);
+    border-radius: 100%;
+    padding: .5rem;
     align-items: center;
+    position: absolute;
+    top: -15px;
+    border: none;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+
+    .arrow-img-down{
+        transform: rotate(180deg);
+    }
+`
+
+const ResumeButtonImg = styled.img`
+    width: 1rem;
+    transition: all .5s ease-in-out;
+`
+
+const ResumeContainer = styled.div`
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
     width: 100%;
 
-    & h3{
-        font-size: 1rem;
-        font-weight: bold; 
+    @media screen and (min-width: 600px){
+        width: 90%;
     }
+`
 
-    & p{
-        font-size: .7rem;
+const BuyResume = styled.div`
+    display: flex;
+    flex-direction: row;
+    color: white;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+
+    & h3{
+        font-weight: bold; 
     }
 
     @media screen and (min-width: 600px){
         width: 90%;
-
-        & p{
-            font-size: .8rem;
-        }
     }
+`
+
+const BuyResumeValue = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+`
+
+const BuyResumeDescription = styled.div`
+    display: flex;
+    flex-direction: column;
+    color: white;
+    width: 100%;
+    justify-content: space-between;
+    font-family: 'Poppins', sans-serif;
+`
+
+const BuyResumeInfo = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-bottom: 1px solid white;
+`
+
+const BuyResumePrices = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    width: 100%;
+    gap: .5rem;
+`
+
+const BuyResumePrice = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-radius: .5rem;
+    background-color: rgba(46, 0, 78, 0.5);
+`
+
+const PriceTerms = styled.div`
+    display: flex;  
+    flex-direction: column;
+    text-align: right;
+`
+
+const TermsText = styled.p`
+    font-size: .8rem;
 `
 
 const BuyButton = styled.button`
@@ -371,6 +445,28 @@ function CartProducts() {
     const frete = 32.9;
 
     const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/);
+
+    let isOpen = false;
+
+    function openResume() {
+        if (isOpen) {
+            const resume = document.querySelector("div.resume-container");
+            resume.style.display = "none";
+
+            const img = document.querySelector("img.arrow-img-up");
+            img.style.transform = "rotate(0deg)";
+
+            isOpen = false;
+        }else{
+            const resume = document.querySelector("div.resume-container");
+            resume.style.display = "flex";
+
+            const img = document.querySelector("img.arrow-img-up");
+            img.style.transform = "rotate(180deg)";
+
+            isOpen = true;
+        }
+    }
 
     if (cartProducts.length < 1) {
         return (
@@ -442,10 +538,9 @@ function CartProducts() {
                                         <SubtitleText>Total à vista:</SubtitleText>
                                         <Value>R$ {(totalNewPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                     </Value1x>
-                                    <Discont>
-                                        <SubtitleText>(Desconto: </SubtitleText>
-                                        <p>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</p>
-                                    </Discont>
+                                    <PriceTerms>
+                                        <Terms><p>(Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)</p></Terms>
+                                    </PriceTerms>
                                 </Total1x>
                             </TotalPrices>
                         </SummaryContainer>
@@ -462,15 +557,68 @@ function CartProducts() {
 
                 </CartContent>                      
 
-                <BuyButtonContainer>
-                    <BuyResumeContainer>
+                <BuyResumeContainer>
+                    <BuyResumeButton onClick={() => openResume()}>
+                        <ResumeButtonImg className="arrow-img-up" src={arrowUp}/>
+                    </BuyResumeButton>
+                    <BuyResume>
                         <h3>RESUMO</h3>
-                        <p>VALOR À VISTA: <strong>R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></p>
-                    </BuyResumeContainer>
+                        <BuyResumeValue>
+                            <p>VALOR À VISTA:</p>
+                            <Value>
+                                <strong>
+                                    R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </strong>
+                            </Value>
+                        </BuyResumeValue>
+                    </BuyResume>
+
+                    <ResumeContainer className="resume-container">
+
+                        <BuyResumeDescription>
+
+                            <BuyResumeInfo>
+                                <p>Valor total:</p>
+                                <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                            </BuyResumeInfo>
+                            <BuyResumeInfo>
+                                <p>Frete:</p>
+                                <Value><strong>R$ {frete.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                            </BuyResumeInfo>
+
+                        </BuyResumeDescription>
+
+                        <BuyResumePrices>
+                                <BuyResumePrice>
+                                    <p>Total à prazo:</p>
+                                    <PriceTerms>
+                                        <Value><strong>R$ {(totalPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                        <Terms>
+                                            <TermsText>
+                                                (Até <strong>10x</strong> de <strong>{((totalPrice + frete) / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> sem juros)
+                                            </TermsText>
+                                        </Terms>
+                                    </PriceTerms>
+                                </BuyResumePrice>
+
+                                <BuyResumePrice>
+                                    <p>Total à vista:</p>
+                                    <PriceTerms>
+                                        <Value><strong>R$ {(totalNewPrice + frete).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                        <Terms>
+                                            <TermsText>
+                                                (Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)
+                                            </TermsText>
+                                        </Terms>
+                                    </PriceTerms>
+                                </BuyResumePrice>
+                            </BuyResumePrices>
+
+                    </ResumeContainer>
                     <ButtonLink className="buy-button-link" to="/compra">
                         <BuyButton>FINALIZAR COMPRA</BuyButton>             
                     </ButtonLink>
-                </BuyButtonContainer>
+                </BuyResumeContainer>
                 <Footer display="none" />
              </CartContainer>
         );
