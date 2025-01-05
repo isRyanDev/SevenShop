@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Home from './routes/Home';
-import Header from './assets/header/index.js';
 import Products from './routes/Products';
 import CartProducts from './routes/Cart';
-import Buy from './routes/Buy';
+import Checkout from './routes/Checkout';
 import reportWebVitals from './reportWebVitals.js';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -47,7 +46,6 @@ const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgb(84 0 133);
   }
-
 `
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -55,12 +53,11 @@ root.render(
   <React.StrictMode>
     <GlobalStyle />
     <BrowserRouter>
-      <Header/>
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/produtos" element={<Products/>} />
         <Route path="/carrinho" element={<CartProducts/>} />
-        <Route path="/compra" element={<Buy/>} />
+        <Route path="/checkout" element={<Checkout/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

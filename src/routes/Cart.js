@@ -1,17 +1,33 @@
 import { Link } from "react-router-dom";
 import { getCartProducts, patchCartProducts } from "../services/cart";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import arrowUp from "../assets/images/arrow-up.png"
 import CartProductsStyled from "../assets/cart-products/index.js";
 import Footer from "../assets/footer/index.js";
+import Header from "../assets/header/index.js";
+import Loading from "../assets/loader/index.js";
 import StyledLink from "../assets/link/index.js";
+
+const LoadingContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(180deg, rgb(46 0 78) 0%, rgb(84 0 133) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+`
 
 const CartContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 92vh;
+    min-height: 100vh;
 `
 
 const CartContent = styled.div`
@@ -32,24 +48,22 @@ const CartEmptyContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-top: 2vh;
-    gap: 1.5rem;
-    min-height: 90vh;
+    min-height: 100vh;
     overflow: hidden;
+`
 
-    & button{
-        color: white;
-        background-color: rgba(109, 0, 156, 0.5);
-        border: none;
-        font-weight: bold;
-        border-radius: .5rem;
-        padding: 1.5rem;
-        transition: all .7s;
+const CartEmptyButton = styled.button`
+    color: white;
+    background-color: rgba(109, 0, 156, 0.5);
+    border: none;
+    font-weight: bold;
+    border-radius: .5rem;
+    padding: 1.5rem;
+    transition: all .7s;
 
-        &:hover {
-            background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
-            cursor: pointer;
-        }
+    &:hover {
+        background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
+        cursor: pointer;
     }
 `
 
@@ -58,6 +72,7 @@ const CardEmptyContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
     gap: 1rem;
 `
 
@@ -461,10 +476,16 @@ const BuyButton = styled.button`
 `
 
 function CartProducts() {
+    useEffect(() => {
+        document.title = "SevenShop Store | Carrinho";
+      }, []);
+
     const [cartProducts, setCartProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
+    const [loading, setLoading] = useState(true);
 
     async function fetchCartProducts() {
+        setLoading(true);
         const cartProductsAPI = await getCartProducts();
         setCartProducts(cartProductsAPI);
 
@@ -473,6 +494,7 @@ function CartProducts() {
             initialQuantities[product.id] = product.quantity;
         });
         setQuantities(initialQuantities);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -483,10 +505,6 @@ function CartProducts() {
         setCartProducts((prevProducts) =>
             prevProducts.filter((product) => product.id !== productId)
         );
-
-        if(cartProducts.length === 1){
-            window.location.replace("/");
-        }
 
         setQuantities((prevQuantities) => {
             const updatedQuantities = { ...prevQuantities };
@@ -579,180 +597,190 @@ function CartProducts() {
         portageValueMq.style.display = "flex";
     }
 
-    function verifyPortage(){
+    const navigate = useNavigate();
+
+    const verifyPortage = (e) => {
+        e.preventDefault();
+
         if(portageValue > 0){
-            window.location.replace("/compra");
+            navigate("/checkout", { state: { totalPrice, totalNewPrice, portageValue } });
         }
         else{
             alert('Preencha o campo de calculo do frete antes de prosseguir com a compra!');
         }
     }
 
-    if (cartProducts.length < 1) {
-        return (
-            <CartEmptyContainer>
+    return (
+        <>
+        {loading ? (
+            <LoadingContainer>
+                <Loading/>
+            </LoadingContainer>
+        ) : cartProducts.length < 1 ? (
+            <CartEmptyContainer> 
                 <CardEmptyContent>
+                    <Header />
                     <CartEmptyText>
                         <h1>Seu carrinho está vazio.</h1>
                         <p>Adicione algum produto para finalizar a compra</p>
                     </CartEmptyText>
                     <StyledLink to={"/"}>
-                        <button>VOLTE A COMPRAR</button>
+                        <CartEmptyButton>VOLTE A COMPRAR</CartEmptyButton>
                     </StyledLink>
                 </CardEmptyContent>
                 <Footer />
             </CartEmptyContainer>
-        );
-    } else {
-        return (
-            <CartContainer>
-                <CartContent>
-                    <ProductCard>
-                        <h1>PRODUTOS</h1>
-                        {cartProducts.map((product) => {
-                            const imagePath = `./${product.src}.png`;
-                            const image = images(imagePath);
+        ) : (
+                <CartContainer>
+                    <Header/>
+                    <CartContent>
+                        <ProductCard>
+                            <h1>PRODUTOS</h1>
+                            {cartProducts.map((product) => {
+                                const imagePath = `./${product.src}.png`;
+                                const image = images(imagePath);
 
-                            return (
-                                <CartProductsStyled
-                                    key={product.id}
-                                    name={product.name}
-                                    image={image}
-                                    price={product.price}
-                                    newprice={product.newprice}
-                                    id={product.id}
-                                    src={product.src}
-                                    quantity={quantities[product.id] || 1}
-                                    onQuantityChange={handleQuantityChange}
-                                    onDelete={handleDeleteProduct}
-                                />
-                            );
-                        })}
-                    </ProductCard>
+                                return (
+                                    <CartProductsStyled
+                                        key={product.id}
+                                        name={product.name}
+                                        image={image}
+                                        price={product.price}
+                                        newprice={product.newprice}
+                                        id={product.id}
+                                        src={product.src}
+                                        quantity={quantities[product.id] || 1}
+                                        onQuantityChange={handleQuantityChange}
+                                        onDelete={handleDeleteProduct}
+                                    />
+                                );
+                            })}
+                        </ProductCard>
 
-                    <Checkout>
-                        <CheckoutTitle>RESUMO</CheckoutTitle>
-                        <SummaryContainer>
-                            <ProductsTotal>
-                                <TotalValue>
-                                    <SubtitleText>Total dos produtos:</SubtitleText>
-                                    <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                                </TotalValue>
-                                <Portage className="portage-value">
-                                    <SubtitleText>Frete:</SubtitleText>
-                                    <Value>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                                </Portage>
-                            </ProductsTotal>
+                        <Checkout>
+                            <CheckoutTitle>RESUMO</CheckoutTitle>
+                            <SummaryContainer>
+                                <ProductsTotal>
+                                    <TotalValue>
+                                        <SubtitleText>Total dos produtos:</SubtitleText>
+                                        <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    </TotalValue>
+                                    <Portage className="portage-value">
+                                        <SubtitleText>Frete:</SubtitleText>
+                                        <Value>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    </Portage>
+                                </ProductsTotal>
+
+                                <PortageContainer onSubmit={getDistance}>
+                                    <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
+                                    <PortageSubmit type="submit" value="Calcular Frete"/>
+                                </PortageContainer>
+
+                                <TotalPrices>
+                                    <TotalInTime>
+                                        <ValueInTime>
+                                            <SubtitleText>Total à prazo:</SubtitleText>
+                                            <Value>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                        </ValueInTime>
+                                        <Terms>
+                                            <p>(Até 10x sem juros)</p>
+                                        </Terms>
+                                    </TotalInTime>
+                                    <Total1x>
+                                        <Value1x>
+                                            <SubtitleText>Total à vista:</SubtitleText>
+                                            <Value>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                        </Value1x>
+                                        <PriceTerms>
+                                            <Terms><p>(Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)</p></Terms>
+                                        </PriceTerms>
+                                    </Total1x>
+                                </TotalPrices>
+                            </SummaryContainer>
+
+                            <CheckoutButtonContainer>
+                                <ButtonLink>
+                                    <CheckoutButton onClick={verifyPortage}>FINALIZAR COMPRA</CheckoutButton>
+                                </ButtonLink>
+                                <ButtonLink to="/">
+                                    <ReturnButton>VOLTE A COMPRAR</ReturnButton>
+                                </ButtonLink>
+                            </CheckoutButtonContainer>
+                        </Checkout>
+
+                    </CartContent>                      
+
+                    <BuyResumeContainer>
+                        <BuyResumeButton onClick={() => openResume()}>
+                            <ResumeButtonImg className="arrow-img-up" src={arrowUp}/>
+                        </BuyResumeButton>
+                        <BuyResume>
+                            <h3>RESUMO</h3>
+                            <BuyResumeValue>
+                                <p>VALOR À VISTA:</p>
+                                <Value>
+                                    <strong>
+                                        R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </strong>
+                                </Value>
+                            </BuyResumeValue>
+                        </BuyResume>
+
+                        <ResumeContainer className="resume-container">
+
+                            <BuyResumeDescription>
+
+                                <BuyResumeInfo>
+                                    <p>Valor total:</p>
+                                    <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                </BuyResumeInfo>
+                                <BuyResumeInfoPortage className="portage-value-mq">
+                                    <p>Frete:</p>
+                                    <Value><strong>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                </BuyResumeInfoPortage>
+                            </BuyResumeDescription>
 
                             <PortageContainer onSubmit={getDistance}>
                                 <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
                                 <PortageSubmit type="submit" value="Calcular Frete"/>
                             </PortageContainer>
 
-                            <TotalPrices>
-                                <TotalInTime>
-                                    <ValueInTime>
-                                        <SubtitleText>Total à prazo:</SubtitleText>
-                                        <Value>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                                    </ValueInTime>
-                                    <Terms>
-                                        <p>(Até 10x sem juros)</p>
-                                    </Terms>
-                                </TotalInTime>
-                                <Total1x>
-                                    <Value1x>
-                                        <SubtitleText>Total à vista:</SubtitleText>
-                                        <Value>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
-                                    </Value1x>
-                                    <PriceTerms>
-                                        <Terms><p>(Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)</p></Terms>
-                                    </PriceTerms>
-                                </Total1x>
-                            </TotalPrices>
-                        </SummaryContainer>
+                            <BuyResumePrices>
+                                    <BuyResumePrice>
+                                        <p>Total à prazo:</p>
+                                        <PriceTerms>
+                                            <Value><strong>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                            <Terms>
+                                                <TermsText>
+                                                    (Até <strong>10x</strong> de <strong>{((totalPrice + portageValue) / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> sem juros)
+                                                </TermsText>
+                                            </Terms>
+                                        </PriceTerms>
+                                    </BuyResumePrice>
 
-                        <CheckoutButtonContainer>
-                            <ButtonLink>
-                                <CheckoutButton onClick={() => verifyPortage()}>FINALIZAR COMPRA</CheckoutButton>
-                            </ButtonLink>
-                            <ButtonLink to="/">
-                                <ReturnButton>VOLTE A COMPRAR</ReturnButton>
-                            </ButtonLink>
-                        </CheckoutButtonContainer>
-                    </Checkout>
+                                    <BuyResumePrice>
+                                        <p>Total à vista:</p>
+                                        <PriceTerms>
+                                            <Value><strong>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                            <Terms>
+                                                <TermsText>
+                                                    (Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)
+                                                </TermsText>
+                                            </Terms>
+                                        </PriceTerms>
+                                    </BuyResumePrice>
+                                </BuyResumePrices>
 
-                </CartContent>                      
-
-                <BuyResumeContainer>
-                    <BuyResumeButton onClick={() => openResume()}>
-                        <ResumeButtonImg className="arrow-img-up" src={arrowUp}/>
-                    </BuyResumeButton>
-                    <BuyResume>
-                        <h3>RESUMO</h3>
-                        <BuyResumeValue>
-                            <p>VALOR À VISTA:</p>
-                            <Value>
-                                <strong>
-                                    R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </strong>
-                            </Value>
-                        </BuyResumeValue>
-                    </BuyResume>
-
-                    <ResumeContainer className="resume-container">
-
-                        <BuyResumeDescription>
-
-                            <BuyResumeInfo>
-                                <p>Valor total:</p>
-                                <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
-                            </BuyResumeInfo>
-                            <BuyResumeInfoPortage className="portage-value-mq">
-                                <p>Frete:</p>
-                                <Value><strong>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
-                            </BuyResumeInfoPortage>
-                        </BuyResumeDescription>
-
-                        <PortageContainer onSubmit={getDistance}>
-                            <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
-                            <PortageSubmit type="submit" value="Calcular Frete"/>
-                        </PortageContainer>
-
-                        <BuyResumePrices>
-                                <BuyResumePrice>
-                                    <p>Total à prazo:</p>
-                                    <PriceTerms>
-                                        <Value><strong>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
-                                        <Terms>
-                                            <TermsText>
-                                                (Até <strong>10x</strong> de <strong>{((totalPrice + portageValue) / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> sem juros)
-                                            </TermsText>
-                                        </Terms>
-                                    </PriceTerms>
-                                </BuyResumePrice>
-
-                                <BuyResumePrice>
-                                    <p>Total à vista:</p>
-                                    <PriceTerms>
-                                        <Value><strong>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
-                                        <Terms>
-                                            <TermsText>
-                                                (Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)
-                                            </TermsText>
-                                        </Terms>
-                                    </PriceTerms>
-                                </BuyResumePrice>
-                            </BuyResumePrices>
-
-                    </ResumeContainer>
-                    <ButtonLink className="buy-button-link">
-                        <BuyButton onClick={() => verifyPortage()}>FINALIZAR COMPRA</BuyButton>             
-                    </ButtonLink>
-                </BuyResumeContainer>
-                <Footer display="none" />
-             </CartContainer>
-        );
-    }
+                        </ResumeContainer>
+                        <ButtonLink className="buy-button-link">
+                            <BuyButton onClick={verifyPortage}>FINALIZAR COMPRA</BuyButton>             
+                        </ButtonLink>
+                    </BuyResumeContainer>
+                    <Footer display="none" />
+                </CartContainer>
+            )}
+        </>
+    );
 }
 
 export default CartProducts;

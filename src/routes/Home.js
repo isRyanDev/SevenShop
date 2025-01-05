@@ -4,6 +4,21 @@ import styled from "styled-components";
 import banner from "../assets/images/Banner.png"
 import ProductsStyled from "../assets/products/index.js";
 import Footer from "../assets/footer/index.js";
+import Header from "../assets/header/index.js";
+import Loading from "../assets/loader/index.js";
+
+const LoadingContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(180deg, rgb(46 0 78) 0%, rgb(84 0 133) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+`
 
 const HomeContainer = styled.div`
     display: flex;
@@ -37,11 +52,20 @@ const ProductsContainer = styled.div`
 `
 
 function Home() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = "SevenShop Store";
+  }, []);
+
     const [ products, setProducts ] = useState([]);
     async function fetchProducts() {
+        setLoading(true);
         const productsAPI = await getProducts();
         setProducts(productsAPI);
+        setLoading(false);
     }
+
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -49,26 +73,36 @@ function Home() {
     const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/)
 
     return (
+      <>
+        {loading ? (
+            <LoadingContainer>
+                <Loading/>
+            </LoadingContainer>
+        ) : (
+            <HomeContainer>
 
-      <HomeContainer>
-          <Banner src={banner}/>
+            <Header/>
 
-        <ProductsContainer>
-          {products.map(product => {
-            const imagePath = `./${product.src}.png`;
+            <Banner src={banner}/>
 
-            const image = images(imagePath);
+            <ProductsContainer>
+              {products.map(product => {
+                const imagePath = `./${product.src}.png`;
 
-              return (
-                <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id}/>
-              )
-            })}
-        </ProductsContainer>
+                const image = images(imagePath);
 
-        <Footer/>
-      </HomeContainer>
+                  return (
+                    <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id}/>
+                  )
+                })}
+            </ProductsContainer>
 
-    );  
+            <Footer/>
+          </HomeContainer>
+        )}
+      </>
+    );
 }
+
 
 export default Home;

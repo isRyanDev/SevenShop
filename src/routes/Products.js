@@ -2,16 +2,41 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/products.js";
 import { useLocation } from "react-router-dom";
+import Header from "../assets/header/index.js";
+import Footer from "../assets/footer/index.js";
+import Loading from "../assets/loader/index.js";
 import ProductsStyled from "../assets/products/index.js";
+
+const LoadingContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(180deg, rgb(46 0 78) 0%, rgb(84 0 133) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+`
 
 const ResultContainer = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    margin-top: 2vh;
-    min-height: 90vh;
+    min-height: 100vh;
     gap: 1rem;
     overflow: hidden;
+`
+
+const ResultContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 2rem;
 `
 
 const ResultText = styled.p`
@@ -38,6 +63,12 @@ const ProductsContainer = styled.div`
 `
 
 function Products() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        document.title = "SevenShop Store";
+      }, []);
+
     const [ products, setProducts ] = useState([]);
     const [ productsFiltered, setproductsFiltered ] = useState([]);
     const location = useLocation();
@@ -50,8 +81,10 @@ function Products() {
     const searchQuery = getQueryParams();
 
     async function fetchProducts() {
+        setLoading(true);
         const productsAPI = await getProducts();
         setProducts(productsAPI);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -64,26 +97,36 @@ function Products() {
     }, [searchQuery, products]);
 
     const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/)
-    
+
     return (
+        <>
+          {loading ? (
+              <LoadingContainer>
+                  <Loading/>
+              </LoadingContainer>
+          ) : (
+            <ResultContainer>
+                <ResultContent>
+                    <Header/>
+                    <ResultText>Mostrando resultados para: {searchQuery}</ResultText>
 
-        <ResultContainer>
-            <ResultText>Mostrando resultados para: {searchQuery}</ResultText>
+                    <ProductsContainer>
+                        {productsFiltered.map(product => {
+                            const imagePath = `./${product.src}.png`;
+                    
+                            const image = images(imagePath);
 
-            <ProductsContainer>
-                {productsFiltered.map(product => {
-                    const imagePath = `./${product.src}.png`;
-            
-                    const image = images(imagePath);
-
-                    return (
-                        <ProductsStyled name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id}/>
-                    )
-                })}
-            </ProductsContainer>
-        </ResultContainer>
-
-    );  
+                            return (
+                                <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id}/>
+                            )
+                        })}
+                    </ProductsContainer>
+                </ResultContent>
+                <Footer/>
+            </ResultContainer>
+          )}
+        </>
+      );
 }
 
 export default Products;
