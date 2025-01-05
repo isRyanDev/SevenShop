@@ -543,7 +543,7 @@ function CartProducts() {
         const destino = cep;
     
         try {
-            const response = await fetch(`http://api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
+            const response = await fetch(`https://api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
             const data = await response.json();
             
             getPortageValue(data.rows[0].elements[0].distance.value);
