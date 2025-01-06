@@ -723,8 +723,9 @@ function CartProducts() {
                             </Checkout>
 
                         </CartContent>                      
+                    </CartContentContainer>
 
-                        <BuyResumeContainer>
+                    <BuyResumeContainer>
                             <BuyResumeButton onClick={() => openResume()}>
                                 <ResumeButtonImg className="arrow-img-up" src={arrowUp}/>
                             </BuyResumeButton>
@@ -790,8 +791,9 @@ function CartProducts() {
                                 <BuyButton onClick={verifyPortage}>FINALIZAR COMPRA</BuyButton>             
                             </ButtonLink>
                         </BuyResumeContainer>
-                    </CartContentContainer>
+
                     <Footer display="none" />
+
                 </CartContainer>
             )}
         </>
