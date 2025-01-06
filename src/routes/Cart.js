@@ -745,7 +745,7 @@ function CartProducts() {
                                 <BuyResumeDescription>
 
                                     <BuyResumeInfo>
-                                        <p>Valor total:</p>
+                                        <p>Valor à prazo:</p>
                                         <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
                                     </BuyResumeInfo>
                                     <BuyResumeInfoPortage className="portage-value-mq">
