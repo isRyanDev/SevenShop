@@ -190,7 +190,7 @@ const PortageCep = styled.input`
     display: flex;
     justify-content: space-between;
     border: none;
-    padding: .5rem;
+    padding: 1rem .5rem;
     border-radius: .5rem;
     color: rgb(46,0,78);
     transition: all .5s ease-in-out;
