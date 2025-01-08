@@ -127,7 +127,7 @@ const MethodImg = styled.img`
 `
 
 const CardChipImg = styled.img`
-    width: 2rem;
+    width: 2.5rem;
 `
 
 const PaymentContent = styled.div`
@@ -175,6 +175,10 @@ const CardPaymentContent = styled.div`
     @media screen and (min-width: 1720px){
         flex-direction: row;
     }
+
+    & .flip-card{
+        transform: rotate3d(0, 1, 0, 180deg)
+    }
 `
 
 const SummaryContainer = styled.div`
@@ -199,13 +203,15 @@ const CardContainer = styled.div`
     justify-content: space-between;
     border-radius: .5rem;
     transition: all .5s ease-in-out;
-    width: 80%;
+    width: 90%;
+    transform: rotate3d(0);
     height: 10rem;
     background-color: rgb(97, 97, 97);
-    padding: 1rem 1.5rem;
+    padding: 1rem;
 
     @media screen and (min-width: 650px){
         width: 35%;
+        padding: 1rem 1.5rem;
     }
 `
 
@@ -272,7 +278,12 @@ const CardContentContainer = styled.div`
     justify-content: center;
     gap: 2rem;
 
+    & p{
+        transition: all .5s ease-in-out;
+    }
+
     & .active-input{
+        transition: all .5s ease-in-out;
         font-weight: bold;
     }
 `
@@ -554,12 +565,14 @@ function Checkout() {
     const [selectedInput, setSelectedInput] = useState(null);
     const [cardNumber, setCardNumber] = useState('•••• •••• •••• ••••');
     const [cardDate, setCardDate] = useState('••/••');
+    const [cardDateForm, setCardDateForm] = useState('');
     const [cardName, setCardName] = useState('NOME DO TITULAR');
     const totalDiscont = totalPrice - totalNewPrice;
 
     useEffect(() => {
         document.title = "SevenShop Store | Checkout";
       }, []);
+
 
     function openResume() {
         const resume = document.querySelector("div.resume-container");
@@ -574,62 +587,89 @@ function Checkout() {
         }
     }
 
-        const handleMethodClick = (method) => {
-            setSelectedMethod(method);
-        };
+    const handleMethodClick = (method) => {
+        setSelectedMethod(method);
+    };
 
-        const handleInputClick = (method) => {
-            setSelectedInput(method);
-        };
+    const handleInputClick = (method) => {
+        setSelectedInput(method);
+    };
 
-        const handleCardNumber = (e) => {
-            const value = e.target.value;
-            setCardNumber(cardNumberFormatter(value));
-        };
+    const handleCardNumber = (e) => {
+        const value = e.target.value;
+        setCardNumber(cardNumberFormatter(value));
+    };
 
-        const cardNumberFormatter = (value) => {
+    const cardNumberFormatter = (value) => {
+    const clearNumber = value.replace(/\D/g, '');
+    
+    let simbolNumber = '•••• •••• •••• ••••';
+
+    for (let i = 0; i < clearNumber.length; i++) {
+        simbolNumber = simbolNumber.replace('•', clearNumber[i]);
+    }
+
+    return simbolNumber;
+    };
+
+    const handleCardName = (e) => {
+        const value = e.target.value;
+        setCardName(cardNameFormatter(value));
+    };
+
+    const cardNameFormatter = (value) => {
+        let defaultName = 'NOME DO TITULAR';
+
+        if(value === '') return defaultName;
+
+        return value;
+    };
+
+    const handleCardDate = (e) => {
+        let value = e.target.value;
+        setCardDate(cardDateFormatter(value));
+
+        let result = '';
+        const formattedValue = value.replace(/\D/g, '');
+
+        if (formattedValue.length <= 2) {
+            result = formattedValue;
+        } 
+        else {
+            result = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4);
+        }
+
+        setCardDateForm(result);
+    };
+
+    const cardDateFormatter = (value) => {
         const clearNumber = value.replace(/\D/g, '');
         
-        let simbolNumber = '•••• •••• •••• ••••';
+        let simbolNumber = '••/••';
     
         for (let i = 0; i < clearNumber.length; i++) {
             simbolNumber = simbolNumber.replace('•', clearNumber[i]);
         }
     
         return simbolNumber;
-        };
+    };
 
-        const handleCardName = (e) => {
-            const value = e.target.value;
-            setCardName(cardNameFormatter(value));
-        };
+    useEffect(() => {
+        const cardNumber = document.getElementById("card-number");
+        const cardName = document.getElementById("card-name");
+        const cardDate = document.getElementById("card-date");
 
-        const cardNameFormatter = (value) => {
-            let defaultName = 'NOME DO TITULAR';
-
-            if(value === '') return defaultName;
-
-            return value;
-        };
-
-        const handleCardDate = (e) => {
-            const value = e.target.value;
-            setCardDate(cardDateFormatter(value));
-        };
-
-        const cardDateFormatter = (value) => {
-            const clearNumber = value.replace(/\D/g, '');
-            
-            let simbolNumber = '••/••';
-        
-            for (let i = 0; i < clearNumber.length; i++) {
-                simbolNumber = simbolNumber.replace('•', clearNumber[i]);
-            }
-        
-            return simbolNumber;
-        };
-
-
+        if(selectedInput === "cvv") {
+            cardNumber.style.opacity = "0";
+            cardName.style.opacity = "0";
+            cardDate.style.opacity = "0";
+        }
+        else {
+            cardNumber.style.opacity = "1";
+            cardName.style.opacity = "1";
+            cardDate.style.opacity = "1";
+        }
+    })
 
     return (
         <CheckoutContainer>
@@ -693,16 +733,16 @@ function Checkout() {
                                 </PaymentMethodCheckbox>
                                 <CardPaymentContent className={selectedMethod === "card" ? "active-card" : ""}>
 
-                                    <CardContainer>
+                                    <CardContainer className={selectedInput === "cvv" ? "flip-card" : ""}>
                                         <CardChipImg src={cardChip} alt="card=chip"/>
 
                                         <CardContentContainer>
-                                            <p className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
+                                            <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
 
                                             <CardContent>
-                                                <p className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
+                                                <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
 
-                                                <CardDate className={selectedInput === "date" ? "active-input" : ""}>
+                                                <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
                                                     <p>Valido até</p>
                                                     <p>{cardDate}</p>
                                                 </CardDate>
@@ -710,31 +750,32 @@ function Checkout() {
                                         </CardContentContainer>
                                     </CardContainer>
                                     <CardForm>
-                                        <MethodInput onClick={() => handleInputClick("number")}
+                                        <MethodInput onFocus={() => handleInputClick("number")}
                                             type="text"
                                             onChange={handleCardNumber}
                                             maxLength={16}
                                             placeholder="1234 5678 1234 5678"
                                         />
 
-                                        <MethodInput onClick={() => handleInputClick("name")}
+                                        <MethodInput onFocus={() => handleInputClick("name")}
                                             type="text"
                                             onChange={handleCardName}
                                             placeholder="Nome impresso no cartão"
                                         />  
 
                                         <SmallInputContainer>
-                                            <MethodInputSmall onClick={() => handleInputClick("date")}
+                                            <MethodInputSmall onFocus={() => handleInputClick("date")}
                                                 type="text"
+                                                value={cardDateForm}
                                                 onChange={handleCardDate}
                                                 pattern="\d{2}/\d{2}"
-                                                maxLength={4}
+                                                maxLength={5}
                                                 placeholder="MM/AA"
                                             />  
 
-                                            <MethodInputSmall onClick={() => handleInputClick("cvv")}
+                                            <MethodInputSmall onFocus={() => handleInputClick("cvv")}
                                                 type="text"
-                                                maxLength={3}
+                                                maxLength={3}   
                                                 placeholder="CVV"
                                             />  
                                         </SmallInputContainer>
