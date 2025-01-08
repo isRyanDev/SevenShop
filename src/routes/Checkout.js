@@ -131,10 +131,6 @@ const MethodImg = styled.img`
     }
 `
 
-const CardChipImg = styled.img`
-    width: 2.5rem;
-`
-
 const PaymentContent = styled.div`
     display: flex;
     text-align: left;
@@ -211,13 +207,16 @@ const CardContainer = styled.div`
     width: 90%;
     transform: rotate3d(0);
     gap: 1.5rem;
-    background-color: rgb(97, 97, 97);
     padding: 1rem;
 
     @media screen and (min-width: 650px){
         width: 40%;
         padding: 1.5rem;
     }
+`
+
+const CardChipImg = styled.img`
+    width: 3.5rem;
 `
 
 const CardForm = styled.form`
@@ -280,8 +279,8 @@ const CardContentContainer = styled.div`
     font-size: 1rem;
     font-family: 'Poppins', sans-serif;
     flex-direction: column;
+    gap: 1rem;
     justify-content: center;
-    gap: 2rem;
 
     & p{
         transition: all .5s ease-in-out;
@@ -293,7 +292,7 @@ const CardContentContainer = styled.div`
     }
 `
 
-const CardFlagInfo = styled.div`
+const CardInfos = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -301,9 +300,24 @@ const CardFlagInfo = styled.div`
     width: 100%;
 `
 
+const CardCVV = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate3d(0, 1, 0, 180deg)
+`
+
+const FlagImgContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+`
+
 const CardFlagImg = styled.img`
     border-radius: .5rem;
-    width: 4rem;
+    width: 100%;
 `
 
 const CardContent = styled.div`
@@ -586,6 +600,7 @@ function Checkout() {
     const [cardDate, setCardDate] = useState('••/••');
     const [cardDateForm, setCardDateForm] = useState('');
     const [cardName, setCardName] = useState('NOME DO TITULAR');
+    const [cardCVV, setCardCVV] = useState('');
     const totalDiscont = totalPrice - totalNewPrice;
 
     useEffect(() => {
@@ -606,6 +621,26 @@ function Checkout() {
             cardNumber.style.opacity = "1";
             cardName.style.opacity = "1";
             cardDate.style.opacity = "1";
+        }
+    })
+
+    useEffect(() => {
+        const cardContainer = document.getElementById("card-container");
+
+        if(cardBrand === "mastercard") {
+            cardContainer.style.backgroundColor = "#ff7300";
+        }
+        else if(cardBrand === "visa") {
+            cardContainer.style.backgroundColor = "#0069ff";
+        }
+        else if(cardBrand === "american-express") {
+            cardContainer.style.backgroundColor = "#08027f";
+        }
+        else if(cardBrand === "elo") {
+            cardContainer.style.backgroundColor = "#ff0000";
+        }
+        else{
+            cardContainer.style.backgroundColor = "#474040";
         }
     })
 
@@ -712,6 +747,11 @@ function Checkout() {
         return simbolNumber;
     };
 
+    const handleCardCVV = (e) => {
+        const value = e.target.value;
+        setCardCVV(value);
+    };
+
     return (
         <CheckoutContainer>
             <CheckoutContentContainer>
@@ -774,20 +814,29 @@ function Checkout() {
                                 </PaymentMethodCheckbox>
                                 <CardPaymentContent className={selectedMethod === "card" ? "active-card" : ""}>
 
-                                    <CardContainer className={selectedInput === "cvv" ? "flip-card" : ""}>
-                                        <CardChipImg src={cardChip} alt="card=chip"/>
+                                    <CardContainer id="card-container" className={selectedInput === "cvv" ? "flip-card" : ""}>
+                                        <CardInfos>
+                                            <CardChipImg src={cardChip} alt="card=chip"/>
+                                            <FlagImgContainer>
+                                                {getCardBrandLogo(cardBrand)}
+                                            </FlagImgContainer>
+                                        </CardInfos>
 
                                         <CardContentContainer>
-                                            <CardFlagInfo>
+                                            <CardInfos>
                                                 <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
-                                                {getCardBrandLogo(cardBrand)}
-                                            </CardFlagInfo>
+
+                                                <CardCVV>
+                                                    <p className={selectedInput === "cvv" ? "active-input" : ""}> {cardCVV}</p>
+                                                </CardCVV>
+
+                                            </CardInfos>
 
                                             <CardContent>
                                                 <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
 
                                                 <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
-                                                    <p>Valido até</p>
+                                                    <p>Validade</p>
                                                     <p>{cardDate}</p>
                                                 </CardDate>
                                             </CardContent>
@@ -820,6 +869,7 @@ function Checkout() {
                                             <MethodInputSmall onFocus={() => handleInputClick("cvv")}
                                                 type="text"
                                                 maxLength={3}   
+                                                onChange={handleCardCVV}
                                                 placeholder="CVV"
                                             />  
                                         </SmallInputContainer>
