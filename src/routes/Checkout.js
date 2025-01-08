@@ -203,6 +203,7 @@ const CardContainer = styled.div`
     flex-direction: column;
     border-radius: .5rem;
     transition: transform .5s ease-in-out;
+    transition: background-color .5s ease-in-out;
     width: 90%;
     transform: rotate3d(0);
     padding: 1rem;
@@ -252,6 +253,7 @@ const CardForm = styled.form`
     width: 100%;
     gap: 1rem;
     color: white;
+    z-index: 20;
 
     @media screen and (min-width: 1720px){
         width: 50%;
