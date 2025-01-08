@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
+import ccType from 'credit-card-type';
 import styled from "styled-components";
 import arrowUp from "../assets/images/arrow-up.png"
 import pix from "../assets/images/pix-icon.png"
 import card from "../assets/images/card-icon.png"
 import barCode from "../assets/images/bar-code-icon.png"
 import cardChip from "../assets/images/card-chip.png"
+import mastercardIcon from "../assets/images/mastercard-icon.png"
+import visaIcon from "../assets/images/visa-icon.png"
+import amexIcon from "../assets/images/amex-icon.png"
 import Footer from "../assets/footer/index.js";
 import Header from "../assets/header/index.js";
 
@@ -205,13 +209,13 @@ const CardContainer = styled.div`
     transition: all .5s ease-in-out;
     width: 90%;
     transform: rotate3d(0);
-    height: 10rem;
+    gap: 1.5rem;
     background-color: rgb(97, 97, 97);
     padding: 1rem;
 
     @media screen and (min-width: 650px){
-        width: 35%;
-        padding: 1rem 1.5rem;
+        width: 40%;
+        padding: 1.5rem;
     }
 `
 
@@ -286,6 +290,18 @@ const CardContentContainer = styled.div`
         transition: all .5s ease-in-out;
         font-weight: bold;
     }
+`
+
+const CardFlagInfo = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+`
+
+const CardFlagImg = styled.img`
+    width: 4rem;
 `
 
 const CardContent = styled.div`
@@ -564,6 +580,7 @@ function Checkout() {
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [selectedInput, setSelectedInput] = useState(null);
     const [cardNumber, setCardNumber] = useState('•••• •••• •••• ••••');
+    const [cardBrand, setCardBrand] = useState(null);
     const [cardDate, setCardDate] = useState('••/••');
     const [cardDateForm, setCardDateForm] = useState('');
     const [cardName, setCardName] = useState('NOME DO TITULAR');
@@ -573,6 +590,22 @@ function Checkout() {
         document.title = "SevenShop Store | Checkout";
       }, []);
 
+    useEffect(() => {
+        const cardNumber = document.getElementById("card-number");
+        const cardName = document.getElementById("card-name");
+        const cardDate = document.getElementById("card-date");
+
+        if(selectedInput === "cvv") {
+            cardNumber.style.opacity = "0";
+            cardName.style.opacity = "0";
+            cardDate.style.opacity = "0";
+        }
+        else {
+            cardNumber.style.opacity = "1";
+            cardName.style.opacity = "1";
+            cardDate.style.opacity = "1";
+        }
+    })
 
     function openResume() {
         const resume = document.querySelector("div.resume-container");
@@ -598,6 +631,13 @@ function Checkout() {
     const handleCardNumber = (e) => {
         const value = e.target.value;
         setCardNumber(cardNumberFormatter(value));
+
+        const cardInfo = ccType(value);
+        if (cardInfo.length > 0 && value !== '') {
+          setCardBrand(cardInfo[0].type);
+        } else {
+          setCardBrand(null);
+        }
     };
 
     const cardNumberFormatter = (value) => {
@@ -610,6 +650,19 @@ function Checkout() {
     }
 
     return simbolNumber;
+    };
+
+    const getCardBrandLogo = (brand) => {
+        switch (brand) {
+          case 'visa':
+            return <CardFlagImg src={visaIcon} alt="Visa" />;
+          case 'mastercard':
+            return <CardFlagImg src={mastercardIcon} alt="MasterCard" />;
+          case 'amex':
+            return <CardFlagImg src={amexIcon} alt="American Express" />;
+          default:
+            return null;
+        }
     };
 
     const handleCardName = (e) => {
@@ -653,23 +706,6 @@ function Checkout() {
     
         return simbolNumber;
     };
-
-    useEffect(() => {
-        const cardNumber = document.getElementById("card-number");
-        const cardName = document.getElementById("card-name");
-        const cardDate = document.getElementById("card-date");
-
-        if(selectedInput === "cvv") {
-            cardNumber.style.opacity = "0";
-            cardName.style.opacity = "0";
-            cardDate.style.opacity = "0";
-        }
-        else {
-            cardNumber.style.opacity = "1";
-            cardName.style.opacity = "1";
-            cardDate.style.opacity = "1";
-        }
-    })
 
     return (
         <CheckoutContainer>
@@ -737,7 +773,10 @@ function Checkout() {
                                         <CardChipImg src={cardChip} alt="card=chip"/>
 
                                         <CardContentContainer>
-                                            <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
+                                            <CardFlagInfo>
+                                                <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
+                                                {getCardBrandLogo(cardBrand)}
+                                            </CardFlagInfo>
 
                                             <CardContent>
                                                 <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
