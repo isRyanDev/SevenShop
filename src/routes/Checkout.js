@@ -202,8 +202,7 @@ const CardContainer = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: .5rem;
-    transition: transform .5s ease-in-out;
-    transition: background-color .5s ease-in-out;
+    transition: all .5s ease-in-out;
     width: 90%;
     transform: rotate3d(0);
     padding: 1rem;
