@@ -201,18 +201,42 @@ const CheckoutTitle = styled.h1`
 const CardContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     border-radius: .5rem;
-    transition: all .5s ease-in-out;
+    transition: transform .5s ease-in-out;
     width: 90%;
     transform: rotate3d(0);
-    gap: 1.5rem;
     padding: 1rem;
 
     @media screen and (min-width: 650px){
         width: 40%;
         padding: 1.5rem;
     }
+`
+
+const CardFrontContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+`
+
+const CardBackContainer = styled.div`
+    display: flex;
+    position: absolute;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+`
+
+const CardBackTarget = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: black;
+    box-sizing: border-box;
+    padding: 1rem;
+    height: 3rem;
+    width: 100%;
 `
 
 const CardChipImg = styled.img`
@@ -302,8 +326,6 @@ const CardInfos = styled.div`
 
 const CardCVV = styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
     transform: rotate3d(0, 1, 0, 180deg)
 `
 
@@ -608,19 +630,19 @@ function Checkout() {
       }, []);
 
     useEffect(() => {
-        const cardNumber = document.getElementById("card-number");
-        const cardName = document.getElementById("card-name");
-        const cardDate = document.getElementById("card-date");
+        const cardContainer = document.getElementById("card-container");
+        const cardFrontContainer = document.getElementById("card-front");
+        const cardBackContainer = document.getElementById("card-back");
 
         if(selectedInput === "cvv") {
-            cardNumber.style.opacity = "0";
-            cardName.style.opacity = "0";
-            cardDate.style.opacity = "0";
+            cardFrontContainer.style.opacity = "0";
+            cardBackContainer.style.opacity = "1";
+            cardContainer.style.alignItems = "center";
         }
         else {
-            cardNumber.style.opacity = "1";
-            cardName.style.opacity = "1";
-            cardDate.style.opacity = "1";
+            cardFrontContainer.style.opacity = "1";
+            cardBackContainer.style.opacity = "0";
+            cardContainer.style.alignItems = "unset";
         }
     })
 
@@ -815,32 +837,38 @@ function Checkout() {
                                 <CardPaymentContent className={selectedMethod === "card" ? "active-card" : ""}>
 
                                     <CardContainer id="card-container" className={selectedInput === "cvv" ? "flip-card" : ""}>
-                                        <CardInfos>
-                                            <CardChipImg src={cardChip} alt="card=chip"/>
-                                            <FlagImgContainer>
-                                                {getCardBrandLogo(cardBrand)}
-                                            </FlagImgContainer>
-                                        </CardInfos>
-
-                                        <CardContentContainer>
+                                        <CardFrontContainer id="card-front">
                                             <CardInfos>
-                                                <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
-
-                                                <CardCVV>
-                                                    <p className={selectedInput === "cvv" ? "active-input" : ""}> {cardCVV}</p>
-                                                </CardCVV>
-
+                                                <CardChipImg id="card-chip" src={cardChip} alt="card=chip"/>
+                                                <FlagImgContainer id="flag-img-container">
+                                                    {getCardBrandLogo(cardBrand)}
+                                                </FlagImgContainer>
                                             </CardInfos>
 
-                                            <CardContent>
-                                                <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
+                                            <CardContentContainer>
+                                                <CardInfos>
+                                                    <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
+                                                </CardInfos>
 
-                                                <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
-                                                    <p>Validade</p>
-                                                    <p>{cardDate}</p>
-                                                </CardDate>
-                                            </CardContent>
-                                        </CardContentContainer>
+                                                <CardContent>
+                                                    <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
+
+                                                    <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
+                                                        <p>Validade</p>
+                                                        <p>{cardDate}</p>
+                                                    </CardDate>
+                                                </CardContent>
+                                            </CardContentContainer>
+                                        </CardFrontContainer>
+
+                                        <CardBackContainer id="card-back">
+                                            <CardBackTarget>
+                                                <CardCVV>
+                                                    <p id="card-cvv" className={selectedInput === "cvv" ? "active-input" : ""}> {cardCVV}</p>
+                                                </CardCVV>
+                                            </CardBackTarget>
+                                        </CardBackContainer>
+
                                     </CardContainer>
                                     <CardForm>
                                         <MethodInput onFocus={() => handleInputClick("number")}
