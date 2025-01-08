@@ -11,6 +11,7 @@ import cardChip from "../assets/images/card-chip.png"
 import mastercardIcon from "../assets/images/mastercard-icon.png"
 import visaIcon from "../assets/images/visa-icon.png"
 import amexIcon from "../assets/images/amex-icon.png"
+import eloIcon from "../assets/images/elo-icon.png"
 import Footer from "../assets/footer/index.js";
 import Header from "../assets/header/index.js";
 
@@ -301,6 +302,7 @@ const CardFlagInfo = styled.div`
 `
 
 const CardFlagImg = styled.img`
+    border-radius: .5rem;
     width: 4rem;
 `
 
@@ -635,6 +637,7 @@ function Checkout() {
         const cardInfo = ccType(value);
         if (cardInfo.length > 0 && value !== '') {
           setCardBrand(cardInfo[0].type);
+        //   console.log(cardInfo)
         } else {
           setCardBrand(null);
         }
@@ -658,8 +661,10 @@ function Checkout() {
             return <CardFlagImg src={visaIcon} alt="Visa" />;
           case 'mastercard':
             return <CardFlagImg src={mastercardIcon} alt="MasterCard" />;
-          case 'amex':
+          case 'american-express':
             return <CardFlagImg src={amexIcon} alt="American Express" />;
+          case 'elo':
+            return <CardFlagImg src={eloIcon} alt="Elo" />;
           default:
             return null;
         }
