@@ -42,6 +42,7 @@ const ResultContent = styled.div`
 const ResultText = styled.p`
     font-size: 1.5rem;
     color: white;
+    text-align: center;
 `
 
 const ProductsContainer = styled.div`

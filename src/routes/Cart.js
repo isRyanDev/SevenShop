@@ -623,6 +623,22 @@ function CartProducts() {
         }
     }
 
+    const handleCep = (e) => {
+        let value = e.target.value;
+
+        let result = '';
+        const formattedValue = value.replace(/\D/g, '');
+
+        if (formattedValue.length <= 5) {
+            result = formattedValue;
+        } 
+        else {
+            result = formattedValue.slice(0, 5) + '-' + formattedValue.slice(5, 9);
+        }
+
+        setCep(result);
+    };
+
     return (
         <>
         {loading ? (
@@ -686,7 +702,17 @@ function CartProducts() {
                                     </ProductsTotal>
 
                                     <PortageContainer onSubmit={getDistance}>
-                                        <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
+                                        <PortageCep 
+                                            type="text" 
+                                            pattern="\d{5}-\d{3}" 
+                                            value={cep}
+                                            placeholder={cepPlaceholder} 
+                                            onFocus={handleFocus} 
+                                            onBlur={handleBlur} 
+                                            maxLength={9} 
+                                            onChange={handleCep}
+                                            required
+                                        />
                                         <PortageSubmit type="submit" value="Calcular Frete"/>
                                     </PortageContainer>
 
@@ -756,7 +782,17 @@ function CartProducts() {
                                 </BuyResumeDescription>
 
                                 <PortageContainer onSubmit={getDistance}>
-                                    <PortageCep type="text" pattern="\d{5}-\d{3}" placeholder={cepPlaceholder} onFocus={handleFocus} onBlur={handleBlur} onChange={(e) => {setCep(e.target.value)}} required/>
+                                    <PortageCep 
+                                        type="text" 
+                                        pattern="\d{5}-\d{3}" 
+                                        value={cep}
+                                        placeholder={cepPlaceholder} 
+                                        onFocus={handleFocus} 
+                                        onBlur={handleBlur} 
+                                        maxLength={9} 
+                                        onChange={handleCep}
+                                        required
+                                    />
                                     <PortageSubmit type="submit" value="Calcular Frete"/>
                                 </PortageContainer>
 

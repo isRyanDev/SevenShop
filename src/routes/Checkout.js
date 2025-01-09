@@ -207,7 +207,37 @@ const CardContainer = styled.div`
     transform: rotate3d(0);
     padding: 1rem;
 
-    @media screen and (min-width: 650px){
+    @media screen and (min-width: 550px){
+        width: 60%;
+        padding: 1.5rem;
+    }
+
+    @media screen and (min-width: 630px){
+        width: 50%;
+        padding: 1.5rem;
+    }
+
+    @media screen and (min-width: 870px){
+        width: 40%;
+        padding: 1.5rem;
+    }
+
+    @media screen and (min-width: 1000px){
+        width: 35%;
+        padding: 1.5rem;
+    }
+
+    @media screen and (min-width: 1200px){
+        width: 30%;
+        padding: 1.5rem;
+    }
+
+    @media screen and (min-width: 1400px){
+        width: 25%;
+        padding: 1.5rem;
+    }
+
+    @media screen and (min-width: 1720px){
         width: 40%;
         padding: 1.5rem;
     }
