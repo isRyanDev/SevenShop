@@ -58,7 +58,7 @@ const PaymentsMethodContent = styled.div`
     gap: 1rem;
 `
 
-const PaymentMethod = styled.button`
+const PaymentMethod = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: .5rem;
@@ -889,27 +889,59 @@ function Checkout() {
     };
 
     const generateCard = () => {
-
-        const randomNumber = Math.floor(Math.random() * 1e16);
+        const randomId = Math.floor(Math.random() * binCards.length);
+        const selectedBinGroup = binCards[randomId].bin;
     
-        const formattedNumber = randomNumber.toString().padStart(16, '0').replace(/(\d{4})(?=\d)/g, '$1 ');
+        const randomBin = selectedBinGroup.length > 1 
+            ? selectedBinGroup[Math.floor(Math.random() * selectedBinGroup.length)]
+            : selectedBinGroup[0];
+    
+        const remainingDigits = 16 - randomBin.toString().length;
+        const randomNumber = Math.floor(Math.random() * Math.pow(10, remainingDigits));
+    
+        const resultNumber = randomBin.toString() + randomNumber.toString().padStart(remainingDigits, '0');
+    
+        const formattedNumber = resultNumber.replace(/(\d{4})(?=\d)/g, '$1 ');
     
         setCardNumberForm(formattedNumber);
-        setCardNumber(cardNumberFormatter(formattedNumber));
-        setCardDate('07/27');
-        setCardDateForm('07/27');
+        setCardNumber(cardNumberFormatter(formattedNumber)); 
+        setCardDate('07/27'); 
+        setCardDateForm('07/77');
         setCardCVV('777');
         setCardName("RYAN DEVELOPER");
         setcardNameForm("RYAN DEVELOPER");
-    
-        const cardInfo = ccType(formattedNumber);
+
+        const cardInfo = ccType(resultNumber);
         if (cardInfo.length > 0) {
             setCardBrand(cardInfo[0].type); 
         } else {
-            setCardBrand(null);
+            setCardBrand(null); 
         }
     };
     
+
+    const binCards = [
+        {
+            id: 1,
+            name: "Visa",
+            bin: [4],
+        },
+        {
+            id: 2,
+            name: "Mastercard",
+            bin: [51, 22, 23, 24, 25, 26, 27],
+        },
+        {
+            id: 3,
+            name: "Amex",
+            bin: [34, 37],
+        },
+        {
+            id: 4,
+            name: "Elo",
+            bin: [438935],
+        }
+    ]
 
     return (
         <CheckoutContainer>
