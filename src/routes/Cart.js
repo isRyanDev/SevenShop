@@ -740,7 +740,7 @@ function CartProducts() {
 
                                 <CheckoutButtonContainer>
                                     <ButtonLink>
-                                        <CheckoutButton onClick={verifyPortage}>FINALIZAR COMPRA</CheckoutButton>
+                                        <CheckoutButton onClick={verifyPortage}>CONTINUAR</CheckoutButton>
                                     </ButtonLink>
                                     <ButtonLink to="/">
                                         <ReturnButton>VOLTE A COMPRAR</ReturnButton>
@@ -770,7 +770,6 @@ function CartProducts() {
                             <ResumeContainer className="resume-container">
 
                                 <BuyResumeDescription>
-
                                     <BuyResumeInfo>
                                         <p>Valor à prazo:</p>
                                         <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
@@ -797,30 +796,30 @@ function CartProducts() {
                                 </PortageContainer>
 
                                 <BuyResumePrices>
-                                        <BuyResumePrice>
-                                            <p>Total à prazo:</p>
-                                            <PriceTerms>
-                                                <Value><strong>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
-                                                <Terms>
-                                                    <TermsText>
-                                                        (Até <strong>10x</strong> de <strong>{((totalPrice + portageValue) / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> sem juros)
-                                                    </TermsText>
-                                                </Terms>
-                                            </PriceTerms>
-                                        </BuyResumePrice>
+                                    <BuyResumePrice>
+                                        <p>Total à prazo:</p>
+                                        <PriceTerms>
+                                            <Value><strong>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                            <Terms>
+                                                <TermsText>
+                                                    (Até <strong>10x</strong> de <strong>{((totalPrice + portageValue) / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> sem juros)
+                                                </TermsText>
+                                            </Terms>
+                                        </PriceTerms>
+                                    </BuyResumePrice>
 
-                                        <BuyResumePrice>
-                                            <p>Total à vista:</p>
-                                            <PriceTerms>
-                                                <Value><strong>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
-                                                <Terms>
-                                                    <TermsText>
-                                                        (Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)
-                                                    </TermsText>
-                                                </Terms>
-                                            </PriceTerms>
-                                        </BuyResumePrice>
-                                    </BuyResumePrices>
+                                    <BuyResumePrice>
+                                        <p>Total à vista:</p>
+                                        <PriceTerms>
+                                            <Value><strong>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                            <Terms>
+                                                <TermsText>
+                                                    (Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)
+                                                </TermsText>
+                                            </Terms>
+                                        </PriceTerms>
+                                    </BuyResumePrice>
+                                </BuyResumePrices>
 
                             </ResumeContainer>
                             <ButtonLink className="buy-button-link">

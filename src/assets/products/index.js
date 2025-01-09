@@ -33,18 +33,51 @@ const Product = styled.li`
     }
 `
 
-const Description = styled.div`
+const DescriptionContentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content-center
+    align-items: center;
+    gap: 1rem;
     line-height: 1.25rem;
     padding: .8rem;
-    text-align: left;
     color: white;
+`
+
+const DescriptionContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+`
+
+const Description = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+`
+
+const DescriptionPrices = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const AuthorContainer = styled.div`
+    display: flex;
+    font-family: 'Poppins', sans-serif;
+    flex-direction: column;
+    justify-content: center;
+    width: 20%;
+    align-items: center;
 `
 
 const ProductName = styled.h4`
     display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: .8rem;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 `
@@ -61,12 +94,6 @@ const ProductNewPrice = styled.h3`
     margin: 0;
     margin-top: 0.125rem;
     margin-bottom: 0.125rem;
-`
-
-const PayMethod = styled.h6`
-    margin: 0;
-    padding: 0;
-    margin-bottom: 2.5rem;
 `
 
 const ProductBuyContainer = styled.div`
@@ -129,7 +156,7 @@ const ButtonCart = styled.img`
     width: 1.5rem;
 `
 
-function ProductsStyled({name, image, price, newprice, src, id}) {
+function ProductsStyled({name, image, price, newprice, src, id, author}) {
 
     function insertCartProduct(productId) {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -168,19 +195,31 @@ function ProductsStyled({name, image, price, newprice, src, id}) {
 
                 <ProductImg src={image} alt={src}/>
 
-                <Description>
-                    <ProductName>
-                        {name}
-                    </ProductName>
-                    <ProductPrice>
-                        R${priceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </ProductPrice>
-                    <ProductNewPrice>
-                        R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 } )}
-                    </ProductNewPrice>
-                    <PayMethod>
-                        Á vista
-                    </PayMethod>
+                <DescriptionContentContainer>
+                    <DescriptionContent>
+                        <ProductName>
+                            {name}
+                        </ProductName>
+
+                        <Description>
+                            <DescriptionPrices>
+                                <ProductPrice>
+                                    R${priceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </ProductPrice>
+                                <ProductNewPrice>
+                                    R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 } )}
+                                </ProductNewPrice>
+                                <h6>
+                                    Á vista
+                                </h6>
+                            </DescriptionPrices>
+
+                            <AuthorContainer>
+                                <p>Autor:</p>
+                                <p><strong>{author}</strong></p>
+                            </AuthorContainer>
+                        </Description>
+                    </DescriptionContent>
 
                     <ProductBuyContainer>
                         <ProductBuyButton onClick={() => insertAndBuy(id)}>
@@ -196,7 +235,7 @@ function ProductsStyled({name, image, price, newprice, src, id}) {
                         </ButtonCartContainer>
 
                     </ProductBuyContainer>
-                </Description>
+                </DescriptionContentContainer>
 
             </Product>
         </ProductsList>

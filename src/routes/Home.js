@@ -92,7 +92,7 @@ function Home() {
                 const image = images(imagePath);
 
                   return (
-                    <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id}/>
+                    <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id} author={product.author}/>
                   )
                 })}
             </ProductsContainer>

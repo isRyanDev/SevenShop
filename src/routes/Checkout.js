@@ -243,7 +243,6 @@ const CardContainer = styled.div`
     }
 `
 
-
 const CardFormContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -765,7 +764,7 @@ function Checkout() {
         else{
             setTotalValue(totalPrice + portageValue);
         }
-    })
+    }, [setTotalValue, totalNewPrice, portageValue, selectedMethod, totalPrice]);
 
     function openResume() {
         const resume = document.querySelector("div.resume-container");
@@ -939,7 +938,7 @@ function Checkout() {
         {
             id: 4,
             name: "Elo",
-            bin: [438935],
+            bin: [438935, 451416,],
         }
     ]
 
