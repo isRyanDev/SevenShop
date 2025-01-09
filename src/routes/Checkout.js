@@ -908,8 +908,8 @@ function Checkout() {
         setCardDate('07/27'); 
         setCardDateForm('07/77');
         setCardCVV('777');
-        setCardName("RYAN DEVELOPER");
-        setcardNameForm("RYAN DEVELOPER");
+        setCardName("Ryan Developer");
+        setcardNameForm("Ryan Developer");
 
         const cardInfo = ccType(resultNumber);
         if (cardInfo.length > 0) {
@@ -1020,7 +1020,7 @@ function Checkout() {
                                                 </CardInfos>
 
                                                 <CardContent>
-                                                    <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName}</p>
+                                                    <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName.toUpperCase()}</p>
 
                                                     <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
                                                         <p>Validade</p>
@@ -1042,7 +1042,8 @@ function Checkout() {
 
                                     <CardFormContainer>
                                         <CardForm>
-                                            <MethodInput onFocus={() => handleInputClick("number")}
+                                            <MethodInput 
+                                                onFocus={() => handleInputClick("number")}
                                                 type="text"
                                                 value={cardNumberForm}
                                                 onChange={handleCardNumber}
@@ -1050,7 +1051,8 @@ function Checkout() {
                                                 placeholder="1234 5678 1234 5678"
                                             />
 
-                                            <MethodInput onFocus={() => handleInputClick("name")}
+                                            <MethodInput 
+                                                onFocus={() => handleInputClick("name")}
                                                 type="text"
                                                 value={cardNameForm}
                                                 onChange={handleCardName}
@@ -1058,7 +1060,8 @@ function Checkout() {
                                             />  
 
                                             <SmallInputContainer>
-                                                <MethodInputSmall onFocus={() => handleInputClick("date")}
+                                                <MethodInputSmall 
+                                                    onFocus={() => handleInputClick("date")}
                                                     type="text"
                                                     value={cardDateForm}
                                                     onChange={handleCardDate}
@@ -1067,7 +1070,9 @@ function Checkout() {
                                                     placeholder="MM/AA"
                                                 />  
 
-                                                <MethodInputSmall onFocus={() => handleInputClick("cvv")}
+                                                <MethodInputSmall 
+                                                    onFocus={() => handleInputClick("cvv")}
+                                                    onBlur={() => handleInputClick("")}
                                                     type="text"
                                                     value={cardCVV}
                                                     maxLength={3}   
