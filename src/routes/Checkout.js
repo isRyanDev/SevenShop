@@ -243,6 +243,20 @@ const CardContainer = styled.div`
     }
 `
 
+
+const CardFormContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+
+    @media screen and (min-width: 1720px){
+        width: 50%;
+    }
+`
+
 const CardFrontContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -283,9 +297,24 @@ const CardForm = styled.form`
     gap: 1rem;
     color: white;
     z-index: 20;
+`
 
-    @media screen and (min-width: 1720px){
-        width: 50%;
+const CardGeneratorButton = styled.button`
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(109, 0, 156, 0.5);
+    border: none;
+    border-radius: .5rem;
+    width: 50%;
+    height: 2rem;
+    color: white;
+    cursor: pointer;
+    
+    & p{
+        font-weight: bold;
+    }
+
+    &:hover {
+        background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
     }
 `
 
@@ -396,10 +425,17 @@ const SummaryContent = styled.div`
     background-color: rgba(46,0,78,0.5);
     padding: 2rem;
     border-radius: .5rem;
-    gap: 2rem;
+    transition: all .5s ease-in-out;
+    gap: 1rem;
 
     &:hover {
         box-shadow: 1px 0px 5px 5px rgba(89, 0, 161, 0.2);
+    }
+
+    .active{
+        opacity: 1;
+        max-height: unset;
+        padding: .5rem;
     }
 `
 
@@ -443,6 +479,28 @@ const Portage = styled.div`
     justify-content: space-between;
     border-bottom: 1px solid white;
     color: white;
+`
+
+const BuyResumePrice = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    max-height: 0;
+    padding: 0;
+    border-radius: .5rem;
+    box-sizing: border-box;
+    width: 100%;
+    color: white;
+    background-color: rgba(109, 0, 156, 0.5);
+    transition: all .5s ease-in-out;
+`
+
+const PriceTerms = styled.div`
+    display: flex;  
+    flex-direction: column;
+    text-align: right;
 `
 
 const SubtitleText = styled.p`
@@ -649,11 +707,14 @@ function Checkout() {
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [selectedInput, setSelectedInput] = useState(null);
     const [cardNumber, setCardNumber] = useState('•••• •••• •••• ••••');
+    const [cardNumberForm, setCardNumberForm] = useState('');
     const [cardBrand, setCardBrand] = useState(null);
     const [cardDate, setCardDate] = useState('••/••');
     const [cardDateForm, setCardDateForm] = useState('');
     const [cardName, setCardName] = useState('NOME DO TITULAR');
+    const [cardNameForm, setcardNameForm] = useState('');
     const [cardCVV, setCardCVV] = useState('');
+    const [totalValue, setTotalValue] = useState(0);
     const totalDiscont = totalPrice - totalNewPrice;
 
     useEffect(() => {
@@ -697,6 +758,15 @@ function Checkout() {
         }
     })
 
+    useEffect(() => {
+        if(selectedMethod === "boleto" || selectedMethod === "pix") {
+            setTotalValue(totalNewPrice + portageValue);
+        }
+        else{
+            setTotalValue(totalPrice + portageValue);
+        }
+    })
+
     function openResume() {
         const resume = document.querySelector("div.resume-container");
         const img = document.querySelector("img.arrow-img-up");
@@ -719,7 +789,13 @@ function Checkout() {
     };
 
     const handleCardNumber = (e) => {
-        const value = e.target.value;
+        let value = e.target.value;
+
+        value = value.replace(/\D/g, '');
+
+        const formattedValue = value.replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+
+        setCardNumberForm(formattedValue);
         setCardNumber(cardNumberFormatter(value));
 
         const cardInfo = ccType(value);
@@ -759,8 +835,12 @@ function Checkout() {
     };
 
     const handleCardName = (e) => {
-        const value = e.target.value;
+        let value = e.target.value;
+
+        value = value.replace(/[^a-zA-Z\s]/g, '');
+
         setCardName(cardNameFormatter(value));
+        setcardNameForm(value);
     };
 
     const cardNameFormatter = (value) => {
@@ -801,9 +881,35 @@ function Checkout() {
     };
 
     const handleCardCVV = (e) => {
-        const value = e.target.value;
+        let value = e.target.value;
+
+        value = value.replace(/\D/g, '');
+
         setCardCVV(value);
     };
+
+    const generateCard = () => {
+
+        const randomNumber = Math.floor(Math.random() * 1e16);
+    
+        const formattedNumber = randomNumber.toString().padStart(16, '0').replace(/(\d{4})(?=\d)/g, '$1 ');
+    
+        setCardNumberForm(formattedNumber);
+        setCardNumber(cardNumberFormatter(formattedNumber));
+        setCardDate('07/27');
+        setCardDateForm('07/27');
+        setCardCVV('777');
+        setCardName("RYAN DEVELOPER");
+        setcardNameForm("RYAN DEVELOPER");
+    
+        const cardInfo = ccType(formattedNumber);
+        if (cardInfo.length > 0) {
+            setCardBrand(cardInfo[0].type); 
+        } else {
+            setCardBrand(null);
+        }
+    };
+    
 
     return (
         <CheckoutContainer>
@@ -852,20 +958,20 @@ function Checkout() {
                                 </PaymentContent>
                             </PaymentMethod>
 
-                            <PaymentMethod onClick={() => handleMethodClick("card")}>
+                            <PaymentMethod onClick={() => handleMethodClick("cartão")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
                                         <input
                                             type="radio"
                                             name="payment-method"
-                                            checked={selectedMethod === "card"}
+                                            checked={selectedMethod === "cartão"}
                                             readOnly
                                         />
                                         <h3>CARTÃO DE CRÉDITO</h3>
                                     </MethodTitle>
                                     <MethodImg src={card} alt="card-icon" />
                                 </PaymentMethodCheckbox>
-                                <CardPaymentContent className={selectedMethod === "card" ? "active-card" : ""}>
+                                <CardPaymentContent className={selectedMethod === "cartão" ? "active-card" : ""}>
 
                                     <CardContainer id="card-container" className={selectedInput === "cvv" ? "flip-card" : ""}>
                                         <CardFrontContainer id="card-front">
@@ -901,38 +1007,49 @@ function Checkout() {
                                         </CardBackContainer>
 
                                     </CardContainer>
-                                    <CardForm>
-                                        <MethodInput onFocus={() => handleInputClick("number")}
-                                            type="text"
-                                            onChange={handleCardNumber}
-                                            maxLength={16}
-                                            placeholder="1234 5678 1234 5678"
-                                        />
 
-                                        <MethodInput onFocus={() => handleInputClick("name")}
-                                            type="text"
-                                            onChange={handleCardName}
-                                            placeholder="Nome impresso no cartão"
-                                        />  
-
-                                        <SmallInputContainer>
-                                            <MethodInputSmall onFocus={() => handleInputClick("date")}
+                                    <CardFormContainer>
+                                        <CardForm>
+                                            <MethodInput onFocus={() => handleInputClick("number")}
                                                 type="text"
-                                                value={cardDateForm}
-                                                onChange={handleCardDate}
-                                                pattern="\d{2}/\d{2}"
-                                                maxLength={5}
-                                                placeholder="MM/AA"
+                                                value={cardNumberForm}
+                                                onChange={handleCardNumber}
+                                                maxLength={19}
+                                                placeholder="1234 5678 1234 5678"
+                                            />
+
+                                            <MethodInput onFocus={() => handleInputClick("name")}
+                                                type="text"
+                                                value={cardNameForm}
+                                                onChange={handleCardName}
+                                                placeholder="Nome impresso no cartão"
                                             />  
 
-                                            <MethodInputSmall onFocus={() => handleInputClick("cvv")}
-                                                type="text"
-                                                maxLength={3}   
-                                                onChange={handleCardCVV}
-                                                placeholder="CVV"
-                                            />  
-                                        </SmallInputContainer>
-                                    </CardForm>
+                                            <SmallInputContainer>
+                                                <MethodInputSmall onFocus={() => handleInputClick("date")}
+                                                    type="text"
+                                                    value={cardDateForm}
+                                                    onChange={handleCardDate}
+                                                    pattern="\d{2}/\d{2}"
+                                                    maxLength={5}
+                                                    placeholder="MM/AA"
+                                                />  
+
+                                                <MethodInputSmall onFocus={() => handleInputClick("cvv")}
+                                                    type="text"
+                                                    value={cardCVV}
+                                                    maxLength={3}   
+                                                    onChange={handleCardCVV}
+                                                    placeholder="CVV"
+                                                />  
+                                            </SmallInputContainer>
+                                        </CardForm>
+
+                                        <CardGeneratorButton onClick={generateCard}>
+                                            <p>GERAR CARTÃO</p>
+                                        </CardGeneratorButton>
+                                    </CardFormContainer>
+
                                 </CardPaymentContent>
                             </PaymentMethod>
                         </PaymentsMethodContent>
@@ -956,8 +1073,14 @@ function Checkout() {
                                     <SubtitleText>Frete:</SubtitleText>
                                     <Value>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
                                 </Portage>
-
                             </ProductsTotal>
+
+                            <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
+                                <p>Total no <strong>{selectedMethod}</strong>:</p>
+                                <PriceTerms>
+                                    <Value><strong>R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                </PriceTerms>
+                            </BuyResumePrice>
 
                             <CheckoutButtonContainer>
                                 <ButtonLink>
