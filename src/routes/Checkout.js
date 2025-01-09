@@ -690,7 +690,7 @@ function Checkout() {
             cardContainer.style.backgroundColor = "#08027f";
         }
         else if(cardBrand === "elo") {
-            cardContainer.style.backgroundColor = "#ff0000";
+            cardContainer.style.backgroundColor = "#000000";
         }
         else{
             cardContainer.style.backgroundColor = "#474040";
