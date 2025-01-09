@@ -929,7 +929,7 @@ function Checkout() {
         {
             id: 2,
             name: "Mastercard",
-            bin: [51, 22, 23, 24, 25, 26, 27],
+            bin: [51, 22, 23, 24, 25, 26],
         },
         {
             id: 3,
