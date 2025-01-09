@@ -808,7 +808,7 @@ function Checkout() {
     return (
         <CheckoutContainer>
             <CheckoutContentContainer>
-                <Header displaySearch="none"/>
+                <Header displaySearch="none" displayButton="none"/>
                 
                 <CheckoutContent>
 

@@ -177,7 +177,7 @@ const SearchInput = styled.input`
 `
 
 const SearchButton = styled.button`
-    display: flex;
+    display: ${(props) => (props.display || "flex")};
     justify-content: center;
     align-items: center;
     border: none;
@@ -194,7 +194,7 @@ const SearchImg = styled.img`
     cursor: pointer;
 `
 
-function Header({displaySearch}){
+function Header({displaySearch, displayButton}){
     const [searchInput, setSearchInput] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -232,7 +232,7 @@ function Header({displaySearch}){
                         </LinkStyled>
                     </HeaderMenuLi>
     
-                    <SearchButton type="button" onClick={toggleSearch}>
+                    <SearchButton display={displayButton} type="button" onClick={toggleSearch}>
                         <SearchImg src={searchImg} alt="search" />
                     </SearchButton>
     
