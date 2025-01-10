@@ -186,10 +186,19 @@ const PortageContainer = styled.form`
     gap: .5rem;
 `
 
+const PortageCepContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: .5rem; 
+    width: 100%;
+`
+
 const PortageCep = styled.input`
     display: flex;
     justify-content: space-between;
     border: none;
+    width: 70%;
     padding: 1rem .5rem;
     border-radius: .5rem;
     color: rgb(46,0,78);
@@ -201,6 +210,31 @@ const PortageCep = styled.input`
 
     &:focus-visible {
         outline: none;
+    }
+`
+
+const GenerateCepButton = styled.button`
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(46,0,78);
+    padding: .5rem;
+    border: none;
+    border-radius: .5rem;
+    color: white;
+    font-weight: bold;
+    width: 30%;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+
+    &:hover {
+        background-color: rgba(46, 0, 78, 0.5);
+    }
+
+    @media screen and (min-width: 1720px){
+        background-color: rgba(109, 0, 156, 0.5);
+
+        &:hover {
+            background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
+        }
     }
 `
 
@@ -472,6 +506,7 @@ const BuyButton = styled.button`
     border: none;
     padding: 1rem;
     cursor: pointer;
+    font-weight: bold;
     transition: all .5s ease-in-out;
 
     &:hover {
@@ -572,7 +607,9 @@ function CartProducts() {
         const destino = cep;
     
         try {
+            setLoading(true);
             const response = await fetch(`https://api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
+            setLoading(false);
             const data = await response.json();
             
             if(data.rows[0].elements[0].status === 'OK'){
@@ -582,7 +619,6 @@ function CartProducts() {
                 alert('CEP não encontrado!');
                 return;
             }
-            
         } catch (error) {
             console.error('Erro ao calcular distância:', error);
         }
@@ -638,6 +674,15 @@ function CartProducts() {
 
         setCep(result);
     };
+
+    const CEPS = ['80215-090', '20531-540', '13484-019', '96200-010', '04809-090', '29102-220', '68908-849']
+    
+    function generateCep(){
+        const randomIndex = Math.floor(Math.random() * CEPS.length);
+        const randomCep = CEPS[randomIndex];
+
+        setCep(randomCep);
+    }
 
     return (
         <>
@@ -702,18 +747,21 @@ function CartProducts() {
                                     </ProductsTotal>
 
                                     <PortageContainer onSubmit={getDistance}>
-                                        <PortageCep 
-                                            type="text" 
-                                            pattern="\d{5}-\d{3}" 
-                                            value={cep}
-                                            placeholder={cepPlaceholder} 
-                                            onFocus={handleFocus} 
-                                            onBlur={handleBlur} 
-                                            maxLength={9} 
-                                            onChange={handleCep}
-                                            required
-                                        />
-                                        <PortageSubmit type="submit" value="Calcular Frete"/>
+                                        <PortageCepContainer>
+                                            <PortageCep 
+                                                type="text" 
+                                                pattern="\d{5}-\d{3}" 
+                                                value={cep}
+                                                placeholder={cepPlaceholder} 
+                                                onFocus={handleFocus} 
+                                                onBlur={handleBlur} 
+                                                maxLength={9} 
+                                                onChange={handleCep}
+                                                required
+                                            />
+                                            <GenerateCepButton onClick={generateCep}>GERAR</GenerateCepButton>
+                                        </PortageCepContainer>
+                                        <PortageSubmit type="submit" value="CALCULAR"/>
                                     </PortageContainer>
 
                                     <TotalPrices>
@@ -781,19 +829,22 @@ function CartProducts() {
                                 </BuyResumeDescription>
 
                                 <PortageContainer onSubmit={getDistance}>
-                                    <PortageCep 
-                                        type="text" 
-                                        pattern="\d{5}-\d{3}" 
-                                        value={cep}
-                                        placeholder={cepPlaceholder} 
-                                        onFocus={handleFocus} 
-                                        onBlur={handleBlur} 
-                                        maxLength={9} 
-                                        onChange={handleCep}
-                                        required
-                                    />
-                                    <PortageSubmit type="submit" value="Calcular Frete"/>
-                                </PortageContainer>
+                                        <PortageCepContainer>
+                                            <PortageCep 
+                                                type="text" 
+                                                pattern="\d{5}-\d{3}" 
+                                                value={cep}
+                                                placeholder={cepPlaceholder} 
+                                                onFocus={handleFocus} 
+                                                onBlur={handleBlur} 
+                                                maxLength={9} 
+                                                onChange={handleCep}
+                                                required
+                                            />
+                                            <GenerateCepButton onClick={generateCep}>GERAR</GenerateCepButton>
+                                        </PortageCepContainer>
+                                        <PortageSubmit type="submit" value="CALCULAR"/>
+                                    </PortageContainer>
 
                                 <BuyResumePrices>
                                     <BuyResumePrice>
@@ -823,7 +874,7 @@ function CartProducts() {
 
                             </ResumeContainer>
                             <ButtonLink className="buy-button-link">
-                                <BuyButton onClick={verifyPortage}>FINALIZAR COMPRA</BuyButton>             
+                                <BuyButton onClick={verifyPortage}>CONTINUAR</BuyButton>             
                             </ButtonLink>
                         </BuyResumeContainer>
 

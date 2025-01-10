@@ -20,6 +20,13 @@ const LoadingContainer = styled.div`
     z-index: 9999;
 `
 
+const NoResultsContainer = styled.div`
+    text-align: center;
+    color: #999;
+    margin: 20px 0;
+    font-size: 18px;
+`;
+
 const ResultContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -46,6 +53,14 @@ const ResultText = styled.p`
 `
 
 const ProductsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+`
+
+const SearchProducts = styled.div`
     display: grid;
     justify-content: center;
     grid-template-columns: 1fr;
@@ -68,17 +83,17 @@ function Products() {
 
     useEffect(() => {
         document.title = "SevenShop Store";
-      }, []);
+    }, []);
 
-    const [ products, setProducts ] = useState([]);
-    const [ productsFiltered, setproductsFiltered ] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [productsFiltered, setproductsFiltered] = useState([]);
     const location = useLocation();
 
     const getQueryParams = () => {
-      const urlParams = new URLSearchParams(location.search);
-      return urlParams.get('search');
+        const urlParams = new URLSearchParams(location.search);
+        return urlParams.get('search');
     };
-  
+
     const searchQuery = getQueryParams();
 
     async function fetchProducts() {
@@ -97,37 +112,53 @@ function Products() {
         setproductsFiltered(productsFill);
     }, [searchQuery, products]);
 
-    const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/)
+    const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/);
 
     return (
         <>
-          {loading ? (
-              <LoadingContainer>
-                  <Loading/>
-              </LoadingContainer>
-          ) : (
-            <ResultContainer>
-                <ResultContent>
-                    <Header/>
-                    <ResultText>Mostrando resultados para: {searchQuery}</ResultText>
+            {loading ? (
+                <LoadingContainer>
+                    <Loading />
+                </LoadingContainer>
+            ) : (
+                <ResultContainer>
+                    <ResultContent>
+                        <Header />
+                        {productsFiltered.length > 0 ? (
+                            <ProductsContainer>
+                                <ResultText>Mostrando resultados para: {searchQuery}</ResultText>
 
-                    <ProductsContainer>
-                        {productsFiltered.map(product => {
-                            const imagePath = `./${product.src}.png`;
-                    
-                            const image = images(imagePath);
+                                <SearchProducts>
+                                    {productsFiltered.map(product => {
+                                        const imagePath = `./${product.src}.png`;
+                                        const image = images(imagePath);
 
-                            return (
-                                <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id}/>
-                            )
-                        })}
-                    </ProductsContainer>
-                </ResultContent>
-                <Footer/>
-            </ResultContainer>
-          )}
+                                        return (
+                                            <ProductsStyled
+                                                key={product.id}
+                                                name={product.name}
+                                                image={image}
+                                                price={product.price}
+                                                newprice={product.newprice}
+                                                src={product.src}
+                                                id={product.id}
+                                                author={product.author}
+                                            />
+                                        );
+                                    })}
+                                </SearchProducts>
+                            </ProductsContainer>
+                        ) : (
+                            <NoResultsContainer>
+                                Nenhum produto foi encontrado para a busca: <strong>{searchQuery}</strong>
+                            </NoResultsContainer>
+                        )}
+                    </ResultContent>
+                    <Footer />
+                </ResultContainer>
+            )}
         </>
-      );
+    );
 }
 
 export default Products;

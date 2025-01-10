@@ -22,9 +22,11 @@ const FooterText = styled.h1`
 `
 
 function Footer({display}){
+    const year = new Date().getFullYear();
+
     return(
         <FooterContainer display={display}>
-            <FooterText>© SevenShop 2025</FooterText>
+            <FooterText>© SevenShop {year}</FooterText>
         </FooterContainer>
     )
 }

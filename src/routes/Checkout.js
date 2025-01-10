@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ccType from 'credit-card-type';
 import styled from "styled-components";
 import arrowUp from "../assets/images/arrow-up.png"
@@ -47,8 +47,32 @@ const PaymentsMethodContainer = styled.div`
     width: 90%;
     gap: 2rem;
 
-    @media screen and (min-width: 1720px){
+    @media screen and (min-width: 500px){
+        width: 80%;
+    }
+
+    @media screen and (min-width: 630px){
+        width: 60%;
+    }
+
+    @media screen and (min-width: 800px){
         width: 50%;
+    }
+
+    @media screen and (min-width: 1000px){
+        width: 70%;
+    }
+
+    @media screen and (min-width: 1280px){
+        width: 60%;
+    }
+
+    @media screen and (min-width: 1500px){
+        width: 50%;
+    }
+
+    @media screen and (min-width: 1720px){
+        width: 45%;
     }
 `
 
@@ -109,7 +133,6 @@ const PaymentMethodCheckbox = styled.div`
     font-family: 'Poppins', sans-serif;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
     box-sizing: border-box;
     padding: 1rem;
     align-items: center;
@@ -173,7 +196,7 @@ const CardPaymentContent = styled.div`
         max-height: 0;
     }
 
-    @media screen and (min-width: 1720px){
+    @media screen and (min-width: 1000px){
         flex-direction: row;
     }
 
@@ -206,41 +229,6 @@ const CardContainer = styled.div`
     width: 90%;
     transform: rotate3d(0);
     padding: 1rem;
-
-    @media screen and (min-width: 550px){
-        width: 60%;
-        padding: 1.5rem;
-    }
-
-    @media screen and (min-width: 630px){
-        width: 50%;
-        padding: 1.5rem;
-    }
-
-    @media screen and (min-width: 870px){
-        width: 40%;
-        padding: 1.5rem;
-    }
-
-    @media screen and (min-width: 1000px){
-        width: 35%;
-        padding: 1.5rem;
-    }
-
-    @media screen and (min-width: 1200px){
-        width: 30%;
-        padding: 1.5rem;
-    }
-
-    @media screen and (min-width: 1400px){
-        width: 25%;
-        padding: 1.5rem;
-    }
-
-    @media screen and (min-width: 1720px){
-        width: 40%;
-        padding: 1.5rem;
-    }
 `
 
 const CardFormContainer = styled.div`
@@ -250,10 +238,6 @@ const CardFormContainer = styled.div`
     justify-content: center;
     gap: 1rem;
     width: 100%;
-
-    @media screen and (min-width: 1720px){
-        width: 50%;
-    }
 `
 
 const CardFrontContainer = styled.div`
@@ -275,7 +259,7 @@ const CardBackTarget = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: black;
+    background-color: rgb(19, 19, 19);
     box-sizing: border-box;
     padding: 1rem;
     height: 3rem;
@@ -492,8 +476,12 @@ const BuyResumePrice = styled.div`
     box-sizing: border-box;
     width: 100%;
     color: white;
-    background-color: rgba(109, 0, 156, 0.5);
+    background-color: rgba(46, 0, 78, 0.5); 
     transition: all .5s ease-in-out;
+
+    @media screen and (min-width: 1720px){
+        background-color: rgba(109, 0, 156, 0.5);
+    }
 `
 
 const PriceTerms = styled.div`
@@ -541,7 +529,7 @@ const ReturnButton = styled.button`
     font-family: 'Poppins', sans-serif;
     background-color: transparent;
     color: white;
-    border: 1px solid rgba(109, 0, 156, 0.5);
+    border: 1px solid rgba(46, 0, 78, 0.5);
     font-weight: bold;
     width: 100%;
     border-radius: .5rem;
@@ -550,7 +538,15 @@ const ReturnButton = styled.button`
     cursor: pointer;
 
     &:hover {
-        background-color: rgba(109, 0, 156, 0.5);
+        background-color: rgba(46, 0, 78, 0.5);
+    }
+
+    @media screen and (min-width: 1720px){
+        border: 1px solid rgba(109, 0, 156, 0.5);
+
+        &:hover {
+            background-color: rgba(109, 0, 156, 0.5);
+        }
     }
 `
 
@@ -631,6 +627,12 @@ const ResumeContainer = styled.div`
     @media screen and (min-width: 600px){
         width: 90%;
     }
+
+    .active{
+        opacity: 1;
+        max-height: unset;
+        padding: .5rem;
+    }
 `
 
 const BuyResume = styled.div`
@@ -689,6 +691,7 @@ const BuyButton = styled.button`
     border-radius: .5rem;
     width: 100%;
     color: white;
+    font-weight: bold;
     background-color: rgb(46,0,78);
     border: none;
     padding: 1rem;
@@ -700,8 +703,26 @@ const BuyButton = styled.button`
     }
 `
 
+const MqReturnButton = styled.button`
+    font-family: 'Poppins', sans-serif;
+    border-radius: .5rem;
+    width: 100%;
+    color: white;
+    background-color: transparent;
+    border: 1px solid rgb(46,0,78);
+    padding: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+
+    &:hover {
+        background-color: rgb(46,0,78);
+    }
+`
+
 function Checkout() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { totalPrice, totalNewPrice, portageValue } = location.state || {};
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [selectedInput, setSelectedInput] = useState(null);
@@ -800,22 +821,21 @@ function Checkout() {
         const cardInfo = ccType(value);
         if (cardInfo.length > 0 && value !== '') {
           setCardBrand(cardInfo[0].type);
-        //   console.log(cardInfo)
         } else {
           setCardBrand(null);
         }
     };
 
     const cardNumberFormatter = (value) => {
-    const clearNumber = value.replace(/\D/g, '');
-    
-    let simbolNumber = '•••• •••• •••• ••••';
+        const clearNumber = value.replace(/\D/g, '');
+        
+        let simbolNumber = '•••• •••• •••• ••••';
 
-    for (let i = 0; i < clearNumber.length; i++) {
-        simbolNumber = simbolNumber.replace('•', clearNumber[i]);
-    }
+        for (let i = 0; i < clearNumber.length; i++) {
+            simbolNumber = simbolNumber.replace('•', clearNumber[i]);
+        }
 
-    return simbolNumber;
+        return simbolNumber;
     };
 
     const getCardBrandLogo = (brand) => {
@@ -894,7 +914,7 @@ function Checkout() {
         const randomBin = selectedBinGroup.length > 1 
             ? selectedBinGroup[Math.floor(Math.random() * selectedBinGroup.length)]
             : selectedBinGroup[0];
-    
+
         const remainingDigits = 16 - randomBin.toString().length;
         const randomNumber = Math.floor(Math.random() * Math.pow(10, remainingDigits));
     
@@ -904,7 +924,7 @@ function Checkout() {
     
         setCardNumberForm(formattedNumber);
         setCardNumber(cardNumberFormatter(formattedNumber)); 
-        setCardDate('07/27'); 
+        setCardDate('07/77'); 
         setCardDateForm('07/77');
         setCardCVV('777');
         setCardName("Ryan Developer");
@@ -917,7 +937,7 @@ function Checkout() {
             setCardBrand(null); 
         }
     };
-    
+
 
     const binCards = [
         {
@@ -938,9 +958,21 @@ function Checkout() {
         {
             id: 4,
             name: "Elo",
-            bin: [438935, 451416,],
+            bin: [438935, 451416],
         }
     ]
+
+    const checkoutRedirect = (e) => {
+        e.preventDefault();
+
+        if(selectedMethod !== null){
+            navigate("/purchase", { state: { totalValue } });
+        }
+        else{
+            alert('Selecione uma forma de pagamento antes de finalizar a compra!');
+        }
+        
+    }
 
     return (
         <CheckoutContainer>
@@ -1120,7 +1152,7 @@ function Checkout() {
 
                             <CheckoutButtonContainer>
                                 <ButtonLink>
-                                    <CheckoutButton>FINALIZAR COMPRA</CheckoutButton>
+                                    <CheckoutButton onClick={checkoutRedirect}>FINALIZAR</CheckoutButton>
                                 </ButtonLink>
                                 <ButtonLink to="/carrinho">
                                     <ReturnButton>VOLTAR</ReturnButton>
@@ -1152,24 +1184,40 @@ function Checkout() {
                     <ResumeContainer className="resume-container">
 
                         <BuyResumeDescription>
-
                             <BuyResumeInfo>
                                 <p>Valor à prazo:</p>
                                 <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
                             </BuyResumeInfo>
+
+                            <DiscontContainer className={selectedMethod === "pix" || selectedMethod === "boleto" ? "active" : ""}>
+                                <SubtitleText>Desconto:</SubtitleText>
+                                <Value>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                            </DiscontContainer>
+
                             <BuyResumeInfoPortage className="portage-value-mq">
                                 <p>Frete:</p>
                                 <Value><strong>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
                             </BuyResumeInfoPortage>
                         </BuyResumeDescription>
 
-                    </ResumeContainer>
-                    <ButtonLink className="buy-button-link">
-                        <BuyButton>FINALIZAR COMPRA</BuyButton>             
-                    </ButtonLink>
-                </BuyResumeContainer>
+                        <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
+                            <p>Total no <strong>{selectedMethod}</strong>:</p>
+                            <PriceTerms>
+                                <Value><strong>R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                            </PriceTerms>
+                        </BuyResumePrice>
 
-                <h3 style={{textAlign: "center", color: "white"}}>PAGINA EM DESENVOLVIMENTO</h3>
+                    </ResumeContainer>
+
+
+                        <ButtonLink className="buy-button-link">
+                            <BuyButton onClick={checkoutRedirect}>FINALIZAR</BuyButton>             
+                        </ButtonLink>
+                        <ButtonLink to="/carrinho" className="buy-button-link">
+                            <MqReturnButton>VOLTAR</MqReturnButton>
+                        </ButtonLink>
+
+                </BuyResumeContainer>
 
             <Footer display="none" />
 
