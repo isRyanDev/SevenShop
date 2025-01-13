@@ -1,10 +1,23 @@
 import { useLocation } from "react-router-dom"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { convertNumber } from "../utils/ConvertNumber.js";
 import { getProducts, postProduct } from "../services/ProductsAPI.js";
 import styled from "styled-components"
 import Header from "../components/Header/header.js";
 import Loading from "../components/Loading/index.js";
+
+const LoadingContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgb(46 0 78) 0%, rgb(84 0 133) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+`
 
 const PurchaseContainer = styled.div`
     display: flex;
@@ -94,7 +107,8 @@ function Purchase(){
         if (imageFile) {
             const formData = new FormData();
             formData.append('imagem', imageFile);
-
+            formData.append('filename', productImgName); // Adiciona o nome abreviado ao FormData
+    
             fetch('https://api.ryandev.com.br/uploads', {
                 method: 'POST',
                 body: formData,
