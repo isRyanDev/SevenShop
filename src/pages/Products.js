@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { getProducts } from "../services/products.js";
+import { getProducts } from "../services/Products.js";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header/header.js";
 import Footer from "../components/Footer/index.js";
