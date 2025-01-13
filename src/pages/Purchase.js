@@ -61,6 +61,7 @@ function Purchase(){
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState("");
     const [productImgName, setProductImgName] = useState("");
+    const [imageFile, setImageFile] = useState(null);
     const { totalValue, street, selectedMethod } = location.state || {};
     const [loading, setLoading] = useState(true);
     const [ products, setProducts ] = useState([]);
@@ -89,6 +90,16 @@ function Purchase(){
         }
 
         postProduct(product);
+
+        if (imageFile) {
+            const formData = new FormData();
+            formData.append('imagem', imageFile);
+
+            fetch('https://api.ryandev.com.br/uploads', {
+                method: 'POST',
+                body: formData,
+            });
+        }
     }
 
     return(
@@ -125,12 +136,9 @@ function Purchase(){
                         <input type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
                         <input type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
                         <input type="number" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
-                        <button type="submit">Adicionar Produto</button>
-                    </form>
-
-                    <form action="https://api.ryandev.com.br/uploads" method="post" enctype="multipart/form-data">
-                        <input type="file" name="imagem" />
+                        <input type="file" name="imagem" onChange={e => setImageFile(e.target.files[0])}/>
                         <button type="submit">Enviar Imagem</button>
+                        <button type="submit">Adicionar Produto</button>
                     </form>
                 </PurchaseContainer>
             )}
