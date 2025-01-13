@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../services/products.js";
+import { getProducts } from "../services/GetProducts.js";
 import styled from "styled-components";
 import banner from "../assets/IconImages/banner.png";
 import ProductsStyled from "../components/HomeProducts/index.js";

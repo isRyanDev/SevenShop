@@ -10,4 +10,10 @@ async function getProducts() {
     return response.data;
 }
 
-export { getProducts };
+async function postProduct(product) {
+    const response = await productsAPI.post("/", product);
+
+    return response.data;
+}
+
+export { getProducts, postProduct };
