@@ -970,7 +970,7 @@ function Checkout() {
         e.preventDefault();
 
         if(selectedMethod !== null){
-            navigate("/purchase", { state: { totalValue, street, selectedMethod } });
+            navigate("/purchase", { state: { totalValue, street, selectedMethod} });
         }
         else{
             alert('Selecione uma forma de pagamento antes de finalizar a compra!');
