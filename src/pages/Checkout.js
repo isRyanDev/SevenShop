@@ -784,7 +784,7 @@ function Checkout() {
     })
 
     useEffect(() => {
-        if(selectedMethod === "boleto" || selectedMethod === "pix") {
+        if(selectedMethod === "Boleto Bancário" || selectedMethod === "Pix") {
             setTotalValue(totalNewPrice + portageValue);
         }
         else{
@@ -1193,7 +1193,7 @@ function Checkout() {
                                 <Value><strong>R$ {convertNumber(totalPrice)}</strong></Value>
                             </BuyResumeInfo>
 
-                            <DiscontContainer className={selectedMethod === "pix" || selectedMethod === "boleto" ? "active" : ""}>
+                            <DiscontContainer className={selectedMethod === "Pix" || selectedMethod === "Boleto Bancário" ? "active" : ""}>
                                 <SubtitleText>Desconto:</SubtitleText>
                                 <Value>R$ {convertNumber(totalDiscont)}</Value>
                             </DiscontContainer>
