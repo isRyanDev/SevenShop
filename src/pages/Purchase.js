@@ -137,7 +137,6 @@ function Purchase(){
                         <input type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
                         <input type="number" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
                         <input type="file" name="imagem" onChange={e => setImageFile(e.target.files[0])}/>
-                        <button type="submit">Enviar Imagem</button>
                         <button type="submit">Adicionar Produto</button>
                     </form>
                 </PurchaseContainer>
