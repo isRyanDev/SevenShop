@@ -70,14 +70,17 @@ function Purchase() {
                 },
                 body: JSON.stringify(newProductData),
             });
-
-            if (!response.ok) {
-                throw new Error('Erro ao adicionar produto');
+    
+            const text = await response.text();  // Pega a resposta como texto
+            console.log('Resposta da API:', text);
+    
+            // Verifica se a resposta tem conteúdo antes de tentar fazer o parse para JSON
+            if (response.ok && text) {
+                const data = JSON.parse(text);  // Faz o parse manual do JSON
+                console.log('Produto adicionado com sucesso:', data);
+            } else {
+                console.error('Erro ao enviar produto:', text);
             }
-
-            const data = await response.json();
-            console.log('Produto adicionado com sucesso:', data);
-            return data; // Retorna o produto adicionado, caso necessário
         } catch (error) {
             console.error('Erro ao enviar produto:', error);
         }
