@@ -214,17 +214,21 @@ const PortageCep = styled.input`
     }
 `
 
-const GenerateCepButton = styled.button`
+const GenerateCepButton = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: 'Poppins', sans-serif;
     background-color: rgb(46,0,78);
     padding: .5rem;
-    border: none;
     border-radius: .5rem;
     color: white;
     font-weight: bold;
     width: 30%;
     cursor: pointer;
     transition: all .5s ease-in-out;
+    user-select: none;
+
 
     &:hover {
         background-color: rgba(46, 0, 78, 0.5);
@@ -828,22 +832,22 @@ function CartProducts() {
                                 </BuyResumeDescription>
 
                                 <PortageContainer onSubmit={getDistance}>
-                                        <PortageCepContainer>
-                                            <PortageCep 
-                                                type="text" 
-                                                pattern="\d{5}-\d{3}" 
-                                                value={cep}
-                                                placeholder={cepPlaceholder} 
-                                                onFocus={handleFocus} 
-                                                onBlur={handleBlur} 
-                                                maxLength={9} 
-                                                onChange={handleCep}
-                                                required
-                                            />
-                                            <GenerateCepButton onClick={generateCep}>GERAR</GenerateCepButton>
-                                        </PortageCepContainer>
-                                        <PortageSubmit type="submit" value="CALCULAR"/>
-                                    </PortageContainer>
+                                    <PortageCepContainer>
+                                        <PortageCep 
+                                            type="text" 
+                                            pattern="\d{5}-\d{3}" 
+                                            value={cep}
+                                            placeholder={cepPlaceholder} 
+                                            onFocus={handleFocus} 
+                                            onBlur={handleBlur} 
+                                            maxLength={9} 
+                                            onChange={handleCep}
+                                            required
+                                        />
+                                        <GenerateCepButton onClick={generateCep}>GERAR</GenerateCepButton>
+                                    </PortageCepContainer>
+                                    <PortageSubmit type="submit" value="CALCULAR"/>
+                                </PortageContainer>
 
                                 <BuyResumePrices>
                                     <BuyResumePrice>

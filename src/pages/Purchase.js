@@ -4,6 +4,7 @@ import { convertNumber } from "../utils/ConvertNumber.js";
 import { getProducts, postProduct } from "../services/ProductsAPI.js";
 import styled from "styled-components"
 import Header from "../components/Header/header.js";
+import Footer from "../components/Footer/index.js";
 import Loading from "../components/Loading/index.js";
 
 const LoadingContainer = styled.div`
@@ -23,10 +24,32 @@ const PurchaseContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    gap: 3vh;
     font-family: 'Poppins', sans-serif; 
-    gap: 1rem;
     color: white;
+`
+
+const PurchaseContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 81vh;
+    gap: 2rem;
+    width: 100%;
+`
+
+const AddProductContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    text-align: center;
+    width: 30%;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: rgb(46,0,78);
+    border-radius: .5rem;
 `
 
 const PurshaceInfo = styled.div`
@@ -34,14 +57,16 @@ const PurshaceInfo = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: rgb(46,0,78);
-    max-width: 40%;
-    text-align: center;
+    max-width: 30%;
+    height: 100%;
     padding: 1rem;
+    box-sizing: border-box;
     border-radius: .5rem;
 `
 
 const InfoTitle = styled.h1`
     font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
+    text-align: center;
     letter-spacing: 1px;
     color: rgb(0, 183, 255);
 `
@@ -49,9 +74,9 @@ const InfoTitle = styled.h1`
 const Infos = styled.div`
     display: flex;
     flex-direction: row;
+    align-items: center;
     width: 100%;
     justify-content: space-between;
-    align-items: center;
     box-sizing: border-box;
     padding: .5rem;
     border-bottom: 1px solid white;
@@ -64,8 +89,52 @@ const InfoRef = styled.h3`
 `
 
 const InfoValue = styled.p`
-    text-align: right;
     max-width: 50%;
+`
+
+const AddProductForm = styled.form` 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 1rem;
+
+    input:focus-visible{
+        outline: none;
+    }
+`
+
+const AddProductInput = styled.input`
+    width: 100%;
+    padding: .5rem;
+    border-radius: .5rem;
+    border: none;
+    background-color: rgb(255, 255, 255);
+    box-sizing: border-box;
+    color: rgb(46,0,78);
+
+    &::placeholder{
+        color: rgb(46,0,78);
+    }
+`
+
+const AddProductButton = styled.button`
+    width: 100%;
+    padding: .5rem;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    border-radius: .5rem;
+    border: none;
+    background-color: rgba(109, 0, 156, 0.5);
+    box-sizing: border-box;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+
+    &:hover {
+        background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
+    }   
 `
 
 function Purchase(){
@@ -96,7 +165,7 @@ function Purchase(){
         const product = {
             name: productName,
             price: productPrice,
-            newprice: productPrice - productPrice * 0.2,
+            newprice: Number(productPrice - productPrice * 0.2),
             src: productImgName,
             author: userName,
             id: products.length + 1,
@@ -125,33 +194,44 @@ function Purchase(){
                 <PurchaseContainer>
                     <Header displaySearch="none" displayButton="none"/>
 
-                    <PurshaceInfo>
-                        <InfoTitle>Informações do pedido</InfoTitle>
+                    <PurchaseContent>
 
-                        <Infos>
-                            <InfoRef>Total pago:</InfoRef>
-                            <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
-                        </Infos>
+                        <PurshaceInfo>
+                            <InfoTitle>Informações da compra</InfoTitle>
 
-                        <Infos>
-                            <InfoRef>Endereço de entrega:</InfoRef>
-                            <InfoValue>{street}</InfoValue>
-                        </Infos>
+                            <Infos>
+                                <InfoRef>Total pago:</InfoRef>
+                                <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
+                            </Infos>
 
-                        <Infos>
-                            <InfoRef>Método de pagamento:</InfoRef>
-                            <InfoValue>{selectedMethod}</InfoValue>
-                        </Infos>
-                    </PurshaceInfo>
+                            <Infos>
+                                <InfoRef>Endereço de entrega:</InfoRef>
+                                <InfoValue>{street}</InfoValue>
+                            </Infos>
 
-                    <form onSubmit={handleAddProduct}>
-                        <input type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
-                        <input type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
-                        <input type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
-                        <input type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
-                        <input type="file" name="imagem" onChange={e => setImageFile(e.target.files[0])}/>
-                        <button type="submit">Adicionar Produto</button>
-                    </form>
+                            <Infos>
+                                <InfoRef>Método de pagamento:</InfoRef>
+                                <InfoValue>{selectedMethod}</InfoValue>
+                            </Infos>
+                        </PurshaceInfo>
+
+                        <AddProductContainer>
+                        <label>
+                            <InfoTitle>COMPRA EFETUADA COM SUCESSO!</InfoTitle>
+                            <p>Obrigado por chegar até aqui!</p>
+                            <p>Agora você pode adicionar um novo produto ao nosso catálogo</p>
+                        </label>
+                            <AddProductForm onSubmit={handleAddProduct}>
+                                <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
+                                <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
+                                <AddProductInput type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
+                                <AddProductInput type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
+                                <AddProductInput type="file" name="imagem" onChange={e => setImageFile(e.target.files[0])}/>
+                                <AddProductButton type="submit">Adicionar Produto</AddProductButton>
+                            </AddProductForm>
+                        </AddProductContainer>
+                    </PurchaseContent>
+                    <Footer/>
                 </PurchaseContainer>
             )}
       </>
