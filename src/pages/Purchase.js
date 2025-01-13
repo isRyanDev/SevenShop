@@ -1,8 +1,8 @@
-import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"
+import { useState } from "react";
 import { convertNumber } from "../utils/ConvertNumber.js";
 import { getProducts, postProduct } from "../services/ProductsAPI.js";
-import styled from "styled-components";
+import styled from "styled-components"
 import Header from "../components/Header/header.js";
 import Loading from "../components/Loading/index.js";
 
@@ -14,7 +14,7 @@ const PurchaseContainer = styled.div`
     font-family: 'Poppins', sans-serif; 
     gap: 1rem;
     color: white;
-`;
+`
 
 const PurshaceInfo = styled.div`
     display: flex;
@@ -25,13 +25,13 @@ const PurshaceInfo = styled.div`
     text-align: center;
     padding: 1rem;
     border-radius: .5rem;
-`;
+`
 
 const InfoTitle = styled.h1`
     font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
     letter-spacing: 1px;
     color: rgb(0, 183, 255);
-`;
+`
 
 const Infos = styled.div`
     display: flex;
@@ -42,28 +42,28 @@ const Infos = styled.div`
     box-sizing: border-box;
     padding: .5rem;
     border-bottom: 1px solid white;
-`;
+`
 
 const InfoRef = styled.h3`
     font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
     font-size: 1.375rem;
     letter-spacing: 1px;
-`;
+`
 
 const InfoValue = styled.p`
     text-align: right;
     max-width: 50%;
-`;
+`
 
-function Purchase() {
+function Purchase(){
     const location = useLocation();
     const [userName, setUserName] = useState("");
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState("");
-    const [productImgName, setProductImgName] = useState("");  // Nome da imagem abreviado
+    const [productImgName, setProductImgName] = useState("");
     const { totalValue, street, selectedMethod } = location.state || {};
     const [loading, setLoading] = useState(true);
-    const [products, setProducts] = useState([]);
+    const [ products, setProducts ] = useState([]);
 
     async function fetchProducts() {
         setLoading(true);
@@ -76,30 +76,30 @@ function Purchase() {
         fetchProducts();
     }, []);
 
-    function handleAddProduct(event) {
+    function handleAddProduct(event){
         event.preventDefault();
 
         const product = {
-            name: productName,
-            price: productPrice,
-            newprice: productPrice - productPrice * 0.2,
-            src: productImgName,
-            author: userName,
-            id: products.length + 1
-        };
+            "name": productName,
+            "price": productPrice,
+            "newprice": productPrice - (productPrice * 0.2),
+            "src": productImgName,
+            "author": userName,
+            "id": products.lenght + 1
+        }
 
         postProduct(product);
     }
 
-    return (
+    return(
         <>
-            {loading ? (
-                <LoadingContainer>
-                    <Loading />
-                </LoadingContainer>
-            ) : (
+          {loading ? (
+              <LoadingContainer>
+                  <Loading/>
+              </LoadingContainer>
+          ) : (
                 <PurchaseContainer>
-                    <Header displaySearch="none" displayButton="none" />
+                    <Header displaySearch="none" displayButton="none"/>
 
                     <PurshaceInfo>
                         <InfoTitle>Informações do pedido</InfoTitle>
@@ -120,48 +120,22 @@ function Purchase() {
                         </Infos>
                     </PurshaceInfo>
 
-                    {/* Formulário unificado */}
-                    <form onSubmit={handleAddProduct} encType="multipart/form-data">
-                        <input
-                            type="text"
-                            onChange={(e) => setUserName(e.target.value)}
-                            placeholder="Digite seu nome"
-                            required
-                        />
-                        <input
-                            type="text"
-                            onChange={(e) => setProductName(e.target.value)}
-                            placeholder="Digite o nome do produto"
-                            required
-                        />
-                        <input
-                            type="text"
-                            onChange={(e) => setProductImgName(e.target.value)}
-                            placeholder="Digite o nome abreviado"
-                            required
-                        />
-                        <input
-                            type="number"
-                            onChange={(e) => setProductPrice(e.target.value)}
-                            placeholder="Digite o valor do produto"
-                            required
-                        />
-                        <input
-                            type="file"
-                            name="imagem"
-                            required
-                        />
-                        <input
-                            type="hidden"
-                            name="name"
-                            value={productImgName}  // Passando o nome abreviado para o upload
-                        />
+                    <form onSubmit={handleAddProduct}>
+                        <input type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
+                        <input type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
+                        <input type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
+                        <input type="number" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
                         <button type="submit">Adicionar Produto</button>
+                    </form>
+
+                    <form action="https://api.ryandev.com.br/uploads" method="post" enctype="multipart/form-data">
+                        <input type="file" name="imagem" />
+                        <button type="submit">Enviar Imagem</button>
                     </form>
                 </PurchaseContainer>
             )}
-        </>
-    );
+      </>
+    )
 }
 
-export default Purchase;
+export default Purchase
