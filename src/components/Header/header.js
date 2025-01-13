@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import Logo from "../logo/index.js"
-import cartImg from "../images/cart-icon.png"
-import Search from "../search/index.js"
 import styled from "styled-components"
-import searchImg from "../images/search-lupe.png"
+import Logo from "./HeaderLogo/index.js"
+import cartImg from "../../assets/IconImages/cart-icon.png"
+import Search from "../SearchBar/index.js"
+import searchImg from "../../assets/IconImages/search-lupe.png"
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -37,7 +37,7 @@ const HeaderLogoContainer = styled.div`
 
     @media screen and (min-width: 1000px){
         width: 20%;
-    )
+    }
 `
 
 const HeaderSearchContainer = styled.div`

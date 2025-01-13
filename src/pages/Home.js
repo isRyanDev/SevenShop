@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/products.js";
 import styled from "styled-components";
-import banner from "../assets/images/Banner.png"
-import ProductsStyled from "../assets/products/index.js";
-import Footer from "../assets/footer/index.js";
-import Header from "../assets/header/index.js";
-import Loading from "../assets/loader/index.js";
+import banner from "../assets/IconImages/banner.png";
+import ProductsStyled from "../components/HomeProducts/index.js";
+import Footer from "../components/Footer/index.js";
+import Header from "../components/Header/header.js";
+import Loading from "../components/Loading/index.js";
 
 const LoadingContainer = styled.div`
     position: fixed;
@@ -70,7 +70,7 @@ function Home() {
         fetchProducts();
     }, []);
 
-    const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/)
+    const images = require.context('../assets/ProductImages', false, /\.(png|jpe?g|gif)$/)
 
     return (
       <>

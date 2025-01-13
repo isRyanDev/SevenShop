@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './routes/Home';
-import Products from './routes/Products';
-import CartProducts from './routes/Cart';
-import Checkout from './routes/Checkout';
-import Purchase from './routes/Purchase';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import CartProducts from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Purchase from './pages/Purchase';
 import reportWebVitals from './reportWebVitals.js';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';

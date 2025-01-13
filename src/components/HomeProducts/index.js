@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components"
-import cartImg from "../images/cart-icon.png"
-import addCartImg from "../images/add-to-cart.png"
+import cartImg from "../../assets/IconImages/cart-icon.png"
+import addCartImg from "../../assets/IconImages/add-to-cart.png"
 
 const ProductsList = styled.ol`
     display: flex;
@@ -36,7 +36,7 @@ const Product = styled.li`
 const DescriptionContentContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content-center
+    justify-content: center;
     align-items: center;
     gap: 1rem;
     line-height: 1.25rem;

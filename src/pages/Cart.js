@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import arrowUp from "../assets/images/arrow-up.png"
-import CartProductsStyled from "../assets/cart-products/index.js";
-import Footer from "../assets/footer/index.js";
-import Header from "../assets/header/index.js";
-import Loading from "../assets/loader/index.js";
-import StyledLink from "../assets/link/index.js";
+import arrowUp from "../assets/IconImages/arrow-up.png";
+import CartProductsStyled from "../components/CartProducts/index.js";
+import Footer from "../components/Footer/index.js";
+import Header from "../components/Header/header.js";
+import Loading from "../components/Loading/index.js";
+import StyledLink from "../components/Link/index.js";
+import { convertNumber } from "../utils/ConvertNumber.js";
 
 const LoadingContainer = styled.div`
     position: fixed;
@@ -573,7 +574,7 @@ function CartProducts() {
 
     const totalDiscont = totalPrice - totalNewPrice;
 
-    const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/);
+    const images = require.context('../assets/ProductImages', false, /\.(png|jpe?g|gif)$/);
 
     let isOpen = false;
 
@@ -738,11 +739,11 @@ function CartProducts() {
                                     <ProductsTotal>
                                         <TotalValue>
                                             <SubtitleText>Total dos produtos:</SubtitleText>
-                                            <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                            <Value>R$ {convertNumber(totalPrice)}</Value>
                                         </TotalValue>
                                         <Portage className="portage-value">
                                             <SubtitleText>Frete:</SubtitleText>
-                                            <Value>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                            <Value>R$ {convertNumber(portageValue)}</Value>
                                         </Portage>
                                     </ProductsTotal>
 
@@ -768,7 +769,7 @@ function CartProducts() {
                                         <TotalInTime>
                                             <ValueInTime>
                                                 <SubtitleText>Total à prazo:</SubtitleText>
-                                                <Value>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                                <Value>R$ {convertNumber(totalPrice + portageValue)}</Value>
                                             </ValueInTime>
                                             <Terms>
                                                 <p>(Até 10x sem juros)</p>
@@ -777,10 +778,10 @@ function CartProducts() {
                                         <Total1x>
                                             <Value1x>
                                                 <SubtitleText>Total à vista:</SubtitleText>
-                                                <Value>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                                <Value>R$ {convertNumber(totalNewPrice + portageValue)}</Value>
                                             </Value1x>
                                             <PriceTerms>
-                                                <Terms><p>(Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)</p></Terms>
+                                                <Terms><p>(Economize: <strong>R$ {convertNumber(totalDiscont)}</strong>)</p></Terms>
                                             </PriceTerms>
                                         </Total1x>
                                     </TotalPrices>
@@ -809,7 +810,7 @@ function CartProducts() {
                                     <p>VALOR À VISTA:</p>
                                     <Value>
                                         <strong>
-                                            R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            R$ {convertNumber(totalNewPrice)}
                                         </strong>
                                     </Value>
                                 </BuyResumeValue>
@@ -820,11 +821,11 @@ function CartProducts() {
                                 <BuyResumeDescription>
                                     <BuyResumeInfo>
                                         <p>Valor à prazo:</p>
-                                        <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                        <Value><strong>R$ {convertNumber(totalPrice)}</strong></Value>
                                     </BuyResumeInfo>
                                     <BuyResumeInfoPortage className="portage-value-mq">
                                         <p>Frete:</p>
-                                        <Value><strong>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                        <Value><strong>R$ {convertNumber(portageValue)}</strong></Value>
                                     </BuyResumeInfoPortage>
                                 </BuyResumeDescription>
 
@@ -850,10 +851,10 @@ function CartProducts() {
                                     <BuyResumePrice>
                                         <p>Total à prazo:</p>
                                         <PriceTerms>
-                                            <Value><strong>R$ {(totalPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                            <Value><strong>R$ {convertNumber(totalPrice + portageValue)}</strong></Value>
                                             <Terms>
                                                 <TermsText>
-                                                    (Até <strong>10x</strong> de <strong>{((totalPrice + portageValue) / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> sem juros)
+                                                    (Até <strong>10x</strong> de <strong>{convertNumber((totalPrice + portageValue) / 10)}</strong> sem juros)
                                                 </TermsText>
                                             </Terms>
                                         </PriceTerms>
@@ -862,10 +863,10 @@ function CartProducts() {
                                     <BuyResumePrice>
                                         <p>Total à vista:</p>
                                         <PriceTerms>
-                                            <Value><strong>R$ {(totalNewPrice + portageValue).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                            <Value><strong>R$ {convertNumber(totalNewPrice + portageValue)}</strong></Value>
                                             <Terms>
                                                 <TermsText>
-                                                    (Economize: <strong>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>)
+                                                    (Economize: <strong>R$ {convertNumber(totalDiscont)}</strong>)
                                                 </TermsText>
                                             </Terms>
                                         </PriceTerms>

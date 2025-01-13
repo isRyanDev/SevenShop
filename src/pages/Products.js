@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/products.js";
 import { useLocation } from "react-router-dom";
-import Header from "../assets/header/index.js";
-import Footer from "../assets/footer/index.js";
-import Loading from "../assets/loader/index.js";
-import ProductsStyled from "../assets/products/index.js";
+import Header from "../components/Header/header.js";
+import Footer from "../components/Footer/index.js";
+import Loading from "../components/Loading/index.js";
+import ProductsStyled from "../components/HomeProducts/index.js";
 
 const LoadingContainer = styled.div`
     position: fixed;
@@ -112,7 +112,7 @@ function Products() {
         setproductsFiltered(productsFill);
     }, [searchQuery, products]);
 
-    const images = require.context('../assets/products-images', false, /\.(png|jpe?g|gif)$/);
+    const images = require.context('../assets/ProductImages/', false, /\.(png|jpe?g|gif)$/);
 
     return (
         <>

@@ -1,19 +1,20 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { convertNumber } from "../utils/ConvertNumber.js";
 import ccType from 'credit-card-type';
 import styled from "styled-components";
-import arrowUp from "../assets/images/arrow-up.png"
-import pix from "../assets/images/pix-icon.png"
-import card from "../assets/images/card-icon.png"
-import barCode from "../assets/images/bar-code-icon.png"
-import cardChip from "../assets/images/card-chip.png"
-import mastercardIcon from "../assets/images/mastercard-icon.png"
-import visaIcon from "../assets/images/visa-icon.png"
-import amexIcon from "../assets/images/amex-icon.png"
-import eloIcon from "../assets/images/elo-icon.png"
-import Footer from "../assets/footer/index.js";
-import Header from "../assets/header/index.js";
+import arrowUp from "../assets/IconImages/arrow-up.png";
+import pix from "../assets/IconImages/pix-icon.png"
+import card from "../assets/IconImages/card-icon.png"
+import barCode from "../assets/IconImages/bar-code-icon.png"
+import cardChip from "../assets/IconImages/card-chip.png"
+import mastercardIcon from "../assets/IconImages/mastercard-icon.png"
+import visaIcon from "../assets/IconImages/visa-icon.png"
+import amexIcon from "../assets/IconImages/amex-icon.png"
+import eloIcon from "../assets/IconImages/elo-icon.png"
+import Footer from "../components/Footer/index.js";
+import Header from "../components/Header/header.js";
 
 const CheckoutContainer = styled.div`
     display: flex;
@@ -369,7 +370,7 @@ const CardInfos = styled.div`
 
 const CardCVV = styled.div`
     display: flex;
-    transform: rotate3d(0, 1, 0, 180deg)
+    transform: rotate3d(0, 1, 0, 180deg);
 `
 
 const FlagImgContainer = styled.div`
@@ -482,6 +483,10 @@ const BuyResumePrice = styled.div`
     @media screen and (min-width: 1720px){
         background-color: rgba(109, 0, 156, 0.5);
     }
+`
+
+const Method = styled.p`
+    font-size: .8rem;
 `
 
 const PriceTerms = styled.div`
@@ -617,7 +622,7 @@ const ResumeContainer = styled.div`
     max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: all 0.5s ease-in-out;,
+    transition: all 0.5s ease-in-out;
 
     &.open {
         max-height: unset;
@@ -723,7 +728,7 @@ const MqReturnButton = styled.button`
 function Checkout() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { totalPrice, totalNewPrice, portageValue } = location.state || {};
+    const { totalPrice, totalNewPrice, portageValue, street } = location.state || {};
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [selectedInput, setSelectedInput] = useState(null);
     const [cardNumber, setCardNumber] = useState('•••• •••• •••• ••••');
@@ -938,7 +943,6 @@ function Checkout() {
         }
     };
 
-
     const binCards = [
         {
             id: 1,
@@ -966,7 +970,7 @@ function Checkout() {
         e.preventDefault();
 
         if(selectedMethod !== null){
-            navigate("/purchase", { state: { totalValue } });
+            navigate("/purchase", { state: { totalValue, street, selectedMethod } });
         }
         else{
             alert('Selecione uma forma de pagamento antes de finalizar a compra!');
@@ -985,56 +989,56 @@ function Checkout() {
                         <CheckoutTitle>FORMA DE PAGAMENTO</CheckoutTitle>
 
                         <PaymentsMethodContent>
-                            <PaymentMethod onClick={() => handleMethodClick("pix")}>
+                            <PaymentMethod onClick={() => handleMethodClick("Pix")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
                                         <input
                                             type="radio"
                                             name="payment-method"
-                                            checked={selectedMethod === "pix"}
+                                            checked={selectedMethod === "Pix"}
                                             readOnly
                                         />
                                         <h3>PIX</h3>
                                     </MethodTitle>
                                     <MethodImg src={pix} alt="pix-icon" />
                                 </PaymentMethodCheckbox>
-                                <PaymentContent className={selectedMethod === "pix" ? "active" : ""}>
+                                <PaymentContent className={selectedMethod === "Pix" ? "active" : ""}>
                                     <p>Até 20% de desconto com aprovação imediata que torna a expedição mais rápida do pedido.</p>
                                 </PaymentContent>
                             </PaymentMethod>
 
-                            <PaymentMethod onClick={() => handleMethodClick("boleto")}>
+                            <PaymentMethod onClick={() => handleMethodClick("Boleto Bancário")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
                                         <input
                                             type="radio"
                                             name="payment-method"
-                                            checked={selectedMethod === "boleto"}
+                                            checked={selectedMethod === "Boleto Bancário"}
                                             readOnly
                                         />
                                         <h3>BOLETO BANCÁRIO</h3>
                                     </MethodTitle>
                                     <MethodImg src={barCode} alt="bar-code-icon" />
                                 </PaymentMethodCheckbox>
-                                <PaymentContent className={selectedMethod === "boleto" ? "active" : ""}>
+                                <PaymentContent className={selectedMethod === "Boleto Bancário" ? "active" : ""}>
                                     <p>Opção prática com aprovação em até 2 dias úteis.</p>
                                 </PaymentContent>
                             </PaymentMethod>
 
-                            <PaymentMethod onClick={() => handleMethodClick("cartão")}>
+                            <PaymentMethod onClick={() => handleMethodClick("Cartão de Crédito")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
                                         <input
                                             type="radio"
                                             name="payment-method"
-                                            checked={selectedMethod === "cartão"}
+                                            checked={selectedMethod === "Cartão de Crédito"}
                                             readOnly
                                         />
                                         <h3>CARTÃO DE CRÉDITO</h3>
                                     </MethodTitle>
                                     <MethodImg src={card} alt="card-icon" />
                                 </PaymentMethodCheckbox>
-                                <CardPaymentContent className={selectedMethod === "cartão" ? "active-card" : ""}>
+                                <CardPaymentContent className={selectedMethod === "Cartão de Crédito" ? "active-card" : ""}>
 
                                     <CardContainer id="card-container" className={selectedInput === "cvv" ? "flip-card" : ""}>
                                         <CardFrontContainer id="card-front">
@@ -1129,24 +1133,24 @@ function Checkout() {
                             <ProductsTotal>
                                 <ValueContainer>
                                     <SubtitleText>Valor dos produtos:</SubtitleText>
-                                    <Value>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    <Value>R$ {convertNumber(totalPrice)}</Value>
                                 </ValueContainer>
 
                                 <DiscontContainer className={selectedMethod === "pix" || selectedMethod === "boleto" ? "active" : ""}>
                                     <SubtitleText>Desconto:</SubtitleText>
-                                    <Value>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    <Value>R$ {convertNumber(totalDiscont)}</Value>
                                 </DiscontContainer>
 
                                 <Portage className="portage-value">
                                     <SubtitleText>Frete:</SubtitleText>
-                                    <Value>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                    <Value>R$ {convertNumber(portageValue)}</Value>
                                 </Portage>
                             </ProductsTotal>
 
                             <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
-                                <p>Total no <strong>{selectedMethod}</strong>:</p>
+                                <Method>Total no <strong>{selectedMethod}</strong>:</Method>
                                 <PriceTerms>
-                                    <Value><strong>R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                    <Value><strong>R$ {convertNumber(totalValue)}</strong></Value>
                                 </PriceTerms>
                             </BuyResumePrice>
 
@@ -1175,7 +1179,7 @@ function Checkout() {
                             <p>VALOR À VISTA:</p>
                             <Value>
                                 <strong>
-                                    R$ {totalNewPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    R$ {convertNumber(totalNewPrice)}
                                 </strong>
                             </Value>
                         </BuyResumeValue>
@@ -1186,24 +1190,24 @@ function Checkout() {
                         <BuyResumeDescription>
                             <BuyResumeInfo>
                                 <p>Valor à prazo:</p>
-                                <Value><strong>R$ {totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                <Value><strong>R$ {convertNumber(totalPrice)}</strong></Value>
                             </BuyResumeInfo>
 
                             <DiscontContainer className={selectedMethod === "pix" || selectedMethod === "boleto" ? "active" : ""}>
                                 <SubtitleText>Desconto:</SubtitleText>
-                                <Value>R$ {totalDiscont.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+                                <Value>R$ {convertNumber(totalDiscont)}</Value>
                             </DiscontContainer>
 
                             <BuyResumeInfoPortage className="portage-value-mq">
                                 <p>Frete:</p>
-                                <Value><strong>R$ {portageValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                <Value><strong>R$ {convertNumber(portageValue)}</strong></Value>
                             </BuyResumeInfoPortage>
                         </BuyResumeDescription>
 
                         <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
-                            <p>Total no <strong>{selectedMethod}</strong>:</p>
+                            <Method>Total no <strong>{selectedMethod}</strong>:</Method>
                             <PriceTerms>
-                                <Value><strong>R$ {totalValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></Value>
+                                <Value><strong>R$ {convertNumber(totalValue)}</strong></Value>
                             </PriceTerms>
                         </BuyResumePrice>
 

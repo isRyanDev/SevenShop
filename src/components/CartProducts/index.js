@@ -1,7 +1,7 @@
 import styled from "styled-components"
-import remCartImg from "../images/trash.png"
-import arrowLeft from "../images/arrow-left.png"
-import arrowRight from "../images/arrow-right.png"
+import remCartImg from "../../assets/IconImages/trash.png"
+import arrowLeft from "../../assets/IconImages/arrow-left.png"
+import arrowRight from "../../assets/IconImages/arrow-right.png"
 
 const ProductsList = styled.ol`
     display: flex;
@@ -131,7 +131,7 @@ const QuantityInput = styled.input`
     background-color: transparent;
     border: none;
     color: white;
-    fonte-weight: bold;
+    font-weight: bold;
     padding: .2rem;
     width: 1.5rem;
 
