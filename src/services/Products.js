@@ -11,9 +11,7 @@ async function getProducts() {
 }
 
 async function postProduct(product) {
-    const response = await productsAPI.post("/", product);
-
-    return response.data;
+    await productsAPI.post("/", product);
 }
 
 export { getProducts, postProduct };

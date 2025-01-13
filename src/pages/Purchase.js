@@ -3,6 +3,7 @@ import { useState } from "react";
 import { convertNumber } from "../utils/ConvertNumber.js";
 import styled from "styled-components"
 import Header from "../components/Header/header.js";
+import { postProduct } from "../services/products.js";
 
 const PurchaseContainer = styled.div`
     display: flex;
@@ -62,6 +63,18 @@ function Purchase(){
 
     function handleAddProduct(event){
         event.preventDefault();
+
+        const product = {
+            "name": productName,
+            "price": productPrice,
+            "newprice": productPrice - (productPrice * 0.2),
+            "quantity": "1",
+            "src": productName,
+            "author": userName,
+            "id": "20"
+        }
+
+        postProduct(product);
     }
 
     return(
