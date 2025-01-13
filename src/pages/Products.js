@@ -112,8 +112,6 @@ function Products() {
         setproductsFiltered(productsFill);
     }, [searchQuery, products]);
 
-    const images = require.context('../assets/ProductImages/', false, /\.(png|jpe?g|gif)$/);
-
     return (
         <>
             {loading ? (
@@ -130,14 +128,13 @@ function Products() {
 
                                 <SearchProducts>
                                     {productsFiltered.map(product => {
-                                        const imagePath = `./${product.src}.png`;
-                                        const image = images(imagePath);
+                                        const imagePath = `https://api.ryandev.com.br/uploads/${product.src}`;
 
                                         return (
                                             <ProductsStyled
                                                 key={product.id}
                                                 name={product.name}
-                                                image={image}
+                                                image={imagePath}
                                                 price={product.price}
                                                 newprice={product.newprice}
                                                 src={product.src}

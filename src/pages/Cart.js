@@ -525,6 +525,7 @@ function CartProducts() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
         setCartProducts(storedCart);
     
@@ -573,8 +574,6 @@ function CartProducts() {
     }, 0);
 
     const totalDiscont = totalPrice - totalNewPrice;
-
-    const images = require.context('../assets/ProductImages', false, /\.(png|jpe?g|gif)$/);
 
     let isOpen = false;
 
@@ -713,14 +712,13 @@ function CartProducts() {
                             <ProductCard>
                                 <h1>PRODUTOS</h1>
                                 {cartProducts.map((product) => {
-                                    const imagePath = `./${product.src}.png`;
-                                    const image = images(imagePath);
+                                    const imagePath = `https://api.ryandev.com.br/uploads/${product.src}`;
 
                                     return (
                                         <CartProductsStyled
                                             key={product.id}
                                             name={product.name}
-                                            image={image}
+                                            image={imagePath}
                                             price={product.price}
                                             newprice={product.newprice}
                                             id={product.id}

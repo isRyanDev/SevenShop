@@ -70,8 +70,6 @@ function Home() {
         fetchProducts();
     }, []);
 
-    const images = require.context('../assets/ProductImages', false, /\.(png|jpe?g|gif)$/)
-
     return (
       <>
         {loading ? (
@@ -87,12 +85,10 @@ function Home() {
 
             <ProductsContainer>
               {products.map(product => {
-                const imagePath = `./${product.src}.png`;
-
-                const image = images(imagePath);
+                const imagePath = `https://api.ryandev.com.br/uploads/${product.src}`;
 
                   return (
-                    <ProductsStyled key={product.id} name={product.name} image={image} price={product.price} newprice={product.newprice} src={product.src} id={product.id} author={product.author}/>
+                    <ProductsStyled key={product.id} name={product.name} image={imagePath} price={product.price} newprice={product.newprice} src={product.src} id={product.id} author={product.author}/>
                   )
                 })}
             </ProductsContainer>
