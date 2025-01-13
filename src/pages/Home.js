@@ -85,7 +85,7 @@ function Home() {
 
             <ProductsContainer>
               {products.map(product => {
-                const imagePath = `https://api.ryandev.com.br/uploads/${product.src}`;
+                const imagePath = `https://api.ryandev.com.br/uploads/${product.src}.png`;
 
                   return (
                     <ProductsStyled key={product.id} name={product.name} image={imagePath} price={product.price} newprice={product.newprice} src={product.src} id={product.id} author={product.author}/>

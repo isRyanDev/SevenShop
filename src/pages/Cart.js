@@ -712,7 +712,7 @@ function CartProducts() {
                             <ProductCard>
                                 <h1>PRODUTOS</h1>
                                 {cartProducts.map((product) => {
-                                    const imagePath = `https://api.ryandev.com.br/uploads/${product.src}`;
+                                    const imagePath = `https://api.ryandev.com.br/uploads/${product.src}.png`;
 
                                     return (
                                         <CartProductsStyled
