@@ -90,24 +90,24 @@ function Purchase(){
         fetchProducts();
     }, []);
 
-    function handleAddProduct(event){
+    function handleAddProduct(event) {
         event.preventDefault();
-
+    
         const product = {
-            "name": productName,
-            "price": productPrice,
-            "newprice": productPrice - (productPrice * 0.2),
-            "src": productImgName,
-            "author": userName,
-            "id": products.lenght + 1
-        }
-
+            name: productName,
+            price: productPrice,
+            newprice: productPrice - productPrice * 0.2,
+            src: productImgName,
+            author: userName,
+            id: products.length + 1,
+        };
+    
         postProduct(product);
-
+    
         if (imageFile) {
             const formData = new FormData();
             formData.append('imagem', imageFile);
-            formData.append('filename', productImgName); // Adiciona o nome abreviado ao FormData
+            formData.append('filename', productImgName); // Nome personalizado para o arquivo
     
             fetch('https://api.ryandev.com.br/uploads', {
                 method: 'POST',
@@ -115,7 +115,6 @@ function Purchase(){
             });
         }
     }
-
     return(
         <>
           {loading ? (
