@@ -1136,7 +1136,7 @@ function Checkout() {
                                     <Value>R$ {convertNumber(totalPrice)}</Value>
                                 </ValueContainer>
 
-                                <DiscontContainer className={selectedMethod === "pix" || selectedMethod === "boleto" ? "active" : ""}>
+                                <DiscontContainer className={selectedMethod === "Pix" || selectedMethod === "Boleto Bancário" ? "active" : ""}>
                                     <SubtitleText>Desconto:</SubtitleText>
                                     <Value>R$ {convertNumber(totalDiscont)}</Value>
                                 </DiscontContainer>
