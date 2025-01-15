@@ -5,7 +5,7 @@ const UploadContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 100%;
 
     /* From Uiverse.io by 3bdel3ziz-T */ 
 .container {
@@ -26,7 +26,7 @@ const UploadContainer = styled.div`
 
 .folder {
   position: absolute;
-  top: -20px;
+  top: 0;
   left: calc(50% - 60px);
   animation: float 2.5s infinite ease-in-out;
   transition: transform var(--transition) ease;
@@ -123,7 +123,7 @@ const UploadContainer = styled.div`
     }
 
     50% {
-        transform: translateY(-20px);
+        transform: translateY(-10px);
     }
 
     100% {

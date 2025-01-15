@@ -35,10 +35,15 @@ const PurchaseContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    gap: 2rem;
+    justify-content: center;
+    gap: 1rem;
     width: 100%;
     min-height: 87vh;
+`
+
+const SectionTItle = styled.h1`
+    font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
+    font-size: 2.5rem;
 `
 
 const Purshace = styled.div`    
@@ -53,14 +58,23 @@ const AddProductContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem;
-    gap: 2rem;
+    padding: 1.5rem;
+    gap: 1rem;
     text-align: center;
     box-sizing: border-box;
-    width: 40%;
     height: 100%;
     background-color: rgb(46,0,78);
     border-radius: .5rem;
+`
+
+const PurshaceInfoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 28%;
+    height: 100%;
+    gap: 1rem;
+    box-sizing: border-box;
 `
 
 const PurshaceInfo = styled.div`
@@ -68,11 +82,8 @@ const PurshaceInfo = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: rgb(46,0,78);
-    max-width: 28%;
-    height: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
     border-radius: .5rem;
+    padding: 1.5rem;
 `
 
 const InfoTitle = styled.h1`
@@ -114,48 +125,11 @@ const AddProductForm = styled.form`
     input:focus-visible{
         outline: none;
     }
-
-    .file-upload-label input {
-    display: none;
-    }
-    .file-upload-label svg {
-    height: 50px;
-    fill: white;
-    margin-bottom: 20px;
-    }
-    .file-upload-label {
-    cursor: pointer;
-    background-color: rgba(109, 0, 156, 0.5);
-    width: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
-    border-radius: 40px;
-    border: 2px dashed white;
-    box-shadow: 0px 0px 200px -50px rgba(0, 0, 0, 0.719);
-    }
-    .file-upload-design {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    }
-    .browse-button {
-    background-color: rgba(109, 0, 156, 0.5);
-    padding: 5px 15px;
-    border-radius: 10px;
-    color: white;
-    transition: all 0.3s;
-    }
-    .browse-button:hover {
-    background-color: rgb(46,0,78);
-    }
-
 `
 
 const InputsContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 2rem;
     align-items: space-around;
     justify-content: space-between;
@@ -167,25 +141,39 @@ const Inputs = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50%;
     gap: 1rem;
+`
+
+const InputContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+`
+
+const InputLabel = styled.label`
+    font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
+    padding: .5rem;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
 `
 
 const AddProductInput = styled.input`
     width: 100%;
     padding: .5rem;
-    border-radius: .5rem;
     border: none;
-    background-color: rgb(255, 255, 255);
+    background-color: transparent;
+    border-bottom: 1px solid rgb(0, 183, 255);
     box-sizing: border-box;
-    color: rgb(46,0,78);
+    color: white;
 
     &::placeholder{
-        color: rgb(46,0,78);
+        color: white;
     }
 `
 
 const AddProductButton = styled.button`
+    width: 100%;
     padding: 1rem;
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
     border-radius: .5rem;
@@ -203,8 +191,8 @@ const AddProductButton = styled.button`
 `
 
 const ReturnButton = styled.button`
-    width: 30%;
-    height: 3rem;
+    width: 100%;
+    height: 3.5rem;
     padding: .5rem;
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
     border-radius: .5rem;
@@ -226,7 +214,6 @@ function Purchase(){
     const [userName, setUserName] = useState("");
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState("");
-    const [productImgName, setProductImgName] = useState("");
     const [imageFile, setImageFile] = useState(null);
     const { totalValue, street, selectedMethod } = location.state || {};
     const [loading, setLoading] = useState(true);
@@ -247,11 +234,16 @@ function Purchase(){
     function handleAddProduct(event) {
         event.preventDefault();
     
+        const currentDate = new Date();
+        const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}_${String(currentDate.getHours()).padStart(2, '0')}${String(currentDate.getMinutes()).padStart(2, '0')}${String(currentDate.getSeconds()).padStart(2, '0')}`;
+    
+        const newProductImgName = `produto_${formattedDate}.jpg`;
+    
         const product = {
             name: productName,
             price: productPrice,
             newprice: Number(productPrice) - Number(productPrice * 0.2),
-            src: productImgName,
+            src: newProductImgName,
             author: userName,
             id: products.length + 1,
         };
@@ -261,12 +253,15 @@ function Purchase(){
         if (imageFile) {
             const formData = new FormData();
             formData.append('imagem', imageFile);
-            formData.append('filename', productImgName);
-
+            formData.append('filename', newProductImgName); 
+    
             fetch('https://api.ryandev.com.br/uploads', {
                 method: 'POST',
                 body: formData,
             });
+
+            console.log("Produto adicionado com sucesso!");
+            navigate("/");
         }
     }
     return(
@@ -280,10 +275,11 @@ function Purchase(){
                     <Header displaySearch="none" displayButton="none"/>
 
                     <PurchaseContent>
-                        <InfoTitle>COMPRA EFETUADA COM SUCESSO!</InfoTitle>
+                        <SectionTItle>COMPRA EFETUADA COM SUCESSO!</SectionTItle>
 
                         <Purshace>
                             <AddProductContainer>
+                                <InfoTitle>Adicione um produto</InfoTitle>
                                 <label>
                                     <p>Obrigado por chegar até aqui!</p>
                                     <p>Agora você pode adicionar um novo produto ficticio ao nosso catálogo</p>
@@ -291,10 +287,18 @@ function Purchase(){
                                 <AddProductForm onSubmit={handleAddProduct}>
                                     <InputsContainer>
                                         <Inputs>
-                                            <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
-                                            <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
-                                            <AddProductInput type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
-                                            <AddProductInput type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
+                                            <InputContent>
+                                                <InputLabel>Nome</InputLabel>
+                                                <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
+                                            </InputContent>
+                                            <InputContent>
+                                                <InputLabel>Nome do produto</InputLabel>
+                                                <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
+                                            </InputContent>
+                                            <InputContent>
+                                                <InputLabel>Valor</InputLabel>
+                                                <AddProductInput type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
+                                            </InputContent>
                                         </Inputs>
                                         <CustomUpload setImageFile={setImageFile}/>
                                     </InputsContainer>
@@ -302,28 +306,29 @@ function Purchase(){
                                 </AddProductForm>
                             </AddProductContainer>
 
-                            <PurshaceInfo>
-                                <InfoTitle>Informações da compra</InfoTitle>
+                            <PurshaceInfoContainer>
+                                <PurshaceInfo>
+                                    <InfoTitle>Informações da compra</InfoTitle>
 
-                                <Infos> 
-                                    <InfoRef>Total pago:</InfoRef>
-                                    <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
-                                </Infos>
+                                    <Infos> 
+                                        <InfoRef>Total pago:</InfoRef>
+                                        <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
+                                    </Infos>
 
-                                <Infos>
-                                    <InfoRef>Endereço de entrega:</InfoRef>
-                                    <InfoValue>{street}</InfoValue>
-                                </Infos>
+                                    <Infos>
+                                        <InfoRef>Endereço de entrega:</InfoRef>
+                                        <InfoValue>{street}</InfoValue>
+                                    </Infos>
 
-                                <Infos>
-                                    <InfoRef>Método de pagamento:</InfoRef>
-                                    <InfoValue>{selectedMethod}</InfoValue>
-                                </Infos>
-                            </PurshaceInfo>
+                                    <Infos>
+                                        <InfoRef>Método de pagamento:</InfoRef>
+                                        <InfoValue>{selectedMethod}</InfoValue>
+                                    </Infos>
+                                </PurshaceInfo>
+
+                                <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>
+                            </PurshaceInfoContainer>
                         </Purshace>
-
-                        <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>
-
                         <h3>PAGINA EM DESENVOLVIMENTO</h3>
                     </PurchaseContent>
                     
