@@ -11,6 +11,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const GlobalStyle = createGlobalStyle`
 
+  :root {
+    --transition: 350ms;
+    --folder-W: 120px;
+    --folder-H: 80px;
+  }
+
   * {
     margin: 0;
     padding: 0;

@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react";
 import { convertNumber } from "../utils/ConvertNumber.js";
 import { getProducts, postProduct } from "../services/ProductsAPI.js";
+import CustomUpload from "../components/CustomUpload/index.js";
 import styled from "styled-components"
 import Header from "../components/Header/header.js";
 import Footer from "../components/Footer/index.js";
@@ -24,17 +25,26 @@ const PurchaseContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3vh;
+    width: 100%;
+    min-height: 100vh;
     font-family: 'Poppins', sans-serif; 
     color: white;
 `
 
 const PurchaseContent = styled.div`
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 2rem;
+    width: 100%;
+    min-height: 87vh;
+`
+
+const Purshace = styled.div`    
+    display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
-    min-height: 81vh;
     gap: 2rem;
     width: 100%;
 `
@@ -44,11 +54,11 @@ const AddProductContainer = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 1rem;
-    gap: 1rem;
+    gap: 2rem;
     text-align: center;
-    width: 30%;
-    height: 100%;
     box-sizing: border-box;
+    width: 40%;
+    height: 100%;
     background-color: rgb(46,0,78);
     border-radius: .5rem;
 `
@@ -58,7 +68,7 @@ const PurshaceInfo = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: rgb(46,0,78);
-    max-width: 30%;
+    max-width: 28%;
     height: 100%;
     padding: 1rem;
     box-sizing: border-box;
@@ -99,7 +109,7 @@ const AddProductForm = styled.form`
     align-items: center;
     width: 100%;
     box-sizing: border-box;
-    gap: 1rem;
+    gap: 2rem;
 
     input:focus-visible{
         outline: none;
@@ -143,6 +153,24 @@ const AddProductForm = styled.form`
 
 `
 
+const InputsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: space-around;
+    justify-content: space-between;
+    width: 100%;
+`
+
+const Inputs = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    gap: 1rem;
+`
+
 const AddProductInput = styled.input`
     width: 100%;
     padding: .5rem;
@@ -158,13 +186,31 @@ const AddProductInput = styled.input`
 `
 
 const AddProductButton = styled.button`
-    width: 100%;
-    padding: .5rem;
+    padding: 1rem;
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
     border-radius: .5rem;
     border: none;
     background-color: rgba(109, 0, 156, 0.5);
     box-sizing: border-box;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+
+    &:hover {
+        background: linear-gradient(315deg, rgba(46,0,78,0.5) 30%, rgba(125,0,180,0.5) 100%);
+    }   
+`
+
+const ReturnButton = styled.button`
+    width: 30%;
+    height: 3rem;
+    padding: .5rem;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    border-radius: .5rem;
+    border: none;
+    background-color: rgb(46,0,78);
+    box-sizing: border-box; 
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -204,7 +250,7 @@ function Purchase(){
         const product = {
             name: productName,
             price: productPrice,
-            newprice: Number(productPrice - productPrice * 0.2),
+            newprice: Number(productPrice) - Number(productPrice * 0.2),
             src: productImgName,
             author: userName,
             id: products.length + 1,
@@ -215,8 +261,8 @@ function Purchase(){
         if (imageFile) {
             const formData = new FormData();
             formData.append('imagem', imageFile);
-            formData.append('filename', productImgName); // Nome personalizado para o arquivo
-    
+            formData.append('filename', productImgName);
+
             fetch('https://api.ryandev.com.br/uploads', {
                 method: 'POST',
                 body: formData,
@@ -233,60 +279,54 @@ function Purchase(){
                 <PurchaseContainer>
                     <Header displaySearch="none" displayButton="none"/>
 
-                    <InfoTitle>COMPRA EFETUADA COM SUCESSO!</InfoTitle>
-
                     <PurchaseContent>
+                        <InfoTitle>COMPRA EFETUADA COM SUCESSO!</InfoTitle>
 
-                        <PurshaceInfo>
-                            <InfoTitle>Informações da compra</InfoTitle>
-
-                            <Infos>
-                                <InfoRef>Total pago:</InfoRef>
-                                <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
-                            </Infos>
-
-                            <Infos>
-                                <InfoRef>Endereço de entrega:</InfoRef>
-                                <InfoValue>{street}</InfoValue>
-                            </Infos>
-
-                            <Infos>
-                                <InfoRef>Método de pagamento:</InfoRef>
-                                <InfoValue>{selectedMethod}</InfoValue>
-                            </Infos>
-                        </PurshaceInfo>
-
-                        <AddProductContainer>
-                        <label>
-                            
-                            <p>Obrigado por chegar até aqui!</p>
-                            <p>Agora você pode adicionar um novo produto ao nosso catálogo</p>
-                        </label>
-                            <AddProductForm onSubmit={handleAddProduct}>
-                                <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
-                                <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
-                                <AddProductInput type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
-                                <AddProductInput type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
-                                <AddProductInput type="file" name="imagem" onChange={e => setImageFile(e.target.files[0])}/>
-
-                                <label for="file" class="file-upload-label">
-                                    <div class="file-upload-design">
-                                    <svg viewBox="0 0 640 512" height="1em">
-                                        <path
-                                        d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
-                                        ></path>
-                                    </svg>
-                                    <p>Arraste a imagem do produto aqui</p>
-                                    <span class="browse-button">Ou procure nos arquivos</span>
-                                    </div>
-                                    <input id="file" type="file" />
+                        <Purshace>
+                            <AddProductContainer>
+                                <label>
+                                    <p>Obrigado por chegar até aqui!</p>
+                                    <p>Agora você pode adicionar um novo produto ficticio ao nosso catálogo</p>
                                 </label>
+                                <AddProductForm onSubmit={handleAddProduct}>
+                                    <InputsContainer>
+                                        <Inputs>
+                                            <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
+                                            <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
+                                            <AddProductInput type="text" onChange={e => setProductImgName(e.target.value)} placeholder="Digite o nome abreviado"/>
+                                            <AddProductInput type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
+                                        </Inputs>
+                                        <CustomUpload setImageFile={setImageFile}/>
+                                    </InputsContainer>
+                                    <AddProductButton type="submit">Adicionar Produto</AddProductButton>
+                                </AddProductForm>
+                            </AddProductContainer>
 
-                                <AddProductButton type="submit">Adicionar Produto</AddProductButton>
-                                <AddProductButton onClick={() => navigate("/")}>Voltar ao início</AddProductButton>
-                            </AddProductForm>
-                        </AddProductContainer>
+                            <PurshaceInfo>
+                                <InfoTitle>Informações da compra</InfoTitle>
+
+                                <Infos> 
+                                    <InfoRef>Total pago:</InfoRef>
+                                    <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
+                                </Infos>
+
+                                <Infos>
+                                    <InfoRef>Endereço de entrega:</InfoRef>
+                                    <InfoValue>{street}</InfoValue>
+                                </Infos>
+
+                                <Infos>
+                                    <InfoRef>Método de pagamento:</InfoRef>
+                                    <InfoValue>{selectedMethod}</InfoValue>
+                                </Infos>
+                            </PurshaceInfo>
+                        </Purshace>
+
+                        <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>
+
+                        <h3>PAGINA EM DESENVOLVIMENTO</h3>
                     </PurchaseContent>
+                    
                     <Footer/>
                 </PurchaseContainer>
             )}
