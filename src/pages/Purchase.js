@@ -260,7 +260,7 @@ function Purchase(){
                 body: formData,
             });
 
-            console.log("Produto adicionado com sucesso!");
+            alert("Produto adicionado com sucesso!");
             navigate("/");
         }
     }
