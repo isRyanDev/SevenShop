@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { convertNumber } from "../utils/ConvertNumber.js";
 import styled from "styled-components";
 import arrowUp from "../assets/IconImages/arrow-up.png";
 import CartProductsStyled from "../components/CartProducts/index.js";
@@ -8,7 +9,7 @@ import Footer from "../components/Footer/index.js";
 import Header from "../components/Header/header.js";
 import Loading from "../components/Loading/index.js";
 import StyledLink from "../components/Link/index.js";
-import { convertNumber } from "../utils/ConvertNumber.js";
+import Notify from "../components/Notify/index.js";
 
 const LoadingContainer = styled.div`
     position: fixed;
@@ -527,6 +528,7 @@ function CartProducts() {
     const [cartProducts, setCartProducts] = useState([]);
     const [quantities, setQuantities] = useState({});
     const [loading, setLoading] = useState(true);
+    const [notifyMessage, setNotifyMessage] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -620,7 +622,7 @@ function CartProducts() {
                 getPortageValue(data.rows[0].elements[0].distance.value);
                 setStreet(data.destination_addresses[0]);
             }else{
-                alert('CEP não encontrado!');
+                setNotifyMessage("Cep Não encontrado!");
                 return;
             }
         } catch (error) {
@@ -659,7 +661,7 @@ function CartProducts() {
             navigate("/checkout", { state: { totalPrice, totalNewPrice, portageValue, street } });
         }
         else{
-            alert('Preencha o campo de calculo do frete antes de prosseguir com a compra!');
+            setNotifyMessage("Preencha o campo de calculo do frete antes de prosseguir com a compra!");
         }
     }
 
@@ -695,6 +697,7 @@ function CartProducts() {
                 <Loading/>
             </LoadingContainer>
         ) : cartProducts.length < 1 ? (
+
             <CartEmptyContainer> 
                 <CardEmptyContent>
                     <Header displaySearch="none" displayButton="none" />
@@ -709,6 +712,8 @@ function CartProducts() {
                 <Footer />
             </CartEmptyContainer>
         ) : (
+            <>
+                <Notify message={notifyMessage} setNotifyMessage={setNotifyMessage} />
                 <CartContainer>
                     <CartContentContainer>
                         <Header displaySearch="none" displayButton="none" />
@@ -884,6 +889,7 @@ function CartProducts() {
                     <Footer display="none" />
 
                 </CartContainer>
+                </>
             )}
         </>
     );

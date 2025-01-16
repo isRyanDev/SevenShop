@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components"
 import cartImg from "../../assets/IconImages/cart-icon.png"
+import Notify from "../Notify/index.js";
 import addCartImg from "../../assets/IconImages/add-to-cart.png"
 
 const ProductsList = styled.ol`
@@ -157,26 +158,27 @@ const ButtonCart = styled.img`
 `
 
 function ProductsStyled({name, image, price, newprice, src, id, author}) {
+    const [notifyMessage, setNotifyMessage] = useState("");
 
     function insertCartProduct(productId) {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
         
         if (cart.some(product => product.id === productId)) {
-            alert("Este produto já está no carrinho!");
+            setNotifyMessage("Este produto já está no carrinho!");
             return;
         }
         
         const newProduct = { id: productId, name, price, newprice, src, quantity: 1 };
         cart.push(newProduct);
         localStorage.setItem("cart", JSON.stringify(cart));
-        console.log("Produto adicionado ao carrinho!");
+        setNotifyMessage("Produto adicionado ao carrinho!");
     }
 
     function insertAndBuy(productId) {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
         if (cart.some(product => product.id === productId)) {
-            alert("Este produto já está no carrinho!");
+            window.location.replace("/carrinho");
             return;
         }
 
@@ -190,55 +192,59 @@ function ProductsStyled({name, image, price, newprice, src, id, author}) {
     const newPriceConvert = parseFloat(newprice)
 
     return(
-        <ProductsList>
-            <Product>
+        <>
+            <Notify message={notifyMessage} setNotifyMessage={setNotifyMessage} />
 
-                <ProductImg src={image} alt={src}/>
+            <ProductsList>
+                <Product>
 
-                <DescriptionContentContainer>
-                    <DescriptionContent>
-                        <ProductName>
-                            {name}
-                        </ProductName>
+                    <ProductImg src={image} alt={src}/>
 
-                        <Description>
-                            <DescriptionPrices>
-                                <ProductPrice>
-                                    R${priceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </ProductPrice>
-                                <ProductNewPrice>
-                                    R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 } )}
-                                </ProductNewPrice>
-                                <h6>
-                                    Á vista
-                                </h6>
-                            </DescriptionPrices>
+                    <DescriptionContentContainer>
+                        <DescriptionContent>
+                            <ProductName>
+                                {name}
+                            </ProductName>
 
-                            <AuthorContainer>
-                                <p>Autor:</p>
-                                <p><strong>{author}</strong></p>
-                            </AuthorContainer>
-                        </Description>
-                    </DescriptionContent>
+                            <Description>
+                                <DescriptionPrices>
+                                    <ProductPrice>
+                                        R${priceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </ProductPrice>
+                                    <ProductNewPrice>
+                                        R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 } )}
+                                    </ProductNewPrice>
+                                    <h6>
+                                        Á vista
+                                    </h6>
+                                </DescriptionPrices>
 
-                    <ProductBuyContainer>
-                        <ProductBuyButton onClick={() => insertAndBuy(id)}>
-                            COMPRAR 
-                        </ProductBuyButton>
+                                <AuthorContainer>
+                                    <p>Autor:</p>
+                                    <p><strong>{author}</strong></p>
+                                </AuthorContainer>
+                            </Description>
+                        </DescriptionContent>
 
-                        <ButtonCartContainer
-                            onMouseEnter={() => setHoverCart(true)}
-                            onMouseLeave={() => setHoverCart(false)}
-                            onClick={() => insertCartProduct(id)}
-                        >
-                            <ButtonCart src={hoverCart ? addCartImg : cartImg} alt="Cart Icon"/>
-                        </ButtonCartContainer>
+                        <ProductBuyContainer>
+                            <ProductBuyButton onClick={() => insertAndBuy(id)}>
+                                COMPRAR 
+                            </ProductBuyButton>
 
-                    </ProductBuyContainer>
-                </DescriptionContentContainer>
+                            <ButtonCartContainer
+                                onMouseEnter={() => setHoverCart(true)}
+                                onMouseLeave={() => setHoverCart(false)}
+                                onClick={() => insertCartProduct(id)}
+                            >
+                                <ButtonCart src={hoverCart ? addCartImg : cartImg} alt="Cart Icon"/>
+                            </ButtonCartContainer>
 
-            </Product>
-        </ProductsList>
+                        </ProductBuyContainer>
+                    </DescriptionContentContainer>
+
+                </Product>
+            </ProductsList>
+        </>
     )
 }
 

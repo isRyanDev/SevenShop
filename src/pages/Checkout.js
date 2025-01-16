@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { convertNumber } from "../utils/ConvertNumber.js";
+import Notify from "../components/Notify/index.js";
 import ccType from 'credit-card-type';
 import styled from "styled-components";
 import arrowUp from "../assets/IconImages/arrow-up.png";
@@ -741,8 +742,9 @@ function Checkout() {
     const [cardNameForm, setcardNameForm] = useState('');
     const [cardCVV, setCardCVV] = useState('');
     const [totalValue, setTotalValue] = useState(0);
+    const [notifyMessage, setNotifyMessage] = useState("");
     const totalDiscont = totalPrice - totalNewPrice;
-
+    
     useEffect(() => {
         document.title = "SevenShop Store | Checkout";
       }, []);
@@ -974,164 +976,223 @@ function Checkout() {
             navigate("/purchase", { state: { totalValue, street, selectedMethod} });
         }
         else{
-            alert('Selecione uma forma de pagamento antes de finalizar a compra!');
+            setNotifyMessage("Selecione uma forma de pagamento antes de finalizar a compra!");
         }
         
     }
 
     return (
-        <CheckoutContainer>
-            <CheckoutContentContainer>
-                <Header displaySearch="none" displayButton="none"/>
-                
-                <CheckoutContent>
+        <>
+            <Notify message={notifyMessage} setNotifyMessage={setNotifyMessage} />
+            <CheckoutContainer>
+                <CheckoutContentContainer>
+                    <Header displaySearch="none" displayButton="none"/>
+                    
+                    <CheckoutContent>
 
-                    <PaymentsMethodContainer>
-                        <CheckoutTitle>FORMA DE PAGAMENTO</CheckoutTitle>
+                        <PaymentsMethodContainer>
+                            <CheckoutTitle>FORMA DE PAGAMENTO</CheckoutTitle>
 
-                        <PaymentsMethodContent>
-                            <PaymentMethod onClick={() => handleMethodClick("Pix")}>
-                                <PaymentMethodCheckbox>
-                                    <MethodTitle>
-                                        <RadioInput check={selectedMethod === "Pix"}/>
-                                        <h3>PIX</h3>
-                                    </MethodTitle>
-                                    <MethodImg src={pix} alt="pix-icon" />
-                                </PaymentMethodCheckbox>
-                                <PaymentContent className={selectedMethod === "Pix" ? "active" : ""}>
-                                    <p>Até 20% de desconto com aprovação imediata que torna a expedição mais rápida do pedido.</p>
-                                </PaymentContent>
-                            </PaymentMethod>
+                            <PaymentsMethodContent>
+                                <PaymentMethod onClick={() => handleMethodClick("Pix")}>
+                                    <PaymentMethodCheckbox>
+                                        <MethodTitle>
+                                            <RadioInput check={selectedMethod === "Pix"}/>
+                                            <h3>PIX</h3>
+                                        </MethodTitle>
+                                        <MethodImg src={pix} alt="pix-icon" />
+                                    </PaymentMethodCheckbox>
+                                    <PaymentContent className={selectedMethod === "Pix" ? "active" : ""}>
+                                        <p>Até 20% de desconto com aprovação imediata que torna a expedição mais rápida do pedido.</p>
+                                    </PaymentContent>
+                                </PaymentMethod>
 
-                            <PaymentMethod onClick={() => handleMethodClick("Boleto Bancário")}>
-                                <PaymentMethodCheckbox>
-                                    <MethodTitle>
-                                    <RadioInput check={selectedMethod === "Boleto Bancário"}/>
-                                        <h3>BOLETO BANCÁRIO</h3>
-                                    </MethodTitle>
-                                    <MethodImg src={barCode} alt="bar-code-icon" />
-                                </PaymentMethodCheckbox>
-                                <PaymentContent className={selectedMethod === "Boleto Bancário" ? "active" : ""}>
-                                    <p>Opção prática com aprovação em até 2 dias úteis.</p>
-                                </PaymentContent>
-                            </PaymentMethod>
+                                <PaymentMethod onClick={() => handleMethodClick("Boleto Bancário")}>
+                                    <PaymentMethodCheckbox>
+                                        <MethodTitle>
+                                        <RadioInput check={selectedMethod === "Boleto Bancário"}/>
+                                            <h3>BOLETO BANCÁRIO</h3>
+                                        </MethodTitle>
+                                        <MethodImg src={barCode} alt="bar-code-icon" />
+                                    </PaymentMethodCheckbox>
+                                    <PaymentContent className={selectedMethod === "Boleto Bancário" ? "active" : ""}>
+                                        <p>Opção prática com aprovação em até 2 dias úteis.</p>
+                                    </PaymentContent>
+                                </PaymentMethod>
 
-                            <PaymentMethod onClick={() => handleMethodClick("Cartão de Crédito")}>
-                                <PaymentMethodCheckbox>
-                                    <MethodTitle>
-                                        <RadioInput check={selectedMethod === "Cartão de Crédito"}/>
-                                        <h3>CARTÃO DE CRÉDITO</h3>
-                                    </MethodTitle>
-                                    <MethodImg src={card} alt="card-icon" />
-                                </PaymentMethodCheckbox>
-                                <CardPaymentContent className={selectedMethod === "Cartão de Crédito" ? "active-card" : ""}>
+                                <PaymentMethod onClick={() => handleMethodClick("Cartão de Crédito")}>
+                                    <PaymentMethodCheckbox>
+                                        <MethodTitle>
+                                            <RadioInput check={selectedMethod === "Cartão de Crédito"}/>
+                                            <h3>CARTÃO DE CRÉDITO</h3>
+                                        </MethodTitle>
+                                        <MethodImg src={card} alt="card-icon" />
+                                    </PaymentMethodCheckbox>
+                                    <CardPaymentContent className={selectedMethod === "Cartão de Crédito" ? "active-card" : ""}>
 
-                                    <CardContainer id="card-container" className={selectedInput === "cvv" ? "flip-card" : ""}>
-                                        <CardFrontContainer id="card-front">
-                                            <CardInfos>
-                                                <CardChipImg id="card-chip" src={cardChip} alt="card=chip"/>
-                                                <FlagImgContainer id="flag-img-container">
-                                                    {getCardBrandLogo(cardBrand)}
-                                                </FlagImgContainer>
-                                            </CardInfos>
-
-                                            <CardContentContainer>
+                                        <CardContainer id="card-container" className={selectedInput === "cvv" ? "flip-card" : ""}>
+                                            <CardFrontContainer id="card-front">
                                                 <CardInfos>
-                                                    <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
+                                                    <CardChipImg id="card-chip" src={cardChip} alt="card=chip"/>
+                                                    <FlagImgContainer id="flag-img-container">
+                                                        {getCardBrandLogo(cardBrand)}
+                                                    </FlagImgContainer>
                                                 </CardInfos>
 
-                                                <CardContent>
-                                                    <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName.toUpperCase()}</p>
+                                                <CardContentContainer>
+                                                    <CardInfos>
+                                                        <p id="card-number" className={selectedInput === "number" ? "active-input" : ""}> {cardNumber}</p>
+                                                    </CardInfos>
 
-                                                    <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
-                                                        <p>Validade</p>
-                                                        <p>{cardDate}</p>
-                                                    </CardDate>
-                                                </CardContent>
-                                            </CardContentContainer>
-                                        </CardFrontContainer>
+                                                    <CardContent>
+                                                        <p id="card-name" className={selectedInput === "name" ? "active-input" : ""}>{cardName.toUpperCase()}</p>
 
-                                        <CardBackContainer id="card-back">
-                                            <CardBackTarget>
-                                                <CardCVV>
-                                                    <p id="card-cvv" className={selectedInput === "cvv" ? "active-input" : ""}> {cardCVV}</p>
-                                                </CardCVV>
-                                            </CardBackTarget>
-                                        </CardBackContainer>
+                                                        <CardDate id="card-date" className={selectedInput === "date" ? "active-input" : ""}>
+                                                            <p>Validade</p>
+                                                            <p>{cardDate}</p>
+                                                        </CardDate>
+                                                    </CardContent>
+                                                </CardContentContainer>
+                                            </CardFrontContainer>
 
-                                    </CardContainer>
+                                            <CardBackContainer id="card-back">
+                                                <CardBackTarget>
+                                                    <CardCVV>
+                                                        <p id="card-cvv" className={selectedInput === "cvv" ? "active-input" : ""}> {cardCVV}</p>
+                                                    </CardCVV>
+                                                </CardBackTarget>
+                                            </CardBackContainer>
 
-                                    <CardFormContainer>
-                                        <CardForm>
-                                            <MethodInput 
-                                                onFocus={() => handleInputClick("number")}
-                                                type="text"
-                                                value={cardNumberForm}
-                                                onChange={handleCardNumber}
-                                                maxLength={19}
-                                                placeholder="1234 5678 1234 5678"
-                                            />
+                                        </CardContainer>
 
-                                            <MethodInput 
-                                                onFocus={() => handleInputClick("name")}
-                                                type="text"
-                                                value={cardNameForm}
-                                                onChange={handleCardName}
-                                                placeholder="Nome impresso no cartão"
-                                            />  
-
-                                            <SmallInputContainer>
-                                                <MethodInputSmall 
-                                                    onFocus={() => handleInputClick("date")}
+                                        <CardFormContainer>
+                                            <CardForm>
+                                                <MethodInput 
+                                                    onFocus={() => handleInputClick("number")}
                                                     type="text"
-                                                    value={cardDateForm}
-                                                    onChange={handleCardDate}
-                                                    pattern="\d{2}/\d{2}"
-                                                    maxLength={5}
-                                                    placeholder="MM/AA"
+                                                    value={cardNumberForm}
+                                                    onChange={handleCardNumber}
+                                                    maxLength={19}
+                                                    placeholder="1234 5678 1234 5678"
+                                                />
+
+                                                <MethodInput 
+                                                    onFocus={() => handleInputClick("name")}
+                                                    type="text"
+                                                    value={cardNameForm}
+                                                    onChange={handleCardName}
+                                                    placeholder="Nome impresso no cartão"
                                                 />  
 
-                                                <MethodInputSmall 
-                                                    onFocus={() => handleInputClick("cvv")}
-                                                    onBlur={() => handleInputClick("")}
-                                                    type="text"
-                                                    value={cardCVV}
-                                                    maxLength={3}   
-                                                    onChange={handleCardCVV}
-                                                    placeholder="CVV"
-                                                />  
-                                            </SmallInputContainer>
-                                        </CardForm>
+                                                <SmallInputContainer>
+                                                    <MethodInputSmall 
+                                                        onFocus={() => handleInputClick("date")}
+                                                        type="text"
+                                                        value={cardDateForm}
+                                                        onChange={handleCardDate}
+                                                        pattern="\d{2}/\d{2}"
+                                                        maxLength={5}
+                                                        placeholder="MM/AA"
+                                                    />  
 
-                                        <CardGeneratorButton onClick={generateCard}>
-                                            <p>GERAR CARTÃO</p>
-                                        </CardGeneratorButton>
-                                    </CardFormContainer>
+                                                    <MethodInputSmall 
+                                                        onFocus={() => handleInputClick("cvv")}
+                                                        onBlur={() => handleInputClick("")}
+                                                        type="text"
+                                                        value={cardCVV}
+                                                        maxLength={3}   
+                                                        onChange={handleCardCVV}
+                                                        placeholder="CVV"
+                                                    />  
+                                                </SmallInputContainer>
+                                            </CardForm>
 
-                                </CardPaymentContent>
-                            </PaymentMethod>
-                        </PaymentsMethodContent>
-                    </PaymentsMethodContainer>
+                                            <CardGeneratorButton onClick={generateCard}>
+                                                <p>GERAR CARTÃO</p>
+                                            </CardGeneratorButton>
+                                        </CardFormContainer>
 
-                    <SummaryContainer>
-                        <CheckoutTitle>RESUMO</CheckoutTitle>
-                        <SummaryContent>
-                            <ProductsTotal>
-                                <ValueContainer>
-                                    <SubtitleText>Valor dos produtos:</SubtitleText>
-                                    <Value>R$ {convertNumber(totalPrice)}</Value>
-                                </ValueContainer>
+                                    </CardPaymentContent>
+                                </PaymentMethod>
+                            </PaymentsMethodContent>
+                        </PaymentsMethodContainer>
+
+                        <SummaryContainer>
+                            <CheckoutTitle>RESUMO</CheckoutTitle>
+                            <SummaryContent>
+                                <ProductsTotal>
+                                    <ValueContainer>
+                                        <SubtitleText>Valor dos produtos:</SubtitleText>
+                                        <Value>R$ {convertNumber(totalPrice)}</Value>
+                                    </ValueContainer>
+
+                                    <DiscontContainer className={selectedMethod === "Pix" || selectedMethod === "Boleto Bancário" ? "active" : ""}>
+                                        <SubtitleText>Desconto:</SubtitleText>
+                                        <Value>R$ {convertNumber(totalDiscont)}</Value>
+                                    </DiscontContainer>
+
+                                    <Portage className="portage-value">
+                                        <SubtitleText>Frete:</SubtitleText>
+                                        <Value>R$ {convertNumber(portageValue)}</Value>
+                                    </Portage>
+                                </ProductsTotal>
+
+                                <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
+                                    <Method>Total no <strong>{selectedMethod}</strong>:</Method>
+                                    <PriceTerms>
+                                        <Value><strong>R$ {convertNumber(totalValue)}</strong></Value>
+                                    </PriceTerms>
+                                </BuyResumePrice>
+
+                                <CheckoutButtonContainer>
+                                    <ButtonLink>
+                                        <CheckoutButton onClick={checkoutRedirect}>FINALIZAR</CheckoutButton>
+                                    </ButtonLink>
+                                    <ButtonLink to="/carrinho">
+                                        <ReturnButton>VOLTAR</ReturnButton>
+                                    </ButtonLink>
+                                </CheckoutButtonContainer>
+
+                            </SummaryContent>
+                        </SummaryContainer>
+
+                    </CheckoutContent>                      
+                </CheckoutContentContainer>
+
+                <BuyResumeContainer>
+                        <BuyResumeButton onClick={() => openResume()}>
+                            <ResumeButtonImg className="arrow-img-up" src={arrowUp}/>
+                        </BuyResumeButton>
+                        <BuyResume>
+                            <h3>RESUMO</h3>
+                            <BuyResumeValue>
+                                <p>VALOR À VISTA:</p>
+                                <Value>
+                                    <strong>
+                                        R$ {convertNumber(totalNewPrice)}
+                                    </strong>
+                                </Value>
+                            </BuyResumeValue>
+                        </BuyResume>
+
+                        <ResumeContainer className="resume-container">
+
+                            <BuyResumeDescription>
+                                <BuyResumeInfo>
+                                    <p>Valor à prazo:</p>
+                                    <Value><strong>R$ {convertNumber(totalPrice)}</strong></Value>
+                                </BuyResumeInfo>
 
                                 <DiscontContainer className={selectedMethod === "Pix" || selectedMethod === "Boleto Bancário" ? "active" : ""}>
                                     <SubtitleText>Desconto:</SubtitleText>
                                     <Value>R$ {convertNumber(totalDiscont)}</Value>
                                 </DiscontContainer>
 
-                                <Portage className="portage-value">
-                                    <SubtitleText>Frete:</SubtitleText>
-                                    <Value>R$ {convertNumber(portageValue)}</Value>
-                                </Portage>
-                            </ProductsTotal>
+                                <BuyResumeInfoPortage className="portage-value-mq">
+                                    <p>Frete:</p>
+                                    <Value><strong>R$ {convertNumber(portageValue)}</strong></Value>
+                                </BuyResumeInfoPortage>
+                            </BuyResumeDescription>
 
                             <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
                                 <Method>Total no <strong>{selectedMethod}</strong>:</Method>
@@ -1140,78 +1201,22 @@ function Checkout() {
                                 </PriceTerms>
                             </BuyResumePrice>
 
-                            <CheckoutButtonContainer>
-                                <ButtonLink>
-                                    <CheckoutButton onClick={checkoutRedirect}>FINALIZAR</CheckoutButton>
-                                </ButtonLink>
-                                <ButtonLink to="/carrinho">
-                                    <ReturnButton>VOLTAR</ReturnButton>
-                                </ButtonLink>
-                            </CheckoutButtonContainer>
-
-                        </SummaryContent>
-                    </SummaryContainer>
-
-                </CheckoutContent>                      
-            </CheckoutContentContainer>
-
-            <BuyResumeContainer>
-                    <BuyResumeButton onClick={() => openResume()}>
-                        <ResumeButtonImg className="arrow-img-up" src={arrowUp}/>
-                    </BuyResumeButton>
-                    <BuyResume>
-                        <h3>RESUMO</h3>
-                        <BuyResumeValue>
-                            <p>VALOR À VISTA:</p>
-                            <Value>
-                                <strong>
-                                    R$ {convertNumber(totalNewPrice)}
-                                </strong>
-                            </Value>
-                        </BuyResumeValue>
-                    </BuyResume>
-
-                    <ResumeContainer className="resume-container">
-
-                        <BuyResumeDescription>
-                            <BuyResumeInfo>
-                                <p>Valor à prazo:</p>
-                                <Value><strong>R$ {convertNumber(totalPrice)}</strong></Value>
-                            </BuyResumeInfo>
-
-                            <DiscontContainer className={selectedMethod === "Pix" || selectedMethod === "Boleto Bancário" ? "active" : ""}>
-                                <SubtitleText>Desconto:</SubtitleText>
-                                <Value>R$ {convertNumber(totalDiscont)}</Value>
-                            </DiscontContainer>
-
-                            <BuyResumeInfoPortage className="portage-value-mq">
-                                <p>Frete:</p>
-                                <Value><strong>R$ {convertNumber(portageValue)}</strong></Value>
-                            </BuyResumeInfoPortage>
-                        </BuyResumeDescription>
-
-                        <BuyResumePrice className={selectedMethod !== null ? "active" : ""}>
-                            <Method>Total no <strong>{selectedMethod}</strong>:</Method>
-                            <PriceTerms>
-                                <Value><strong>R$ {convertNumber(totalValue)}</strong></Value>
-                            </PriceTerms>
-                        </BuyResumePrice>
-
-                    </ResumeContainer>
+                        </ResumeContainer>
 
 
-                        <ButtonLink className="buy-button-link">
-                            <BuyButton onClick={checkoutRedirect}>FINALIZAR</BuyButton>             
-                        </ButtonLink>
-                        <ButtonLink to="/carrinho" className="buy-button-link">
-                            <MqReturnButton>VOLTAR</MqReturnButton>
-                        </ButtonLink>
+                            <ButtonLink className="buy-button-link">
+                                <BuyButton onClick={checkoutRedirect}>FINALIZAR</BuyButton>             
+                            </ButtonLink>
+                            <ButtonLink to="/carrinho" className="buy-button-link">
+                                <MqReturnButton>VOLTAR</MqReturnButton>
+                            </ButtonLink>
 
-                </BuyResumeContainer>
+                    </BuyResumeContainer>
 
-            <Footer display="none" />
+                <Footer display="none" />
 
-        </CheckoutContainer>
+            </CheckoutContainer>
+        </>
     );
 }
 

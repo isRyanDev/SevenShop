@@ -1,4 +1,6 @@
+import { useState } from "react";
 import styled from "styled-components"
+import Notify from "../Notify/index.js";
 import remCartImg from "../../assets/IconImages/trash.png"
 import arrowLeft from "../../assets/IconImages/arrow-left.png"
 import arrowRight from "../../assets/IconImages/arrow-right.png"
@@ -206,6 +208,7 @@ const DiscontPriceContainer = styled.div`
 `
 
 function CartProductsStyled({name, image, price, newprice, src, id, quantity, onQuantityChange, handleDeleteProduct }) {
+    const [notifyMessage, setNotifyMessage] = useState("");
 
     function handleQuantityChange(e) {
         const newQuantity = Math.max(1, Math.min(25, Number(e.target.value)));
@@ -226,7 +229,7 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
             onQuantityChange(id, Number(quantity) + 1);
         }
         else{
-            alert("Você pode não pode comprar mais de 25 produtos por vez!")
+            setNotifyMessage("Você pode não pode comprar mais de 25 produtos por vez!");
         }
     }
 
@@ -237,60 +240,63 @@ function CartProductsStyled({name, image, price, newprice, src, id, quantity, on
     newPriceConvert *= quantity
 
     return(
-        <ProductsList>
-            <Product key={id}> 
-                <DescriptionContainer>
-                    <Description>
-                        <InfosContainer>
-                            <ProductImg src={image} alt={src}/>
-                            <ProductContainer>
-                                <ProductName>
-                                    {name}
-                                </ProductName>
-                                <PriceContainer>
-                                    <ProductNewPrice>
-                                        A vista com desconto: <strong>R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                                    </ProductNewPrice>
-                                    <ProductPrice>
-                                        Parcelado em até 10x: <strong>R${priceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
-                                    </ProductPrice>
-                                </PriceContainer>
-                            </ProductContainer>
-                        </InfosContainer>
-                    </Description>
-                </DescriptionContainer>
+        <>
+            <Notify message={notifyMessage} setNotifyMessage={setNotifyMessage} />
+            <ProductsList>
+                <Product key={id}> 
+                    <DescriptionContainer>
+                        <Description>
+                            <InfosContainer>
+                                <ProductImg src={image} alt={src}/>
+                                <ProductContainer>
+                                    <ProductName>
+                                        {name}
+                                    </ProductName>
+                                    <PriceContainer>
+                                        <ProductNewPrice>
+                                            A vista com desconto: <strong>R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                                        </ProductNewPrice>
+                                        <ProductPrice>
+                                            Parcelado em até 10x: <strong>R${priceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                                        </ProductPrice>
+                                    </PriceContainer>
+                                </ProductContainer>
+                            </InfosContainer>
+                        </Description>
+                    </DescriptionContainer>
 
-                <QuantityContainer>
+                    <QuantityContainer>
 
 
-                    <QuantityMain>
-                        <label>Qtd</label>
-                        <QuantityContent>
-                            <button onClick={() => {arrowL()}}>
-                                <img src={arrowLeft} alt="arrow-left"/>
-                            </button>
-                            <QuantityInput type="number" value={quantity} onChange={handleQuantityChange} min="1" max="25"/>
-                            <button onClick={() => {arrowR()}}>
-                                <img src={arrowRight} alt="arrow-right"/>
-                            </button>
-                        </QuantityContent>
+                        <QuantityMain>
+                            <label>Qtd</label>
+                            <QuantityContent>
+                                <button onClick={() => {arrowL()}}>
+                                    <img src={arrowLeft} alt="arrow-left"/>
+                                </button>
+                                <QuantityInput type="number" value={quantity} onChange={handleQuantityChange} min="1" max="25"/>
+                                <button onClick={() => {arrowR()}}>
+                                    <img src={arrowRight} alt="arrow-right"/>
+                                </button>
+                            </QuantityContent>
 
-                        <CartRemContainer>
-                            <ButtonCartContainer onClick={() => {
-                                handleDeleteProduct(id);
-                            }}>
-                                <ButtonCart src={remCartImg} alt="Cart Icon"/>
-                            </ButtonCartContainer>
-                        </CartRemContainer>
-                    </QuantityMain>
-                        <DiscontPriceContainer>
-                            <h4>Preço à vista no pix</h4>
-                            <h2>R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
-                        </DiscontPriceContainer>
-                </QuantityContainer>
+                            <CartRemContainer>
+                                <ButtonCartContainer onClick={() => {
+                                    handleDeleteProduct(id);
+                                }}>
+                                    <ButtonCart src={remCartImg} alt="Cart Icon"/>
+                                </ButtonCartContainer>
+                            </CartRemContainer>
+                        </QuantityMain>
+                            <DiscontPriceContainer>
+                                <h4>Preço à vista no pix</h4>
+                                <h2>R${newPriceConvert.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                            </DiscontPriceContainer>
+                    </QuantityContainer>
 
-            </Product>
-        </ProductsList>
+                </Product>
+            </ProductsList>
+        </>
     )
 }
 

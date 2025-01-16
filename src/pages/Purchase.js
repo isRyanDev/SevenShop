@@ -7,6 +7,7 @@ import styled from "styled-components"
 import Header from "../components/Header/header.js";
 import Footer from "../components/Footer/index.js";
 import Loading from "../components/Loading/index.js";
+import Notify from "../components/Notify/index.js";
 
 const LoadingContainer = styled.div`
     position: fixed;
@@ -39,6 +40,7 @@ const PurchaseContent = styled.div`
     gap: 1rem;
     width: 100%;
     min-height: 87vh;
+    box-sizing: border-box;
     text-align: center;
     padding: 1rem;
 `
@@ -234,6 +236,7 @@ function Purchase(){
     const [imageFile, setImageFile] = useState(null);
     const { totalValue, street, selectedMethod } = location.state || {};
     const [loading, setLoading] = useState(true);
+    const [notifyMessage, setNotifyMessage] = useState("");
     const navigate = useNavigate();
     const [ products, setProducts ] = useState([]);
 
@@ -281,7 +284,7 @@ function Purchase(){
             navigate("/");
         }
         else{
-            alert("Imagem ou valor do produto inválido!");
+            setNotifyMessage("Imagem ou valor do produto inválido!");
         }
     }
     const handleProductValue = (e) => {
@@ -308,81 +311,84 @@ function Purchase(){
 
     return(
         <>
-          {loading ? (
-              <LoadingContainer>
-                  <Loading/>
-              </LoadingContainer>
-          ) : (
-                <PurchaseContainer>
-                    <Header displaySearch="none" displayButton="none"/>
+            {loading ? (
+                <LoadingContainer>
+                    <Loading/>
+                </LoadingContainer>
+            ) : (
+                <>
+                    <Notify message={notifyMessage} setNotifyMessage={setNotifyMessage} />
+                    <PurchaseContainer>
+                        <Header displaySearch="none" displayButton="none"/>
 
-                    <PurchaseContent>
-                        <SectionTItle>COMPRA EFETUADA COM SUCESSO!</SectionTItle>
+                        <PurchaseContent>
+                            <SectionTItle>COMPRA EFETUADA COM SUCESSO!</SectionTItle>
 
-                        <Purshace>
-                            <AddProductContainer>
-                                <InfoTitle>Adicione um produto</InfoTitle>
-                                <label>
-                                    <p>Obrigado por chegar até aqui!</p>
-                                    <p>Agora você pode adicionar um novo produto ficticio ao nosso catálogo</p>
-                                </label>
-                                <AddProductForm onSubmit={handleAddProduct}>
-                                    <InputsContainer>
-                                        <Inputs>
-                                            <InputContent>
-                                                <InputLabel>Nome</InputLabel>
-                                                <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
-                                            </InputContent>
-                                            <InputContent>
-                                                <InputLabel>Nome do produto</InputLabel>
-                                                <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
-                                            </InputContent>
-                                            <InputContent>
-                                                <InputLabel>Valor</InputLabel>
-                                                <AddProductInput 
-                                                type="text" 
-                                                value={productPrice} 
-                                                maxLength={8}
-                                                onChange={handleProductValue} 
-                                                placeholder="Digite o valor do produto"/>
-                                            </InputContent>
-                                        </Inputs>
-                                        <CustomUpload setImageFile={setImageFile}/>
-                                    </InputsContainer>
-                                    <AddProductButton type="submit">Adicionar Produto</AddProductButton>
-                                </AddProductForm>
-                            </AddProductContainer>
+                            <Purshace>
+                                <AddProductContainer>
+                                    <InfoTitle>Adicione um produto</InfoTitle>
+                                    <label>
+                                        <p>Obrigado por chegar até aqui!</p>
+                                        <p>Agora você pode adicionar um novo produto ficticio ao nosso catálogo</p>
+                                    </label>
+                                    <AddProductForm onSubmit={handleAddProduct}>
+                                        <InputsContainer>
+                                            <Inputs>
+                                                <InputContent>
+                                                    <InputLabel>Nome</InputLabel>
+                                                    <AddProductInput type="text" onChange={e => setUserName(e.target.value)} placeholder="Digite seu nome"/>
+                                                </InputContent>
+                                                <InputContent>
+                                                    <InputLabel>Nome do produto</InputLabel>
+                                                    <AddProductInput type="text" onChange={e => setProductName(e.target.value)} placeholder="Digite o nome do produto"/>
+                                                </InputContent>
+                                                <InputContent>
+                                                    <InputLabel>Valor</InputLabel>
+                                                    <AddProductInput 
+                                                    type="text" 
+                                                    value={productPrice} 
+                                                    maxLength={8}
+                                                    onChange={handleProductValue} 
+                                                    placeholder="Digite o valor do produto"/>
+                                                </InputContent>
+                                            </Inputs>
+                                            <CustomUpload setImageFile={setImageFile}/>
+                                        </InputsContainer>
+                                        <AddProductButton type="submit">Adicionar Produto</AddProductButton>
+                                    </AddProductForm>
+                                </AddProductContainer>
 
-                            <PurshaceInfoContainer>
-                                <PurshaceInfo>
-                                    <InfoTitle>Informações da compra</InfoTitle>
+                                <PurshaceInfoContainer>
+                                    <PurshaceInfo>
+                                        <InfoTitle>Informações da compra</InfoTitle>
 
-                                    <Infos> 
-                                        <InfoRef>Total pago:</InfoRef>
-                                        <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
-                                    </Infos>
+                                        <Infos> 
+                                            <InfoRef>Total pago:</InfoRef>
+                                            <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
+                                        </Infos>
 
-                                    <Infos>
-                                        <InfoRef>Endereço de entrega:</InfoRef>
-                                        <InfoValue>{street}</InfoValue>
-                                    </Infos>
+                                        <Infos>
+                                            <InfoRef>Endereço de entrega:</InfoRef>
+                                            <InfoValue>{street}</InfoValue>
+                                        </Infos>
 
-                                    <Infos>
-                                        <InfoRef>Método de pagamento:</InfoRef>
-                                        <InfoValue>{selectedMethod}</InfoValue>
-                                    </Infos>
-                                </PurshaceInfo>
+                                        <Infos>
+                                            <InfoRef>Método de pagamento:</InfoRef>
+                                            <InfoValue>{selectedMethod}</InfoValue>
+                                        </Infos>
+                                    </PurshaceInfo>
 
-                                <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>
-                            </PurshaceInfoContainer>
-                        </Purshace>
-                        <h3>PAGINA EM DESENVOLVIMENTO</h3>
-                    </PurchaseContent>
-                    
-                    <Footer/>
-                </PurchaseContainer>
+                                    <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>
+                                </PurshaceInfoContainer>
+                            </Purshace>
+                            <h3>PAGINA EM DESENVOLVIMENTO</h3>
+                        </PurchaseContent>
+                        
+                        <Footer/>
+                    </PurchaseContainer>
+                </>
             )}
-      </>
+        </>
     )
 }
 
