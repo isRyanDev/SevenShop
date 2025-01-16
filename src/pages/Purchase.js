@@ -165,6 +165,7 @@ const InputContent = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    border-bottom: 1px solid rgb(0, 183, 255);
     text-align: left;
 `
 
@@ -180,7 +181,7 @@ const AddProductInput = styled.input`
     padding: .5rem;
     border: none;
     background-color: transparent;
-    border: 1px solid rgb(0, 183, 255);
+
     box-sizing: border-box;
     color: white;
 
