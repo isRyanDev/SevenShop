@@ -248,10 +248,10 @@ function Purchase(){
             id: products.length + 1,
         };
     
-        postProduct(product);
-    
-        if (imageFile) {
+        if (imageFile && productPrice > 100) {
             const formData = new FormData();
+            postProduct(product);
+
             formData.append('imagem', imageFile);
             formData.append('filename', newProductImgName); 
     
@@ -263,7 +263,40 @@ function Purchase(){
             alert("Produto adicionado com sucesso!");
             navigate("/");
         }
+        else{
+            alert("Imagem ou valor do produto inválido!");
+        }
     }
+    const handleProductValue = (e) => {
+        let value = e.target.value;
+    
+        // Remove tudo que não seja número ou vírgula
+        value = value.replace(/[^0-9,]/g, '');
+    
+        // Se houver vírgula, substituí-la por ponto para facilitar o tratamento
+        value = value.replace(',', '.');
+    
+        // Garantir que o valor tenha no máximo duas casas decimais
+        if (value.length <= 2) {
+            // Para valores com 1 ou 2 dígitos, exibimos como "0.xx"
+            value = '0.' + value.padStart(2, '0');
+        } else {
+            // Para valores com mais de 2 dígitos, separamos a parte inteira da parte decimal
+            const integerPart = value.slice(0, value.length - 2); // Parte inteira
+            const decimalPart = value.slice(value.length - 2);  // Parte decimal
+    
+            // Remover os zeros à esquerda da parte inteira
+            const integerValue = parseInt(integerPart, 10);
+    
+            // Reconstituir o valor
+            value = `${integerValue}.${decimalPart}`;
+        }
+    
+        // Atualiza o estado com o valor formatado
+        setProductPrice(value);
+    };
+    
+
     return(
         <>
           {loading ? (
@@ -297,7 +330,12 @@ function Purchase(){
                                             </InputContent>
                                             <InputContent>
                                                 <InputLabel>Valor</InputLabel>
-                                                <AddProductInput type="text" onChange={e => setProductPrice(e.target.value)} placeholder="Digite o valor do produto"/>
+                                                <AddProductInput 
+                                                type="text" 
+                                                value={productPrice} 
+                                                maxLength={8}
+                                                onChange={handleProductValue} 
+                                                placeholder="Digite o valor do produto"/>
                                             </InputContent>
                                         </Inputs>
                                         <CustomUpload setImageFile={setImageFile}/>
