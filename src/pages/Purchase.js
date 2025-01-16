@@ -102,6 +102,7 @@ const PurshaceInfo = styled.div`
     align-items: center;
     background-color: rgb(46,0,78);
     border-radius: .5rem;
+    gap: 1rem;
     padding: 1.5rem;
 `
 
@@ -362,26 +363,27 @@ function Purchase(){
                                     <PurshaceInfo>
                                         <InfoTitle>Informações da compra</InfoTitle>
 
-                                        <Infos> 
-                                            <InfoRef>Total pago:</InfoRef>
-                                            <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
-                                        </Infos>
+                                        <div>
+                                            <Infos> 
+                                                <InfoRef>Total pago:</InfoRef>
+                                                <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
+                                            </Infos>
 
-                                        <Infos>
-                                            <InfoRef>Endereço de entrega:</InfoRef>
-                                            <InfoValue>{street}</InfoValue>
-                                        </Infos>
+                                            <Infos>
+                                                <InfoRef>Endereço de entrega:</InfoRef>
+                                                <InfoValue>{street}</InfoValue>
+                                            </Infos>
 
-                                        <Infos>
-                                            <InfoRef>Método de pagamento:</InfoRef>
-                                            <InfoValue>{selectedMethod}</InfoValue>
-                                        </Infos>
+                                            <Infos>
+                                                <InfoRef>Método de pagamento:</InfoRef>
+                                                <InfoValue>{selectedMethod}</InfoValue>
+                                            </Infos>
+                                        </div>
                                     </PurshaceInfo>
 
                                     <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>
                                 </PurshaceInfoContainer>
                             </Purshace>
-                            <h3>PAGINA EM DESENVOLVIMENTO</h3>
                         </PurchaseContent>
                         
                         <Footer/>
