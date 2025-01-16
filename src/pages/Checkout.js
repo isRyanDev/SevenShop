@@ -15,6 +15,7 @@ import amexIcon from "../assets/IconImages/amex-icon.png"
 import eloIcon from "../assets/IconImages/elo-icon.png"
 import Footer from "../components/Footer/index.js";
 import Header from "../components/Header/header.js";
+import RadioInput from "../components/RadioInput/index.js";
 
 const CheckoutContainer = styled.div`
     display: flex;
@@ -992,12 +993,7 @@ function Checkout() {
                             <PaymentMethod onClick={() => handleMethodClick("Pix")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
-                                        <input
-                                            type="radio"
-                                            name="payment-method"
-                                            checked={selectedMethod === "Pix"}
-                                            readOnly
-                                        />
+                                        <RadioInput check={selectedMethod === "Pix"}/>
                                         <h3>PIX</h3>
                                     </MethodTitle>
                                     <MethodImg src={pix} alt="pix-icon" />
@@ -1010,12 +1006,7 @@ function Checkout() {
                             <PaymentMethod onClick={() => handleMethodClick("Boleto Bancário")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
-                                        <input
-                                            type="radio"
-                                            name="payment-method"
-                                            checked={selectedMethod === "Boleto Bancário"}
-                                            readOnly
-                                        />
+                                    <RadioInput check={selectedMethod === "Boleto Bancário"}/>
                                         <h3>BOLETO BANCÁRIO</h3>
                                     </MethodTitle>
                                     <MethodImg src={barCode} alt="bar-code-icon" />
@@ -1028,12 +1019,7 @@ function Checkout() {
                             <PaymentMethod onClick={() => handleMethodClick("Cartão de Crédito")}>
                                 <PaymentMethodCheckbox>
                                     <MethodTitle>
-                                        <input
-                                            type="radio"
-                                            name="payment-method"
-                                            checked={selectedMethod === "Cartão de Crédito"}
-                                            readOnly
-                                        />
+                                        <RadioInput check={selectedMethod === "Cartão de Crédito"}/>
                                         <h3>CARTÃO DE CRÉDITO</h3>
                                     </MethodTitle>
                                     <MethodImg src={card} alt="card-icon" />
