@@ -269,33 +269,25 @@ function Purchase(){
     }
     const handleProductValue = (e) => {
         let value = e.target.value;
-    
-        // Remove tudo que não seja número ou vírgula
+        
         value = value.replace(/[^0-9,]/g, '');
     
-        // Se houver vírgula, substituí-la por ponto para facilitar o tratamento
         value = value.replace(',', '.');
     
-        // Garantir que o valor tenha no máximo duas casas decimais
-        if (value.length <= 2) {
-            // Para valores com 1 ou 2 dígitos, exibimos como "0.xx"
-            value = '0.' + value.padStart(2, '0');
-        } else {
-            // Para valores com mais de 2 dígitos, separamos a parte inteira da parte decimal
-            const integerPart = value.slice(0, value.length - 2); // Parte inteira
-            const decimalPart = value.slice(value.length - 2);  // Parte decimal
+        console.log(value.length)
+
+        if (value.length > 2) {
+
+            const integerPart = value.slice(0, value.length - 2); 
+            const decimalPart = value.slice(value.length - 2);
     
-            // Remover os zeros à esquerda da parte inteira
             const integerValue = parseInt(integerPart, 10);
     
-            // Reconstituir o valor
             value = `${integerValue}.${decimalPart}`;
         }
-    
-        // Atualiza o estado com o valor formatado
+
         setProductPrice(value);
     };
-    
 
     return(
         <>
