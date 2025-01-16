@@ -181,7 +181,6 @@ const AddProductInput = styled.input`
     padding: .5rem;
     border: none;
     background-color: transparent;
-
     box-sizing: border-box;
     color: white;
 
