@@ -70,7 +70,7 @@ const AddProductContainer = styled.div`
     gap: 1rem;
     text-align: center;
     box-sizing: border-box;
-    width: 70%;
+    width: 85%;
     height: 100%;
     background-color: rgb(46,0,78);
     border-radius: .5rem;
@@ -84,7 +84,7 @@ const PurshaceInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 70%;
+    max-width: 85%;
     height: 100%;
     gap: 1rem;
     box-sizing: border-box;
@@ -180,7 +180,7 @@ const AddProductInput = styled.input`
     padding: .5rem;
     border: none;
     background-color: transparent;
-    border-bottom: 1px solid rgb(0, 183, 255);
+    border: 1px solid rgb(0, 183, 255);
     box-sizing: border-box;
     color: white;
 
