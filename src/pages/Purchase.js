@@ -39,6 +39,8 @@ const PurchaseContent = styled.div`
     gap: 1rem;
     width: 100%;
     min-height: 87vh;
+    text-align: center;
+    padding: 1rem;
 `
 
 const SectionTItle = styled.h1`
@@ -48,10 +50,16 @@ const SectionTItle = styled.h1`
 
 const Purshace = styled.div`    
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 2rem;
     width: 100%;
+
+    @media screen and (min-width: 1150px){
+        flex-direction: row;
+        align-items: unset;
+    }
 `
 
 const AddProductContainer = styled.div`
@@ -62,19 +70,28 @@ const AddProductContainer = styled.div`
     gap: 1rem;
     text-align: center;
     box-sizing: border-box;
+    width: 70%;
     height: 100%;
     background-color: rgb(46,0,78);
     border-radius: .5rem;
+
+    @media screen and (min-width: 1150px){
+        width: unset;
+    }
 `
 
 const PurshaceInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 28%;
+    max-width: 70%;
     height: 100%;
     gap: 1rem;
     box-sizing: border-box;
+
+    @media screen and (min-width: 1150px){
+        max-width: 28%;
+    }
 `
 
 const PurshaceInfo = styled.div`
