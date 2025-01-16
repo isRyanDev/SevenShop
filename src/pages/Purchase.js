@@ -64,6 +64,12 @@ const Purshace = styled.div`
     }
 `
 
+const AddProductText = styled.label`
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+`
+
 const AddProductContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -78,7 +84,7 @@ const AddProductContainer = styled.div`
     border-radius: .5rem;
 
     @media screen and (min-width: 1150px){
-        width: unset;
+        max-width: 35%;
     }
 `
 
@@ -106,9 +112,22 @@ const PurshaceInfo = styled.div`
     padding: 1.5rem;
 `
 
+const InfosContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    .address{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+`
+
 const InfoTitle = styled.h1`
     font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
-    text-align: center;
     letter-spacing: 1px;
     color: rgb(0, 183, 255);
 `
@@ -126,12 +145,13 @@ const Infos = styled.div`
 
 const InfoRef = styled.h3`
     font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
+    text-align: left;
     font-size: 1.375rem;
     letter-spacing: 1px;
 `
 
 const InfoValue = styled.p`
-    max-width: 50%;
+    text-align: left;
 `
 
 const AddProductForm = styled.form` 
@@ -231,15 +251,16 @@ const ReturnButton = styled.button`
 
 function Purchase(){
     const location = useLocation();
+    const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState("");
     const [imageFile, setImageFile] = useState(null);
-    const { totalValue, street, selectedMethod } = location.state || {};
+    const [cartProducts, setCartProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [notifyMessage, setNotifyMessage] = useState("");
-    const navigate = useNavigate();
     const [ products, setProducts ] = useState([]);
+    const { totalValue, street, selectedMethod } = location.state || {};
 
     async function fetchProducts() {
         setLoading(true);
@@ -250,7 +271,15 @@ function Purchase(){
 
     useEffect(() => {
         fetchProducts();
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        setCartProducts(storedCart);
     }, []);
+
+    function handleClearCart() {
+        setCartProducts([]);
+    
+        localStorage.removeItem("cart");
+    }
 
     function handleAddProduct(event) {
         event.preventDefault();
@@ -283,6 +312,7 @@ function Purchase(){
 
             alert("Produto adicionado com sucesso!");
             navigate("/");
+            handleClearCart();
         }
         else{
             setNotifyMessage("Imagem ou valor do produto inválido!");
@@ -328,10 +358,10 @@ function Purchase(){
                             <Purshace>
                                 <AddProductContainer>
                                     <InfoTitle>Adicione um produto</InfoTitle>
-                                    <label>
+                                    <AddProductText>
                                         <p>Obrigado por chegar até aqui!</p>
-                                        <p>Agora você pode adicionar um novo produto ficticio ao nosso catálogo</p>
-                                    </label>
+                                        <p>Como agradecimento, agora você pode adicionar um novo produto ficticio ao nosso catálogo</p>
+                                    </AddProductText>
                                     <AddProductForm onSubmit={handleAddProduct}>
                                         <InputsContainer>
                                             <Inputs>
@@ -363,22 +393,24 @@ function Purchase(){
                                     <PurshaceInfo>
                                         <InfoTitle>Informações da compra</InfoTitle>
 
-                                        <div>
+                                        <InfosContainer>
                                             <Infos> 
                                                 <InfoRef>Total pago:</InfoRef>
                                                 <InfoValue>R$ {convertNumber(totalValue)}</InfoValue>
                                             </Infos>
 
                                             <Infos>
+                                                <InfoRef>Método de pagamento:</InfoRef>
+                                                <InfoValue>{selectedMethod}</InfoValue>
+                                            </Infos>
+
+                                            <Infos className="address">
                                                 <InfoRef>Endereço de entrega:</InfoRef>
                                                 <InfoValue>{street}</InfoValue>
                                             </Infos>
 
-                                            <Infos>
-                                                <InfoRef>Método de pagamento:</InfoRef>
-                                                <InfoValue>{selectedMethod}</InfoValue>
-                                            </Infos>
-                                        </div>
+
+                                        </InfosContainer>
                                     </PurshaceInfo>
 
                                     <ReturnButton onClick={() => navigate("/")}>Voltar ao início</ReturnButton>

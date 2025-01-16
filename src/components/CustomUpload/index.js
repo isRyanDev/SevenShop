@@ -133,24 +133,42 @@ const UploadContainer = styled.div`
 
 `
 
-function CustomUpload({setImageFile}) {
-    return(
+function CustomUpload({ setImageFile }) {
+    function handleFileChange(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            if (file.type !== "image/png") {
+                alert("Apenas arquivos PNG são permitidos!");
+                event.target.value = ""; // Reseta o input
+                return;
+            }
+            setImageFile(file);
+        }
+    }
+
+    return (
         <UploadContainer>
             <div className="container">
                 <div className="folder">
                     <div className="front-side">
-                    <div className="tip"></div>
-                    <div className="cover"></div>
+                        <div className="tip"></div>
+                        <div className="cover"></div>
                     </div>
                     <div className="back-side cover"></div>
                 </div>
                 <label className="custom-file-upload">
-                    <input className="title" type="file" onChange={e => setImageFile(e.target.files[0])} />
+                    <input 
+                        className="title" 
+                        type="file" 
+                        accept="image/png"
+                        onChange={handleFileChange} 
+                    />
                     Escolha uma imagem
                 </label>
             </div>
         </UploadContainer>
-    )
+    );
 }
 
 export default CustomUpload;
