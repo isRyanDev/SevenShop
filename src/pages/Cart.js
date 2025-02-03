@@ -614,7 +614,7 @@ function CartProducts() {
     
         try {
             setLoading(true);
-            const response = await fetch(`https://api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
+            const response = await fetch(`https://7shop.api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
             setLoading(false);
             const data = await response.json();
             
@@ -721,7 +721,7 @@ function CartProducts() {
                             <ProductCard>
                                 <h1>PRODUTOS</h1>
                                 {cartProducts.map((product) => {
-                                    const imagePath = `https://api.ryandev.com.br/uploads/${product.src}.png`;
+                                    const imagePath = `https://7shop.api.ryandev.com.br/uploads/${product.src}.png`;
 
                                     return (
                                         <CartProductsStyled

@@ -305,7 +305,7 @@ function Purchase(){
             formData.append('imagem', imageFile);
             formData.append('filename', newProductImgName); 
     
-            fetch('https://api.ryandev.com.br/uploads', {
+            fetch('https://7shop.api.ryandev.com.br/uploads', {
                 method: 'POST',
                 body: formData,
             });

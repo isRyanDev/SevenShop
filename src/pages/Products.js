@@ -128,7 +128,7 @@ function Products() {
 
                                 <SearchProducts>
                                     {productsFiltered.map(product => {
-                                        const imagePath = `https://api.ryandev.com.br/uploads/${product.src}.png`;
+                                        const imagePath = `https://7shop.api.ryandev.com.br/uploads/${product.src}.png`;
 
                                         return (
                                             <ProductsStyled
