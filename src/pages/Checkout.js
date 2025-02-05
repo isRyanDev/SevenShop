@@ -184,7 +184,7 @@ const CardPaymentContent = styled.div`
     justify-content: space-evenly;
     text-align: left;
     border-top: 1px solid white;
-    transition: all .5s ease-in-out;
+    transition: all .8s ease-in-out;
     width: 100%;
     opacity: 0;
     max-height: 0;
@@ -228,7 +228,7 @@ const CardContainer = styled.div`
     display: flex;
     flex-direction: column;
     border-radius: .5rem;
-    transition: all .5s ease-in-out;
+    transition: all .8s ease-in-out;
     width: 90%;
     transform: rotate3d(0);
     padding: 1rem;
@@ -755,14 +755,18 @@ function Checkout() {
         const cardBackContainer = document.getElementById("card-back");
 
         if(selectedInput === "cvv") {
-            cardFrontContainer.style.opacity = "0";
-            cardBackContainer.style.opacity = "1";
-            cardContainer.style.alignItems = "center";
+            setTimeout(() => {
+                cardFrontContainer.style.opacity = "0";
+                cardBackContainer.style.opacity = "1";
+                cardContainer.style.alignItems = "center";
+            }, 400);
         }
         else {
-            cardFrontContainer.style.opacity = "1";
-            cardBackContainer.style.opacity = "0";
-            cardContainer.style.alignItems = "unset";
+            setTimeout(() => {
+                cardFrontContainer.style.opacity = "1";
+                cardBackContainer.style.opacity = "0";
+                cardContainer.style.alignItems = "unset";
+            }, 400);
         }
     })
 
