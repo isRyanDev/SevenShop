@@ -616,9 +616,16 @@ function CartProducts() {
         try {
             setLoading(true);
             const response = await getDistance({origem, destino});
-            setLoading(false);
+            
+            if (!response.status || !response.data) {
+                setNotifyMessage("Cep Não encontrado!");
+                setLoading(false);
+                return;
+            } else{
+                setLoading(false);
+            }
 
-            const data = await response.data.json();
+            const data = response.data;
             
             if(data.rows[0].elements[0].status === 'OK'){
                 getPortageValue(data.rows[0].elements[0].distance.value);
@@ -838,7 +845,7 @@ function CartProducts() {
                                     </BuyResumeInfoPortage>
                                 </BuyResumeDescription>
 
-                                <PortageContainer onSubmit={getDistance}>
+                                <PortageContainer onSubmit={fetchDistance}>
                                     <PortageCepContainer>
                                         <PortageCep 
                                             type="text" 
