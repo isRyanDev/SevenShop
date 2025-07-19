@@ -10,6 +10,7 @@ import Header from "../components/Header/header.js";
 import Loading from "../components/Loading/index.js";
 import StyledLink from "../components/Link/index.js";
 import Notify from "../components/Notify/index.js";
+import { getDistance } from "../services/Distance.js";
 
 const LoadingContainer = styled.div`
     position: fixed;
@@ -607,15 +608,15 @@ function CartProducts() {
     const [street, setStreet] = useState('');
     const [cep, setCep] = useState('');
 
-    const getDistance = async (event) => {
-        event.preventDefault();
+    async function fetchDistance(e) {
+        e.preventDefault();
         const origem = '04029-200';
         const destino = cep;
     
         try {
             setLoading(true);
-            const response = await fetch(`https://7shop.api.ryandev.com.br/calcular-distancia?origem=${origem}&destino=${destino}`);
-            setLoading(false);
+            const response = await getDistance({origem, destino});
+
             const data = await response.json();
             
             if(data.rows[0].elements[0].status === 'OK'){
@@ -625,6 +626,8 @@ function CartProducts() {
                 setNotifyMessage("Cep Não encontrado!");
                 return;
             }
+
+            setLoading(false);
         } catch (error) {
             console.error('Erro ao calcular distância:', error);
         }
@@ -754,7 +757,7 @@ function CartProducts() {
                                         </Portage>
                                     </ProductsTotal>
 
-                                    <PortageContainer onSubmit={getDistance}>
+                                    <PortageContainer onSubmit={fetchDistance}>
                                         <PortageCepContainer>
                                             <PortageCep 
                                                 type="text" 
