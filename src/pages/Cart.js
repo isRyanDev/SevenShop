@@ -617,7 +617,7 @@ function CartProducts() {
             setLoading(true);
             const response = await getDistance({origem, destino});
             
-            if (!response.status || !response.data) {
+            if (!response.success || !response.data) {
                 setNotifyMessage("Cep Não encontrado!");
                 setLoading(false);
                 return;
