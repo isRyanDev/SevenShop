@@ -616,8 +616,9 @@ function CartProducts() {
         try {
             setLoading(true);
             const response = await getDistance({origem, destino});
+            setLoading(false);
 
-            const data = await response.json();
+            const data = await response.data.json();
             
             if(data.rows[0].elements[0].status === 'OK'){
                 getPortageValue(data.rows[0].elements[0].distance.value);
@@ -626,8 +627,6 @@ function CartProducts() {
                 setNotifyMessage("Cep Não encontrado!");
                 return;
             }
-
-            setLoading(false);
         } catch (error) {
             console.error('Erro ao calcular distância:', error);
         }
