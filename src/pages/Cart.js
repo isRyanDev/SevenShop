@@ -617,13 +617,13 @@ function CartProducts() {
             setLoading(true);
             const response = await getDistance({origem, destino});
             
-            if (!response.success || !response.data) {
+            if (response.success === false) {
                 setNotifyMessage("Cep Não encontrado!");
                 setLoading(false);
                 return;
-            } else{
-                setLoading(false);
             }
+
+            setLoading(false);
 
             const data = response.data;
             
