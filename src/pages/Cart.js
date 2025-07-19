@@ -155,7 +155,7 @@ const TotalValue = styled.div`
 `
 
 const Portage = styled.div`
-    display: none;
+    display: flex;
     flex-direction: row;
     padding: .5rem;
     justify-content: space-between;
@@ -467,7 +467,7 @@ const BuyResumeInfo = styled.div`
 `
 
 const BuyResumeInfoPortage = styled.div`
-    display: none;
+    display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -607,6 +607,7 @@ function CartProducts() {
     const [portageValue, setPortageValue] = useState(0);
     const [street, setStreet] = useState('');
     const [cep, setCep] = useState('');
+    const [showPortage, setShowPortage] = useState(false);
 
     async function fetchDistance(e) {
         e.preventDefault();
@@ -616,14 +617,13 @@ function CartProducts() {
         try {
             setLoading(true);
             const response = await getDistance({origem, destino});
+            setLoading(false);
             
             if (response.success === false) {
                 setNotifyMessage("Cep Não encontrado!");
                 setLoading(false);
                 return;
             }
-
-            setLoading(false);
 
             const data = response.data;
             
@@ -635,7 +635,7 @@ function CartProducts() {
                 return;
             }
         } catch (error) {
-            console.error('Erro ao calcular distância:', error);
+            console.error('Erro ao calcular distância:', error.message);
         }
     };
 
@@ -654,11 +654,7 @@ function CartProducts() {
 
         setPortageValue(distance * 0.1);
 
-        const portageValue = document.querySelector("div.portage-value");
-        const portageValueMq = document.querySelector("div.portage-value-mq");
-
-        portageValue.style.display = "flex";
-        portageValueMq.style.display = "flex";
+        setShowPortage(true);
     }
 
     const navigate = useNavigate();
@@ -757,10 +753,12 @@ function CartProducts() {
                                             <SubtitleText>Total dos produtos:</SubtitleText>
                                             <Value>R$ {convertNumber(totalPrice)}</Value>
                                         </TotalValue>
-                                        <Portage className="portage-value">
-                                            <SubtitleText>Frete:</SubtitleText>
-                                            <Value>R$ {convertNumber(portageValue)}</Value>
-                                        </Portage>
+                                        {showPortage && (
+                                            <Portage>
+                                                <SubtitleText>Frete:</SubtitleText>
+                                                <Value>R$ {convertNumber(portageValue)}</Value>
+                                            </Portage>
+                                        )}
                                     </ProductsTotal>
 
                                     <PortageContainer onSubmit={fetchDistance}>
@@ -839,10 +837,12 @@ function CartProducts() {
                                         <p>Valor à prazo:</p>
                                         <Value><strong>R$ {convertNumber(totalPrice)}</strong></Value>
                                     </BuyResumeInfo>
-                                    <BuyResumeInfoPortage className="portage-value-mq">
-                                        <p>Frete:</p>
-                                        <Value><strong>R$ {convertNumber(portageValue)}</strong></Value>
-                                    </BuyResumeInfoPortage>
+                                    {showPortage && (
+                                        <BuyResumeInfoPortage>
+                                            <p>Frete:</p>
+                                            <Value><strong>R$ {convertNumber(portageValue)}</strong></Value>
+                                        </BuyResumeInfoPortage>
+                                    )}
                                 </BuyResumeDescription>
 
                                 <PortageContainer onSubmit={fetchDistance}>
