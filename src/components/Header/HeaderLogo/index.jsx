@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import StyledLink from "../../Link/index.js"
+import StyledLink from "../../Link/index.jsx"
 
 const HeaderTitle = styled.h1`
     display: flex;

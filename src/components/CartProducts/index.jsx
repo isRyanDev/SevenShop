@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components"
-import Notify from "../Notify/index.js";
+import Notify from "../Notify/index.jsx";
 import remCartImg from "../../assets/IconImages/trash.png"
 import arrowLeft from "../../assets/IconImages/arrow-left.png"
 import arrowRight from "../../assets/IconImages/arrow-right.png"

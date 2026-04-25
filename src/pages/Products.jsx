@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { getProducts } from "../services/ProductsAPI.js";
+import { getProducts } from "../services/ProductsAPI.jsx";
 import { useLocation } from "react-router-dom";
-import Header from "../components/Header/header.js";
-import Footer from "../components/Footer/index.js";
-import Loading from "../components/Loading/index.js";
-import ProductsStyled from "../components/HomeProducts/index.js";
+import Header from "../components/Header/index.jsx";
+import Footer from "../components/Footer/index.jsx";
+import Loading from "../components/Loading/index.jsx";
+import ProductsStyled from "../components/HomeProducts/index.jsx";
 
 const LoadingContainer = styled.div`
     position: fixed;

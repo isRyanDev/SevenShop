@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import styled from "styled-components"
-import Logo from "./HeaderLogo/index.js"
+import Logo from "./HeaderLogo/index.jsx"
 import cartImg from "../../assets/IconImages/cart-icon.png"
-import Search from "../SearchBar/index.js"
+import Search from "../SearchBar/index.jsx"
 import searchImg from "../../assets/IconImages/search-lupe.png"
 
 const HeaderContainer = styled.header`

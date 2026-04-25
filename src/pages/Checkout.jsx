@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { convertNumber } from "../utils/ConvertNumber.js";
-import Notify from "../components/Notify/index.js";
+import { convertNumber } from "../utils/ConvertNumber.jsx";
+import Notify from "../components/Notify/index.jsx";
 import ccType from 'credit-card-type';
 import styled from "styled-components";
 import arrowUp from "../assets/IconImages/arrow-up.png";
@@ -14,9 +14,9 @@ import mastercardIcon from "../assets/IconImages/mastercard-icon.png"
 import visaIcon from "../assets/IconImages/visa-icon.png"
 import amexIcon from "../assets/IconImages/amex-icon.png"
 import eloIcon from "../assets/IconImages/elo-icon.png"
-import Footer from "../components/Footer/index.js";
-import Header from "../components/Header/header.js";
-import RadioInput from "../components/RadioInput/index.js";
+import Footer from "../components/Footer/index.jsx";
+import Header from "../components/Header/index.jsx";
+import RadioInput from "../components/RadioInput/index.jsx";
 
 const CheckoutContainer = styled.div`
     display: flex;

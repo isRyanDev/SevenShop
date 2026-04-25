@@ -18,7 +18,6 @@ const SearchContent = styled.div`
 
 const SearchForm = styled.form` 
     display: flex;
-    
 `
 
 const SearchInput = styled.input`

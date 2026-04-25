@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { convertNumber } from "../utils/ConvertNumber.js";
+import { convertNumber } from "../utils/ConvertNumber.jsx";
 import styled from "styled-components";
 import arrowUp from "../assets/IconImages/arrow-up.png";
-import CartProductsStyled from "../components/CartProducts/index.js";
-import Footer from "../components/Footer/index.js";
-import Header from "../components/Header/header.js";
-import Loading from "../components/Loading/index.js";
-import StyledLink from "../components/Link/index.js";
-import Notify from "../components/Notify/index.js";
-import { getDistance } from "../services/Distance.js";
+import CartProductsStyled from "../components/CartProducts/index.jsx";
+import Footer from "../components/Footer/index.jsx";
+import Header from "../components/Header/index.jsx";
+import Loading from "../components/Loading/index.jsx";
+import StyledLink from "../components/Link/index.jsx";
+import Notify from "../components/Notify/index.jsx";
+import { getDistance } from "../services/Distance.jsx";
 
 const LoadingContainer = styled.div`
     position: fixed;

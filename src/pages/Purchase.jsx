@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react";
-import { convertNumber } from "../utils/ConvertNumber.js";
-import { getProducts, postProduct } from "../services/ProductsAPI.js";
-import CustomUpload from "../components/CustomUpload/index.js";
+import { convertNumber } from "../utils/ConvertNumber.jsx";
+import { getProducts, postProduct } from "../services/ProductsAPI.jsx";
+import CustomUpload from "../components/CustomUpload/index.jsx";
 import styled from "styled-components"
-import Header from "../components/Header/header.js";
-import Footer from "../components/Footer/index.js";
-import Loading from "../components/Loading/index.js";
-import Notify from "../components/Notify/index.js";
+import Header from "../components/Header/index.jsx";
+import Footer from "../components/Footer/index.jsx";
+import Loading from "../components/Loading/index.jsx";
+import Notify from "../components/Notify/index.jsx";
 
 const LoadingContainer = styled.div`
     position: fixed;

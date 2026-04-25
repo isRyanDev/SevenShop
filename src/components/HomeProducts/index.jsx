@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components"
 import cartImg from "../../assets/IconImages/cart-icon.png"
-import Notify from "../Notify/index.js";
+import Notify from "../Notify/index.jsx";
 import addCartImg from "../../assets/IconImages/add-to-cart.png"
 
 const ProductsList = styled.ol`
