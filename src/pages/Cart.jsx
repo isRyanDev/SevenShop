@@ -636,9 +636,9 @@ function CartProducts() {
             }
         } catch (error) {
             setLoading(false);
-            setNotifyMessage(`Erro ao calcular distância, ${error.message}`);
+            setNotifyMessage(`Erro ao calcular distância: ${error.response.data.message || error.message}`);
             console.error('Erro ao calcular distância:', error.message);
-        }
+        }v
     };
 
     const [cepPlaceholder, setCepPlaceholder] = useState('Digite seu CEP*');
