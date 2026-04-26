@@ -635,6 +635,8 @@ function CartProducts() {
                 return;
             }
         } catch (error) {
+            setLoading(false);
+            setNotifyMessage(`Erro ao calcular distância, ${error.message}`);
             console.error('Erro ao calcular distância:', error.message);
         }
     };
